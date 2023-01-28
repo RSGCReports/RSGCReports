@@ -1,26 +1,52 @@
 import React from 'react';
-import logo from './logo.svg';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import About from './component/About';
+import Login from './component/Login';
+import Signup from './component/Signup';
 import './App.css';
+import { withAuthenticator } from '@aws-amplify/ui-react';
+import PropTypes from 'prop-types';
 
-function App() {
+function App({ signOut, user }) {
+  // const user = await getUser();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Router>
+        <div className="App">
+          <ul className="App-header">
+            <li>
+              <Link to="/">About</Link>
+            </li>
+            <li>
+              <Link to="/login">Login</Link>
+            </li>
+            <li>
+              <Link to="/signup">Signup</Link>
+            </li>
+          </ul>
+          <Routes>
+            <Route exact path="/" element={<About />}></Route>
+            <Route exact path="/login" element={<Login />}></Route>
+            <Route exact path="/signup" element={<Signup />}></Route>
+          </Routes>
+        </div>
+      </Router>
+      {/* <button onClick={login}>Login</button> */}
+      <button onClick={signOut}>Logout</button>
+      <h1>Hello {user.username}</h1>
     </div>
   );
 }
 
-export default App;
+App.propTypes = {
+  signOut: PropTypes.func,
+  user: PropTypes.object,
+  username: PropTypes.string,
+};
+
+export default withAuthenticator(App, {
+  signUpAttributes: ['email', 'name'],
+});
+// export default App;
+// export default withAuthenticator(App);
