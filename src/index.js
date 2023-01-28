@@ -12,9 +12,9 @@ Amplify.configure({
     // Amazon Region
     region: 'us-east-1',
     // Amazon Cognito User Pool ID
-    userPoolId: process.env.AWS_COGNITO_POOL_ID,
+    userPoolId: 'us-east-1_FPEWhM7x2',
     // Amazon Cognito App Client ID (26-char alphanumeric string)
-    userPoolWebClientId: process.env.AWS_COGNITO_CLIENT_ID,
+    userPoolWebClientId: 'vslhf5lriohhrud6d7qim0bou',
     // Hosted UI configuration
     oauth: {
       // Amazon Hosted UI Domain
@@ -23,8 +23,8 @@ Amplify.configure({
       scope: ['email', 'profile', 'openid'],
       // NOTE: these must match what you have specified in the Hosted UI
       // app settings for Callback and Redirect URLs (e.g., no trailing slash).
-      redirectSignIn: process.env.OAUTH_SIGN_IN_REDIRECT_URL,
-      redirectSignOut: process.env.OAUTH_SIGN_OUT_REDIRECT_URL,
+      redirectSignIn: 'http://localhost:3000',
+      redirectSignOut: 'http://localhost:3000',
       // We're using the Access Code Grant flow (i.e., `code`)
       responseType: 'code',
     },
