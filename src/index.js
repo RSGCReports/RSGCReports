@@ -3,6 +3,33 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { Amplify } from 'aws-amplify';
+import '@aws-amplify/ui-react/styles.css';
+
+// Configure our Auth object to use our Cognito User Pool
+Amplify.configure({
+  Auth: {
+    // Amazon Region
+    region: 'us-east-1',
+    // Amazon Cognito User Pool ID
+    userPoolId: 'us-east-1_FPEWhM7x2',
+    // Amazon Cognito App Client ID (26-char alphanumeric string)
+    userPoolWebClientId: 'vslhf5lriohhrud6d7qim0bou',
+    // Hosted UI configuration
+    oauth: {
+      // Amazon Hosted UI Domain
+      domain: process.env.AWS_COGNITO_HOSTED_UI_DOMAIN,
+      // These scopes must match what you set in the User Pool for this App Client
+      scope: ['email', 'profile', 'openid'],
+      // NOTE: these must match what you have specified in the Hosted UI
+      // app settings for Callback and Redirect URLs (e.g., no trailing slash).
+      redirectSignIn: 'http://localhost:3000',
+      redirectSignOut: 'http://localhost:3000',
+      // We're using the Access Code Grant flow (i.e., `code`)
+      responseType: 'code',
+    },
+  },
+});
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
