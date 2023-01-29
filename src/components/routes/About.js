@@ -160,7 +160,7 @@ let About = () => {
             <Col>
               <Card>
                 <Card.Body>
-                  <Card.Title>Genevieve Clare Calma</Card.Title>
+                  <Card.Title>Genevieve Calma</Card.Title>
                   <Card.Subtitle>Developer</Card.Subtitle>
                   <Card.Text>About you and contact...</Card.Text>
                 </Card.Body>
