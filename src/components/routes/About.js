@@ -1,8 +1,11 @@
-import React from 'react';
-import { Container, Card, Row, Col } from 'react-bootstrap';
+import React, { useRef } from 'react';
+import { Container, Card, Row, Col, Button } from 'react-bootstrap';
 import '../../styles/About.css';
 
-let About = () => {
+const About = () => {
+  const overview = useRef(null);
+  const teamInfo = useRef(null);
+
   return (
     <>
       <div className="about-jumbotron">
@@ -14,7 +17,10 @@ let About = () => {
             user friendly and communicative platform to file your report!
           </p>
           <div className="learn-more">
-            <p className="about-scroll">
+            <button
+              onClick={() => overview.current.scrollIntoView({ behavior: 'smooth' })}
+              className="about-scroll"
+            >
               MORE ABOUT US
               <br />
               <div className="svg-center">
@@ -29,12 +35,12 @@ let About = () => {
                   <path d="M1 3.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13a.5.5 0 0 1-.5-.5zM8 6a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 .708-.708L7.5 12.293V6.5A.5.5 0 0 1 8 6z" />
                 </svg>
               </div>
-            </p>
+            </button>
           </div>
         </Container>
       </div>
 
-      <div className="about-more">
+      <div ref={overview} className="about-more">
         <Container>
           <h2>OVERVIEW</h2>
           <br />
@@ -50,7 +56,12 @@ let About = () => {
               RSGC is led by an amazing team and founders, Stefan Frunza, Rudy Chung, Genevieve
               Clare Calma, and Chen-Yuan Chu as of 2022.
             </p>
-            <p>GET TO KNOW OUR TEAM</p>
+            <Button
+              onClick={() => teamInfo.current.scrollIntoView({ behavior: 'smooth' })}
+              className="team-scroll"
+            >
+              GET TO KNOW MORE ABOUT OUR TEAM
+            </Button>
             <br />
             <h5>REQUIREMENTS TO FILE A VEHICLE COLLISION REPORT</h5>
             <p>If you are involved in a vehicle collision:</p>
@@ -134,7 +145,7 @@ let About = () => {
         </Container>
       </div>
 
-      <div className="team-info">
+      <div ref={teamInfo} className="team-info">
         <Container>
           <h2>RSGC Team</h2>
           <h5>Get to know our team!</h5>
