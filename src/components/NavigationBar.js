@@ -1,9 +1,15 @@
 import React from 'react';
 import { Nav, Navbar, NavDropdown, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { Auth } from 'aws-amplify';
 import '../styles/NavBar.css';
 
 const NavigationBar = () => {
+  function signOut(e) {
+    e.preventDefault();
+    Auth.signOut();
+  }
+
   return (
     <Navbar expand="lg" bg="dark" varient="dark">
       <Navbar.Brand href="/">RSGC</Navbar.Brand>
@@ -21,7 +27,9 @@ const NavigationBar = () => {
             <NavDropdown.Item href="">Dashboard</NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item href="" className="dropdown-logout">
-              <Button variant="dark">Logout</Button>
+              <Button variant="dark" onClick={(e) => signOut(e)}>
+                Logout
+              </Button>
             </NavDropdown.Item>
           </NavDropdown>
         </Nav>
