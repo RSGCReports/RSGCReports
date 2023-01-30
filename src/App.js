@@ -19,7 +19,7 @@ function App({ user }) {
   return (
     <div>
       <Router>
-        <NavigationBar user={user} />
+        <NavigationBar />
         <Routes>
           <Route exact path="/" element={<About />} />
           <Route path="*" element={<NotFound />} />
