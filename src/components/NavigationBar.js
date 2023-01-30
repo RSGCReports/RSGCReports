@@ -1,14 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Nav, Navbar, NavDropdown, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { Auth } from 'aws-amplify';
 import '../styles/NavBar.css';
 
 const NavigationBar = () => {
-  function signOut(e) {
+  const [username, setUserName] = useState([]);
+
+  useEffect(() => {
+    fetchUser().then((users) => setUserName(users.username));
+  });
+
+  const signOut = (e) => {
     e.preventDefault();
     Auth.signOut();
-  }
+  };
+
+  const fetchUser = async () => {
+    return await Auth.currentUserInfo();
+  };
 
   return (
     <Navbar expand="lg" bg="dark" varient="dark">
@@ -22,7 +32,7 @@ const NavigationBar = () => {
           <Nav.Link as={Link}>Contact Us</Nav.Link>
         </Nav>
         <Nav>
-          <NavDropdown title="Username/login/register" id="collapsible-nav-dropdown">
+          <NavDropdown title={username} id="collapsible-nav-dropdown">
             <NavDropdown.Item href="">Profile</NavDropdown.Item>
             <NavDropdown.Item href="">Dashboard</NavDropdown.Item>
             <NavDropdown.Divider />

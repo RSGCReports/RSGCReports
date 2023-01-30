@@ -7,7 +7,7 @@ import './App.css';
 import { withAuthenticator } from '@aws-amplify/ui-react';
 import PropTypes from 'prop-types';
 
-function App({ signOut, user }) {
+function App({ user }) {
   function authorizationHeaders(type = 'application/json') {
     const headers = { 'Content-Type': type };
     headers['Authorization'] = `Bearer ${user.signInUserSession.idToken.jwtToken}`;
@@ -19,20 +19,17 @@ function App({ signOut, user }) {
   return (
     <div>
       <Router>
-        <NavigationBar signOut={signOut} />
+        <NavigationBar />
         <Routes>
           <Route exact path="/" element={<About />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
-      {/* <button onClick={signOut}>Logout</button> */}
-      <h1>Hello {user.username}</h1>
     </div>
   );
 }
 
 App.propTypes = {
-  signOut: PropTypes.func,
   user: PropTypes.object,
   username: PropTypes.string,
 };
