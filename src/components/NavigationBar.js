@@ -29,18 +29,26 @@ const NavigationBar = () => {
           <Nav.Link as={Link} to="/">
             About
           </Nav.Link>
-          <Nav.Link as={Link}>Contact Us</Nav.Link>
+          {/* <Nav.Link as={Link}>Contact Us</Nav.Link> */}
         </Nav>
         <Nav>
-          <NavDropdown title={username} id="collapsible-nav-dropdown">
-            <NavDropdown.Item href="">Profile</NavDropdown.Item>
-            <NavDropdown.Item href="">Dashboard</NavDropdown.Item>
+          <NavDropdown
+            title={username}
+            id="dropdown-menu-align-end collapsible-nav-dropdown"
+            align="end"
+          >
+            <NavDropdown.Item as={Link} to="/profile">
+              Profile
+            </NavDropdown.Item>
+            <NavDropdown.Item as={Link} to="/reports">
+              Reports
+            </NavDropdown.Item>
             <NavDropdown.Divider />
-            <NavDropdown.Item href="" className="dropdown-logout">
+            <NavDropdown.ItemText className="dropdown-logout">
               <Button variant="dark" onClick={(e) => signOut(e)}>
                 Logout
               </Button>
-            </NavDropdown.Item>
+            </NavDropdown.ItemText>
           </NavDropdown>
         </Nav>
       </Navbar.Collapse>

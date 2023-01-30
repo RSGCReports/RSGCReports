@@ -4,7 +4,7 @@
   background-color: rgba(0, 0, 0, 0.8);
   margin: 0;
   padding: 10%;
-  padding-bottom: 2.5%;
+  padding-bottom: 5%;
 }
 .about-jumbotron h1,
 .about-jumbotron h3,
@@ -72,4 +72,20 @@
 }
 .other-resources .card-text {
   margin: 15px;
+}
+
+.about-scroll {
+  background: none;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+.about-scroll {
+  color: white;
+}
+.team-scroll {
+  /* padding: 0 15px 15px 0; */
+  background: grey;
+  border: 0;
+  margin: 0 15px 15px 0;
 }
