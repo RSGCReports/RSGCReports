@@ -1,0 +1,75 @@
+.about-jumbotron {
+  background: url('../assets/pexels-photo-2265634.jpeg');
+  background-size: cover;
+  background-color: rgba(0, 0, 0, 0.8);
+  margin: 0;
+  padding: 10%;
+  padding-bottom: 2.5%;
+}
+.about-jumbotron h1,
+.about-jumbotron h3,
+.about-jumbotron p,
+.other-resources h2,
+.other-resources h4 {
+  color: white;
+  text-shadow: #000 1px 0 20px;
+}
+.about-jumbotron .learn-more {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 0;
+  margin-top: 50px;
+}
+.about-jumbotron .learn-more p {
+  margin: 0;
+}
+.about-jumbotron .learn-more .svg-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.about-more {
+  position: relative;
+  margin: auto;
+  padding: 5%;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.about-more .requirements {
+  text-align: left;
+}
+
+.other-resources {
+  background: url('../assets/pexels-photo-2265634.jpeg');
+  background-size: cover;
+  background-color: rgba(0, 0, 0, 0.8);
+  margin: 0;
+  padding: 5%;
+  text-align: center;
+}
+.other-resources p,
+.other-resources a {
+  color: #000 !important;
+}
+.other-resources .col,
+.team-info .col {
+  padding: 2.5% !important;
+}
+
+.team-info {
+  position: relative;
+  margin: auto;
+  padding: 5%;
+  text-align: center;
+}
+.other-resources .card,
+.team-info .card {
+  height: 100%;
+  width: 100%;
+}
+.other-resources .card-text {
+  margin: 15px;
+}

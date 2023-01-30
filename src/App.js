@@ -1,8 +1,8 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import About from './component/About';
-import Account from './component/Account';
-import Reports from './component/Reports';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import About from './components/routes/About';
+import NotFound from './components/routes/NotFound';
+import NavigationBar from './components/NavigationBar';
 import './App.css';
 import { withAuthenticator } from '@aws-amplify/ui-react';
 import PropTypes from 'prop-types';
@@ -19,26 +19,13 @@ function App({ signOut, user }) {
   return (
     <div>
       <Router>
-        <div className="App">
-          <ul className="App-header">
-            <li>
-              <Link to="/">About</Link>
-            </li>
-            <li>
-              <Link to="/Account">Account</Link>
-            </li>
-            <li>
-              <Link to="/Reports">Reports</Link>
-            </li>
-          </ul>
-          <Routes>
-            <Route exact path="/" element={<About />}></Route>
-            <Route exact path="/Account" element={<Account />}></Route>
-            <Route exact path="/Reports" element={<Reports />}></Route>
-          </Routes>
-        </div>
+        <NavigationBar signOut={signOut} />
+        <Routes>
+          <Route exact path="/" element={<About />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </Router>
-      <button onClick={signOut}>Logout</button>
+      {/* <button onClick={signOut}>Logout</button> */}
       <h1>Hello {user.username}</h1>
     </div>
   );
