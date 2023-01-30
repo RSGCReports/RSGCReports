@@ -1,23 +1,47 @@
-import React, { Component } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import About from './component/About';
+import Account from './component/Account';
+import Reports from './component/Reports';
 import About from './components/routes/About';
 import NotFound from './components/routes/NotFound';
 import NavigationBar from './components/NavigationBar';
+import './App.css';
+import { withAuthenticator } from '@aws-amplify/ui-react';
+import PropTypes from 'prop-types';
 
-class App extends Component {
-  render() {
-    return (
-      <React.Fragment>
-        <Router>
-          <NavigationBar />
+function App({ signOut, user }) {
+  function authorizationHeaders(type = 'application/json') {
+    const headers = { 'Content-Type': type };
+    headers['Authorization'] = `Bearer ${user.signInUserSession.idToken.jwtToken}`;
+    return headers;
+  }
+
+  console.log(authorizationHeaders());
+
+  return (
+    <div>
+      <Router>
+      <NavigationBar />
           <Routes>
             <Route exact path="/" element={<About />} />
             <Route path="*" element={<NotFound />} />
+            <Route exact path="/Account" element={<Account />}></Route>
+            <Route exact path="/Reports" element={<Reports />}></Route>
           </Routes>
-        </Router>
-      </React.Fragment>
-    );
-  }
+      </Router>
+      <button onClick={signOut}>Logout</button>
+      <h1>Hello {user.username}</h1>
+    </div>
+  );
 }
 
-export default App;
+App.propTypes = {
+  signOut: PropTypes.func,
+  user: PropTypes.object,
+  username: PropTypes.string,
+};
+
+export default withAuthenticator(App, {
+  signUpAttributes: ['email', 'name'],
+});
