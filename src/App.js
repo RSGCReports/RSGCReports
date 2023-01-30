@@ -1,8 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import About from './component/About';
-import Account from './component/Account';
-import Reports from './component/Reports';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import About from './components/routes/About';
 import NotFound from './components/routes/NotFound';
 import NavigationBar from './components/NavigationBar';
@@ -22,15 +19,13 @@ function App({ signOut, user }) {
   return (
     <div>
       <Router>
-      <NavigationBar />
-          <Routes>
-            <Route exact path="/" element={<About />} />
-            <Route path="*" element={<NotFound />} />
-            <Route exact path="/Account" element={<Account />}></Route>
-            <Route exact path="/Reports" element={<Reports />}></Route>
-          </Routes>
+        <NavigationBar signOut={signOut} />
+        <Routes>
+          <Route exact path="/" element={<About />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </Router>
-      <button onClick={signOut}>Logout</button>
+      {/* <button onClick={signOut}>Logout</button> */}
       <h1>Hello {user.username}</h1>
     </div>
   );
