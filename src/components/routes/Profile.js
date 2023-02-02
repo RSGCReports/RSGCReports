@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Container } from 'react-bootstrap';
 import { Auth } from 'aws-amplify';
+import PersonalInfo from './profileComponents/PersonalInfo';
+// import InsurancePolicy from './profileComponents/InsurancePolicy';
+// import VehicleInfo from './profileComponents/VehicleInfo';
 
 const Profile = () => {
-  const [user, setUser] = useState([]);
-  const [username, setUserName] = useState([]);
+  const [fullName, setFullName] = useState([]);
 
   useEffect(() => {
-    fetchUser().then((users) => setUser(users));
-    fetchUser().then((users) => setUserName(users.username));
+    fetchUser().then((users) => setFullName(users.attributes.name));
   });
 
   const fetchUser = async () => {
@@ -18,7 +19,13 @@ const Profile = () => {
   return (
     <div>
       <Container>
-        <h1>{username}</h1>
+        <h1>Hi {fullName}!</h1>
+        <br />
+        <PersonalInfo />
+        <br />
+        {/* <InsurancePolicy /> */}
+        <br />
+        {/* <VehicleInfo /> */}
       </Container>
     </div>
   );
