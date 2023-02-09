@@ -30,12 +30,25 @@ const InsurancePolicy = () => {
             <Form.Label>City</Form.Label>
             <Form.Control type="text" />
           </Form.Group>
-          <Form.Group as={Col} controlId="formProvince">
-            <Form.Label>Province</Form.Label>
+          {/* <Form.Group as={Col} controlId="formProvince">
+            <Form.Label>Province/Territory</Form.Label>
             <Form.Select defaultValue="Province">
-              <option>List of provinces...</option>
+              <option>List of provinces and territories...</option>
+              <option value={}>Alberta</option>
+              <option value={}>British Columbia</option>
+              <option value={}>Manitoba</option>
+              <option value={}>New Brunswick</option>
+              <option value={}>Newfoundland and Labrador</option>
+              <option value={}>Nova Scotia</option>
+              <option value={}>Ontario</option>
+              <option value={}>Prince Edward Island</option>
+              <option value={}>Quebec</option>
+              <option value={}>Saskatchewan</option>
+              <option value={}>Northwest Territories</option>
+              <option value={}>Nunavut</option>
+              <option value={}>Yukon</option>
             </Form.Select>
-          </Form.Group>
+          </Form.Group> */}
           <Form.Group as={Col} controlId="formPostal">
             <Form.Label>Postal Code</Form.Label>
             <Form.Control type="text" />

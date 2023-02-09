@@ -29,7 +29,6 @@ const NavigationBar = () => {
           <Nav.Link as={Link} to="/">
             About
           </Nav.Link>
-          {/* <Nav.Link as={Link}>Contact Us</Nav.Link> */}
         </Nav>
         <Nav>
           <NavDropdown

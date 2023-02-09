@@ -19,7 +19,10 @@ const Profile = () => {
   return (
     <div>
       <Container>
-        <h1>Hi {fullName}!</h1>
+        <h1>
+          {fullName}
+          {"'"}s Profile
+        </h1>
         <br />
         <PersonalInfo />
         <br />
