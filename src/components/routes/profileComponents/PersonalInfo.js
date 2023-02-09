@@ -27,18 +27,21 @@ const PersonalInfo = () => {
   };
 
   useEffect(() => {
+    fetchUser().then((users) => {
+      setToken(users.signInUserSession.idToken.jwtToken);
+    });
     fetchUser().then((users) => setFullName(users.attributes.name));
     fetchUser().then((users) => setUserName(users.username));
     fetchUser().then((users) => setEmail(users.attributes.email));
-    fetchSession().then((users) => setToken(users.accessToken.jwtToken));
+    // fetchSession().then((users) => setToken(users.accessToken.jwtToken));
   });
 
   const fetchUser = async () => {
     return await Auth.currentAuthenticatedUser();
   };
-  const fetchSession = async () => {
-    return await Auth.currentSession();
-  };
+  // const fetchSession = async () => {
+  //   return await Auth.currentSession();
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -52,7 +55,7 @@ const PersonalInfo = () => {
       console.log(token);
       // alert('Posted...');
       try {
-        let res = await fetch('http://localhost:8080/api', {
+        let res = await fetch('http://localhost:8080/api/', {
           method: 'POST',
           body: JSON.stringify({
             username: form.username,
@@ -67,7 +70,7 @@ const PersonalInfo = () => {
           }),
           headers: { 'Content-Type': 'application/json', Authorization: token },
         });
-        if (res.status === 200) {
+        if (res.status >= 200 && res.status <= 299) {
           setForm({});
           setErrors({});
           console.log('POST Success!!');
