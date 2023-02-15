@@ -3,48 +3,6 @@ import { Container, Form, Button, Row, Col } from 'react-bootstrap';
 import { Auth } from 'aws-amplify';
 
 const PersonalInfo = ({ nextStep, setField, setErrors, errors, formValues }) => {
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   const newErrors = checkErrors();
-
-  //   if (Object.keys(newErrors).length > 0) {
-  //     setErrors(newErrors);
-  //   } else {
-  //     // console.log(form);
-  //     const token = 'Bearer ' + bearerToken;
-  //     try {
-  //       let res = await fetch('http://localhost:8080/api', {
-  //         method: 'POST',
-  //         body: JSON.stringify({
-  //           username: form.username,
-  //           fullname: form.fullname,
-  //           email: form.email,
-  //           dob: form.dob,
-  //           disabilities: form.disabilities,
-  //           yearsDriving: form.yearsDriving,
-  //           homeAddress: form.homeAddress,
-  //           businessAddress: form.businessAddress,
-  //           phoneNumber: form.phoneNumber,
-  //         }),
-  //         headers: { 'Content-Type': 'application/json', Authorization: token },
-  //       });
-  //       if (res.status === 200) {
-  //         setForm({});
-  //         setErrors({});
-  //         console.log('POST Success!!');
-  //       } else {
-  //         console.log('Some Error occurred...');
-  //       }
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   // console.log(formValues.username);
-  // });
-
   const [fullName_auth, setFullName] = useState([]);
   const [username_auth, setUserName] = useState([]);
   const [email_auth, setEmail] = useState([]);
