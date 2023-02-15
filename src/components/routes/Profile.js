@@ -1,37 +1,95 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Container } from 'react-bootstrap';
-import { Auth } from 'aws-amplify';
 import PersonalInfo from './profileComponents/PersonalInfo';
-// import InsurancePolicy from './profileComponents/InsurancePolicy';
-// import VehicleInfo from './profileComponents/VehicleInfo';
+import InsurancePolicy from './profileComponents/InsurancePolicy';
+import VehicleInfo from './profileComponents/VehicleInfo';
+import Confirmation from './profileComponents/Confirmation';
+import NotFound from './NotFound';
 
 const Profile = () => {
-  const [fullName, setFullName] = useState([]);
+  const [form, setForm] = useState({});
+  const [step, setStep] = useState(1);
+  const [errors, setErrors] = useState({});
 
-  useEffect(() => {
-    fetchUser().then((users) => setFullName(users.attributes.name));
-  });
-
-  const fetchUser = async () => {
-    return await Auth.currentUserInfo();
+  const setField = (field, value) => {
+    setForm({
+      ...form,
+      [field]: value,
+    });
+    // checking for errors, and removing them from error object
+    if (errors[field])
+      setErrors({
+        ...errors,
+        [field]: null,
+      });
   };
 
-  return (
-    <div>
-      <Container>
-        <h1>
-          {fullName}
-          {"'"}s Profile
-        </h1>
-        <br />
-        <PersonalInfo />
-        <br />
-        {/* <InsurancePolicy /> */}
-        <br />
-        {/* <VehicleInfo /> */}
-      </Container>
-    </div>
-  );
+  // proceed to next component
+  const nextStep = () => {
+    setStep(step + 1);
+  };
+  // proceed to previous component
+  const prevStep = () => {
+    setStep(step - 1);
+  };
+
+  switch (step) {
+    case 1:
+      return (
+        <Container>
+          <PersonalInfo
+            nextStep={nextStep}
+            setField={setField}
+            setErrors={setErrors}
+            errors={errors}
+            formValues={form}
+          />
+        </Container>
+      );
+    case 2:
+      return (
+        <Container>
+          <InsurancePolicy
+            nextStep={nextStep}
+            prevStep={prevStep}
+            setField={setField}
+            setErrors={setErrors}
+            errors={errors}
+            formValues={form}
+          />
+        </Container>
+      );
+    case 3:
+      return (
+        <Container>
+          <VehicleInfo
+            nextStep={nextStep}
+            prevStep={prevStep}
+            setField={setField}
+            setErrors={setErrors}
+            errors={errors}
+            formValues={form}
+          />
+        </Container>
+      );
+    case 4:
+      return (
+        <Container>
+          <Confirmation
+            prevStep={prevStep}
+            setForm={setForm}
+            setErrors={setErrors}
+            formValues={form}
+          />
+        </Container>
+      );
+    default:
+      return (
+        <Container>
+          <NotFound />
+        </Container>
+      );
+  }
 };
 
 export default Profile;

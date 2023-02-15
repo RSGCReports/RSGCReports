@@ -1,81 +1,236 @@
 import React from 'react';
-import { Container, Form, Col } from 'react-bootstrap';
+import { Container, Form, Button, Row, Col } from 'react-bootstrap';
 
-const InsurancePolicy = () => {
+const InsurancePolicy = ({ nextStep, prevStep, setField, setErrors, errors, formValues }) => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const newErrors = checkErrors();
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+    } else {
+      nextStep();
+    }
+  };
+
+  const goBack = (e) => {
+    e.preventDefault();
+    prevStep();
+  };
+
+  const checkErrors = () => {
+    const {
+      insurer,
+      insurerName,
+      Agent,
+      IPhomeStreet,
+      IPhomeCity,
+      IPhomeCountry,
+      IPhomeProvince,
+      IPhomePostalCode,
+      policyNumber,
+    } = formValues;
+    const newErrors = {};
+
+    // insurer and agent check
+    if (!insurer || insurer === '') newErrors.insurer = 'Must provide insurer';
+    if (!insurerName || insurerName === '') newErrors.insurerName = 'Must provide insurer name';
+    if (!Agent || Agent === '') newErrors.Agent = 'Must provide agent';
+
+    // home address check
+    if (!IPhomeStreet || IPhomeStreet === '')
+      newErrors.IPhomeStreet = 'Must provide home street address';
+    if (!IPhomeCity || IPhomeCity === '') newErrors.IPhomeCity = 'Must provide city';
+    if (!IPhomeCountry || IPhomeCountry === '') newErrors.IPhomeCountry = 'Must provide country';
+    if (!IPhomeProvince || IPhomeProvince === '')
+      newErrors.IPhomeProvince = 'Must provide province';
+    if (!IPhomePostalCode || IPhomePostalCode === '')
+      newErrors.IPhomePostalCode = 'Must provide postal code';
+
+    // policy number check
+    if (!policyNumber || policyNumber === '') newErrors.policyNumber = 'Must include policy number';
+
+    return newErrors;
+  };
+
   return (
     <div>
-      <Container>
+      <Container style={{ padding: '15px' }}>
         <Form>
           <h3>Insurance Policy</h3>
-          {/* <Row> */}
-          <Form.Group as={Col} controlId="formInsurer">
+          <Form.Group controlId="formInsurer">
             <Form.Label>Insurer</Form.Label>
-            <Form.Control type="text" />
+            <Form.Control
+              type="text"
+              name="form[insurer]"
+              defaultValue={formValues.insurer}
+              onChange={(e) => setField('insurer', e.target.value)}
+              isInvalid={errors.insurer}
+            />
+            <Form.Control.Feedback type="invalid">{errors.insurer}</Form.Control.Feedback>
           </Form.Group>
-          <Form.Group as={Col} controlId="formInsurerName">
+          <Form.Group controlId="formInsurerName">
             <Form.Label>Name of Insurer</Form.Label>
-            <Form.Control type="text" />
+            <Form.Control
+              type="text"
+              name="form[insurerName]"
+              defaultValue={formValues.insurerName}
+              onChange={(e) => setField('insurerName', e.target.value)}
+              isInvalid={errors.insurerName}
+            />
+            <Form.Control.Feedback type="invalid">{errors.insurerName}</Form.Control.Feedback>
           </Form.Group>
-          <Form.Group as={Col} controlId="formInsuranceAgent">
-            <Form.Label>Agent/Broker</Form.Label>
-            <Form.Control type="text" />
+          <Form.Group controlId="formInsuranceAgent">
+            <Form.Label>Agent</Form.Label>
+            <Form.Control
+              type="text"
+              name="form[Agent]"
+              defaultValue={formValues.Agent}
+              onChange={(e) => setField('Agent', e.target.value)}
+              isInvalid={errors.Agent}
+            />
+            <Form.Control.Feedback type="invalid">{errors.Agent}</Form.Control.Feedback>
           </Form.Group>
-          {/* </Row> */}
-          <Form.Group controlId="formAddress">
-            <Form.Label>Address</Form.Label>
-            <Form.Control type="text" placeholder="1234 Fake St" />
-          </Form.Group>
-          {/* <Row> */}
-          <Form.Group as={Col} controlId="formCity">
-            <Form.Label>City</Form.Label>
-            <Form.Control type="text" />
-          </Form.Group>
-          {/* <Form.Group as={Col} controlId="formProvince">
-            <Form.Label>Province/Territory</Form.Label>
-            <Form.Select defaultValue="Province">
-              <option>List of provinces and territories...</option>
-              <option value={}>Alberta</option>
-              <option value={}>British Columbia</option>
-              <option value={}>Manitoba</option>
-              <option value={}>New Brunswick</option>
-              <option value={}>Newfoundland and Labrador</option>
-              <option value={}>Nova Scotia</option>
-              <option value={}>Ontario</option>
-              <option value={}>Prince Edward Island</option>
-              <option value={}>Quebec</option>
-              <option value={}>Saskatchewan</option>
-              <option value={}>Northwest Territories</option>
-              <option value={}>Nunavut</option>
-              <option value={}>Yukon</option>
-            </Form.Select>
-          </Form.Group> */}
-          <Form.Group as={Col} controlId="formPostal">
-            <Form.Label>Postal Code</Form.Label>
-            <Form.Control type="text" />
-            <Form.Text>
-              No dashes {'"'}-{'"'} and/or spaces
-            </Form.Text>
-          </Form.Group>
-          {/* </Row> */}
-          {/* <Row> */}
-          <Form.Group as={Col} controlId="formNumber">
-            <Form.Label>Phone Number</Form.Label>
-            <Form.Control type="text" placeholder="4161231234" />
-            <Form.Text>
-              Numbers only, no dashes {'"'}-{'"'} and/or brackets {'"'}
-              {'()'}
-              {'"'}
-            </Form.Text>
-          </Form.Group>
-          <Form.Group as={Col} controlId="formPolicyNumber">
-            <Form.Label>Policy Number</Form.Label>
-            <Form.Control type="text" />
-          </Form.Group>
-          {/* </Row> */}
           <br />
-          <Button varient="primary" type="submit">
-            Submit
-          </Button>
+          <Row>
+            <Form.Group as={Col} controlId="formAddress">
+              <Form.Label>Home Address</Form.Label>
+              <Form.Control
+                type="text"
+                name="form[IPhomeStreet]"
+                defaultValue={formValues.IPhomeStreet}
+                placeholder="123 Fake St"
+                onChange={(e) => setField('IPhomeStreet', e.target.value)}
+                isInvalid={errors.IPhomeStreet}
+              />
+              <Form.Control.Feedback type="invalid">{errors.IPhomeStreet}</Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group as={Col} controlId="formCity">
+              <Form.Label>City</Form.Label>
+              <Form.Control
+                type="text"
+                name="form[IPhomeCity]"
+                defaultValue={formValues.IPhomeCity}
+                onChange={(e) => setField('IPhomeCity', e.target.value)}
+                isInvalid={errors.IPhomeCity}
+              />
+              <Form.Control.Feedback type="invalid">{errors.IPhomeCity}</Form.Control.Feedback>
+            </Form.Group>
+          </Row>
+          <Row>
+            <Form.Group as={Col} controlId="formProvince">
+              <Form.Label>Province/State</Form.Label>
+              <Form.Control
+                type="text"
+                name="form[IPhomeProvince]"
+                defaultValue={formValues.IPhomeProvince}
+                onChange={(e) => setField('IPhomeProvince', e.target.value)}
+                isInvalid={errors.IPhomeProvince}
+              />
+              <Form.Control.Feedback type="invalid">{errors.IPhomeProvince}</Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group as={Col} controlId="formCountry">
+              <Form.Label>Country</Form.Label>
+              <Form.Control
+                type="text"
+                name="form[IPhomeCountry]"
+                defaultValue={formValues.IPhomeCountry}
+                onChange={(e) => setField('IPhomeCountry', e.target.value)}
+                isInvalid={errors.IPhomeCountry}
+              />
+              <Form.Control.Feedback type="invalid">{errors.IPhomeCountry}</Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group as={Col} controlId="formPostal">
+              <Form.Label>Postal Code</Form.Label>
+              <Form.Control
+                type="text"
+                name="form[IPhomePostalCode]"
+                defaultValue={formValues.IPhomePostalCode}
+                placeholder="X#X#X#"
+                onChange={(e) => setField('IPhomePostalCode', e.target.value)}
+                isInvalid={errors.IPhomePostalCode}
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.IPhomePostalCode}
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Row>
+          <br />
+          <Row>
+            <Form.Group as={Col} controlId="formAddress">
+              <Form.Label>Business Address</Form.Label>
+              <Form.Control
+                type="text"
+                name="form[IPbusinessStreet]"
+                defaultValue={formValues.businessStreet || ''}
+                placeholder={formValues.businessStreet || '123 Fake St'}
+                onChange={(e) => setField('IPbusinessStreet', e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group as={Col} controlId="formCity">
+              <Form.Label>City</Form.Label>
+              <Form.Control
+                type="text"
+                name="form[IPbusinessCity]"
+                defaultValue={formValues.businessCity || ''}
+                placeholder={formValues.businessCity}
+                onChange={(e) => setField('IPbusinessCity', e.target.value)}
+              />
+            </Form.Group>
+          </Row>
+          <Row>
+            <Form.Group as={Col} controlId="formProvince">
+              <Form.Label>Province/State</Form.Label>
+              <Form.Control
+                type="text"
+                name="form[IPbusinessProvince]"
+                defaultValue={formValues.businessProvince || ''}
+                placeholder={formValues.businessProvince}
+                onChange={(e) => setField('IPbusinessProvince', e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group as={Col} controlId="formCountry">
+              <Form.Label>Country</Form.Label>
+              <Form.Control
+                type="text"
+                name="form[IPbusinessCountry]"
+                defaultValue={formValues.businessCountry || ''}
+                placeholder={formValues.businessCountry}
+                onChange={(e) => setField('IPbusinessCountry', e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group as={Col} controlId="formPostal">
+              <Form.Label>Postal Code</Form.Label>
+              <Form.Control
+                type="text"
+                name="form[IPbusinessPostalCode]"
+                defaultValue={formValues.businessPostalCode || ''}
+                placeholder={formValues.businessPostalCode || 'X#X#X#'}
+                onChange={(e) => setField('IPbusinessPostalCode', e.target.value)}
+              />
+            </Form.Group>
+          </Row>
+          <br />
+          <Form.Group controlId="formPolicyNumber">
+            <Form.Label>Policy Number</Form.Label>
+            <Form.Control
+              type="text"
+              name="form[policyNumber]"
+              defaultValue={formValues.policyNumber}
+              onChange={(e) => setField('policyNumber', e.target.value)}
+              isInvalid={errors.policyNumber}
+            />
+            <Form.Control.Feedback type="invalid">{errors.policyNumber}</Form.Control.Feedback>
+          </Form.Group>
+          <br />
+          <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+            <Button variant="secondary" onClick={goBack}>
+              Previous
+            </Button>
+            <Button variant="primary" type="submit" onClick={handleSubmit}>
+              Continue to Vehicle Information
+            </Button>
+          </div>
         </Form>
       </Container>
     </div>
