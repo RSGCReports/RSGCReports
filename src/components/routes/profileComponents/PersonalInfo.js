@@ -1,90 +1,45 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Form, Button } from 'react-bootstrap';
+import { Container, Form, Button, Row, Col } from 'react-bootstrap';
 import { Auth } from 'aws-amplify';
 
-const PersonalInfo = () => {
-  const [form, setForm] = useState({});
+const PersonalInfo = ({ nextStep, setField, setErrors, errors, formValues }) => {
   const [fullName_auth, setFullName] = useState([]);
   const [username_auth, setUserName] = useState([]);
   const [email_auth, setEmail] = useState([]);
-  const [bearerToken, setToken] = useState([]);
-  const [errors, setErrors] = useState({});
-
-  const setField = (field, value) => {
-    setForm({
-      ...form,
-      username: username_auth,
-      fullname: fullName_auth,
-      email: email_auth,
-      [field]: value,
-    });
-    // checking for errors, and removing them from error object
-    if (errors[field])
-      setErrors({
-        ...errors,
-        [field]: null,
-      });
-  };
 
   useEffect(() => {
-    fetchUser().then((users) => {
-      setToken(users.signInUserSession.idToken.jwtToken);
-    });
     fetchUser().then((users) => setFullName(users.attributes.name));
     fetchUser().then((users) => setUserName(users.username));
     fetchUser().then((users) => setEmail(users.attributes.email));
-    // fetchSession().then((users) => setToken(users.accessToken.jwtToken));
   });
 
   const fetchUser = async () => {
-    return await Auth.currentAuthenticatedUser();
+    return await Auth.currentUserInfo();
   };
-  // const fetchSession = async () => {
-  //   return await Auth.currentSession();
-  // };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     const newErrors = checkErrors();
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
     } else {
-      console.log(form);
-      const token = 'Bearer ' + bearerToken;
-      console.log(token);
-      // alert('Posted...');
-      try {
-        let res = await fetch('http://localhost:8080/api/', {
-          method: 'POST',
-          body: JSON.stringify({
-            username: form.username,
-            fullname: form.fullname,
-            email: form.email,
-            dob: form.dob,
-            disabilities: form.disabilities,
-            yearsDriving: form.yearsDriving,
-            homeAddress: form.homeAddress,
-            businessAddress: form.businessAddress,
-            phoneNumber: form.phoneNumber,
-          }),
-          headers: { 'Content-Type': 'application/json', Authorization: token },
-        });
-        if (res.status >= 200 && res.status <= 299) {
-          setForm({});
-          setErrors({});
-          console.log('POST Success!!');
-        } else {
-          console.log('Some Error occurred...');
-        }
-      } catch (err) {
-        console.log(err);
-      }
+      nextStep();
     }
   };
 
   const checkErrors = () => {
-    const { dob, yearsDriving, homeAddress, phoneNumber } = form;
+    const {
+      dob,
+      yearsDriving,
+      homeStreet,
+      homeCity,
+      homeCountry,
+      homeProvince,
+      homePostalCode,
+      phoneNumber,
+      driverLicense,
+    } = formValues;
     const newErrors = {};
     // const regex = RegExp(/^d{10}$);
 
@@ -92,7 +47,12 @@ const PersonalInfo = () => {
     if (!dob || dob === '') newErrors.dob = 'Must provide date of birth';
 
     // home address check
-    if (!homeAddress || homeAddress === '') newErrors.homeAddress = 'Must provide home address';
+    if (!homeStreet || homeStreet === '') newErrors.homeStreet = 'Must provide home street address';
+    if (!homeCity || homeCity === '') newErrors.homeCity = 'Must provide city';
+    if (!homeCountry || homeCountry === '') newErrors.homeCountry = 'Must provide country';
+    if (!homeProvince || homeProvince === '') newErrors.homeProvince = 'Must provide province';
+    if (!homePostalCode || homePostalCode === '')
+      newErrors.homePostalCode = 'Must provide postal code';
 
     // phone number check
     if (!phoneNumber || phoneNumber === '') newErrors.phoneNumber = 'Must provide phone number';
@@ -101,12 +61,16 @@ const PersonalInfo = () => {
     if (!yearsDriving || yearsDriving === '')
       newErrors.yearsDriving = 'Must provide how many years you drove';
 
+    // drivers license check
+    if (!driverLicense || driverLicense === '')
+      newErrors.driverLicense = 'Must provide drivers license number';
+
     return newErrors;
   };
 
   return (
     <div>
-      <Container>
+      <Container style={{ padding: '15px' }}>
         <Form>
           <h3>Personal Information</h3>
           <Form.Group controlId="formFullName">
@@ -114,7 +78,7 @@ const PersonalInfo = () => {
             <Form.Control
               type="text"
               name="form[name]"
-              value={fullName_auth}
+              defaultValue={fullName_auth || ''}
               placeholder={fullName_auth}
               disabled
             />
@@ -124,7 +88,7 @@ const PersonalInfo = () => {
             <Form.Control
               type="text"
               name="form[username]"
-              value={username_auth}
+              defaultValue={username_auth || ''}
               placeholder={username_auth}
               disabled
             />
@@ -134,7 +98,7 @@ const PersonalInfo = () => {
             <Form.Control
               type="email"
               name="form[email]"
-              value={email_auth}
+              defaultValue={email_auth || ''}
               placeholder={email_auth}
               disabled
             />
@@ -144,77 +108,189 @@ const PersonalInfo = () => {
             <Form.Control
               type="date"
               name="form[dob]"
+              defaultValue={formValues.dob}
               onChange={(e) => setField('dob', e.target.value)}
               isInvalid={errors.dob}
             />
             <Form.Control.Feedback type="invalid">{errors.dob}</Form.Control.Feedback>
           </Form.Group>
-          <Form.Group controlId="formAddress">
-            <Form.Label>Home Address</Form.Label>
-            <Form.Control
-              type="text"
-              name="form[homeAddress]"
-              placeholder="1234 Fake St, City, Province, Canada, A1B2C3"
-              onChange={(e) => setField('homeAddress', e.target.value)}
-              isInvalid={errors.homeAddress}
-            />
-            <Form.Control.Feedback type="invalid">{errors.homeAddress}</Form.Control.Feedback>
-          </Form.Group>
-          <Form.Group controlId="formAddress">
-            <Form.Label>Business Address Address</Form.Label>
-            <Form.Control
-              type="text"
-              name="form[businessAddress]"
-              defaultValue={''}
-              placeholder="1234 Fake St"
-              onChange={(e) => setField('businessAddress', e.target.value)}
-            />
-          </Form.Group>
-          <Form.Group controlId="formNumber">
-            <Form.Label>Phone Number</Form.Label>
-            <Form.Control
-              type="text"
-              name="form[phoneNumber]"
-              placeholder="4161231234"
-              onChange={(e) => setField('phoneNumber', e.target.value)}
-              isInvalid={errors.phoneNumber}
-            />
-            <Form.Control.Feedback type="invalid">{errors.phoneNumber}</Form.Control.Feedback>
-          </Form.Group>
-          {/* <Form.Group controlId="formLicenseNumber">
+          <br />
+          <Row>
+            <Form.Group as={Col} controlId="formAddress">
+              <Form.Label>Home Street Address</Form.Label>
+              <Form.Control
+                type="text"
+                name="form[homeStreet]"
+                defaultValue={formValues.homeStreet}
+                placeholder="1234 Fake St"
+                onChange={(e) => setField('homeStreet', e.target.value)}
+                isInvalid={errors.homeStreet}
+              />
+              <Form.Control.Feedback type="invalid">{errors.homeStreet}</Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group as={Col} controlId="formCity">
+              <Form.Label>City</Form.Label>
+              <Form.Control
+                type="text"
+                name="form[homeCity]"
+                defaultValue={formValues.homeCity}
+                onChange={(e) => setField('homeCity', e.target.value)}
+                isInvalid={errors.homeCity}
+              />
+              <Form.Control.Feedback type="invalid">{errors.homeCity}</Form.Control.Feedback>
+            </Form.Group>
+          </Row>
+          <Row>
+            <Form.Group as={Col} controlId="formProvince">
+              <Form.Label>Province/State</Form.Label>
+              <Form.Control
+                type="text"
+                name="form[homeProvince]"
+                defaultValue={formValues.homeProvince}
+                onChange={(e) => setField('homeProvince', e.target.value)}
+                isInvalid={errors.homeProvince}
+              />
+              <Form.Control.Feedback type="invalid">{errors.homeProvince}</Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group as={Col} controlId="formCountry">
+              <Form.Label>Country</Form.Label>
+              <Form.Control
+                type="text"
+                name="form[homeCountry]"
+                defaultValue={formValues.homeCountry}
+                onChange={(e) => setField('homeCountry', e.target.value)}
+                isInvalid={errors.homeCountry}
+              />
+              <Form.Control.Feedback type="invalid">{errors.homeCountry}</Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group as={Col} controlId="formPostal">
+              <Form.Label>Postal Code</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="A1B2C3"
+                name="form[homePostalCode]"
+                defaultValue={formValues.homePostalCode}
+                onChange={(e) => setField('homePostalCode', e.target.value)}
+                isInvalid={errors.homePostalCode}
+              />
+              <Form.Control.Feedback type="invalid">{errors.homePostalCode}</Form.Control.Feedback>
+            </Form.Group>
+          </Row>
+          <br />
+          <Row>
+            <Form.Group as={Col} controlId="formAddress">
+              <Form.Label>Business Street Address</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="1234 Fake St"
+                name="form[businessStreet]"
+                defaultValue={formValues.businessStreet || ''}
+                onChange={(e) =>
+                  e.target.value
+                    ? setField('businessStreet', e.target.value)
+                    : setField('businessStreet', '')
+                }
+              />
+            </Form.Group>
+            <Form.Group as={Col} controlId="formCity">
+              <Form.Label>City</Form.Label>
+              <Form.Control
+                type="text"
+                name="form[businessCity]"
+                defaultValue={formValues.businessCity || ''}
+                onChange={(e) => setField('businessCity', e.target.value)}
+              />
+            </Form.Group>
+          </Row>
+          <Row>
+            <Form.Group as={Col} controlId="formProvince">
+              <Form.Label>Province/State</Form.Label>
+              <Form.Control
+                type="text"
+                name="form[businessProvince]"
+                defaultValue={formValues.businessProvince || ''}
+                onChange={(e) => setField('businessProvince', e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group as={Col} controlId="formCountry">
+              <Form.Label>Country</Form.Label>
+              <Form.Control
+                type="text"
+                name="form[businessCountry]"
+                defaultValue={formValues.businessCountry || ''}
+                onChange={(e) => setField('businessCountry', e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group as={Col} controlId="formPostal">
+              <Form.Label>Postal Code</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="A1B2C3"
+                name="form[businessPostalCode]"
+                defaultValue={formValues.businessPostalCode || ''}
+                onChange={(e) => setField('businessPostalCode', e.target.value)}
+              />
+            </Form.Group>
+          </Row>
+          <br />
+          <Row>
+            <Form.Group as={Col} controlId="formNumber">
+              <Form.Label>Phone Number</Form.Label>
+              <Form.Control
+                type="text"
+                name="form[phoneNumber]"
+                placeholder="4161231234"
+                defaultValue={formValues.phoneNumber}
+                onChange={(e) => setField('phoneNumber', e.target.value)}
+                isInvalid={errors.phoneNumber}
+              />
+              <Form.Control.Feedback type="invalid">{errors.phoneNumber}</Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group as={Col} controlId="formYearsDriving">
+              <Form.Label>Years Driving</Form.Label>
+              <Form.Control
+                type="number"
+                name="form[yearsDriving]"
+                placeholder="0"
+                min="0"
+                defaultValue={formValues.yearsDriving}
+                onChange={(e) => setField('yearsDriving', e.target.value)}
+                isInvalid={errors.yearsDriving}
+              />
+              <Form.Control.Feedback type="invalid">{errors.yearsDriving}</Form.Control.Feedback>
+            </Form.Group>
+          </Row>
+          <br />
+          <Form.Group controlId="formLicenseNumber">
             <Form.Label>Drivers License Number</Form.Label>
-            <Form.Control type="text" placeholder="XXXXX-XXXXX-XXXXX" />
-            <Form.Text>
-              No dashes {'"'}-{'"'} and or spaces
-            </Form.Text>
-          </Form.Group> */}
-          <Form.Group controlId="formYearsDriving">
-            <Form.Label>Number of Years Driving</Form.Label>
             <Form.Control
-              type="number"
-              name="form[yearsDriving]"
-              placeholder="0"
-              min="0"
-              onChange={(e) => setField('yearsDriving', e.target.value)}
-              isInvalid={errors.yearsDriving}
+              type="text"
+              placeholder="XXXXX-XXXXX-XXXXX"
+              name="form[driverLicense]"
+              defaultValue={formValues.driverLicense}
+              onChange={(e) => setField('driverLicense', e.target.value)}
+              isInvalid={errors.driverLicense}
             />
-            <Form.Control.Feedback type="invalid">{errors.yearsDriving}</Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">{errors.driverLicense}</Form.Control.Feedback>
           </Form.Group>
+          <br />
           <Form.Group xs={7} controlId="formDisabilities">
             <Form.Label>List any disabilities</Form.Label>
             <Form.Control
               as="textarea"
               type="text"
               name="form[disabilities]"
-              defaultValue={''}
+              defaultValue={formValues.disabilities || ''}
               onChange={(e) => setField('disabilities', e.target.value)}
             />
             <Form.Text>If none, field can be left blank, otherwise please state all</Form.Text>
           </Form.Group>
           <br />
-          <Button varient="primary" type="submit" onClick={handleSubmit}>
-            Submit
-          </Button>
+          <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+            <Button variant="primary" type="submit" onClick={handleSubmit}>
+              Continue to Insurance Policy Information
+            </Button>
+          </div>
         </Form>
       </Container>
     </div>
