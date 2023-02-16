@@ -50,13 +50,29 @@ const PersonalInfo = ({ nextStep, setField, setErrors, errors, formValues }) => 
     if (!homeStreet || homeStreet === '') newErrors.homeStreet = 'Must provide home street address';
     if (!homeCity || homeCity === '') newErrors.homeCity = 'Must provide city';
     if (!homeCountry || homeCountry === '') newErrors.homeCountry = 'Must provide country';
+    else if (homeCountry && homeCountry !== '' && homeCountry !== 'Canada')
+      newErrors.homeCountry = 'Must be Canada';
     if (!homeProvince || homeProvince === '') newErrors.homeProvince = 'Must provide province';
+    else if (
+      homeProvince &&
+      homeProvince !== '' &&
+      !['ON', 'QC', 'NS', 'NB', 'MB', 'BC', 'PE', 'SK', 'AB', 'NL', 'NT', 'YT', 'NU'].includes(
+        homeProvince
+      )
+    )
+      newErrors.homeProvince = 'Must be a Canadian province';
     if (!homePostalCode || homePostalCode === '')
       newErrors.homePostalCode = 'Must provide postal code';
-
+    else if (
+      homePostalCode &&
+      homePostalCode !== '' &&
+      !/^[A-Z][0-9][A-Z][0-9][A-Z][0-9]$/.test(homePostalCode)
+    )
+      newErrors.homePostalCode = 'Postal code must be in X#X#X# format';
     // phone number check
     if (!phoneNumber || phoneNumber === '') newErrors.phoneNumber = 'Must provide phone number';
-
+    else if (phoneNumber || (phoneNumber !== '' && /[0-9]{10}/.test(phoneNumber)))
+      newErrors.phoneNumber = 'Phone number must be in ########## format';
     // years driving check
     if (!yearsDriving || yearsDriving === '')
       newErrors.yearsDriving = 'Must provide how many years you drove';
