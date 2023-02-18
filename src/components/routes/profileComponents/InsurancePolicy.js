@@ -42,10 +42,19 @@ const InsurancePolicy = ({ nextStep, prevStep, setField, setErrors, errors, form
       newErrors.IPhomeStreet = 'Must provide home street address';
     if (!IPhomeCity || IPhomeCity === '') newErrors.IPhomeCity = 'Must provide city';
     if (!IPhomeCountry || IPhomeCountry === '') newErrors.IPhomeCountry = 'Must provide country';
+    else if (IPhomeCountry !== 'Canada') newErrors.IPhomeCountry = 'Must be Canada';
     if (!IPhomeProvince || IPhomeProvince === '')
       newErrors.IPhomeProvince = 'Must provide province';
+    else if (
+      !['ON', 'QC', 'NS', 'NB', 'MB', 'BC', 'PE', 'SK', 'AB', 'NL', 'NT', 'YT', 'NU'].includes(
+        IPhomeProvince
+      )
+    )
+      newErrors.IPhomeProvince = 'Must be a Canadian province';
     if (!IPhomePostalCode || IPhomePostalCode === '')
       newErrors.IPhomePostalCode = 'Must provide postal code';
+    else if (!/^[A-Z][0-9][A-Z][0-9][A-Z][0-9]$/.test(IPhomePostalCode))
+      newErrors.IPhomePostalCode = 'Postal code must be in X#X#X# format';
 
     // policy number check
     if (!policyNumber || policyNumber === '') newErrors.policyNumber = 'Must include policy number';

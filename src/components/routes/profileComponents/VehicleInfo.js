@@ -56,18 +56,36 @@ const VehicleInfo = ({ nextStep, prevStep, setField, setErrors, errors, formValu
     if (!regStreet || regStreet === '') newErrors.regStreet = 'Must provide street address';
     if (!regCity || regCity === '') newErrors.regCity = 'Must provide city';
     if (!regCountry || regCountry === '') newErrors.regCountry = 'Must provide country';
+    else if (regCountry !== 'Canada') newErrors.regCountry = 'Must be Canada';
     if (!regProvince || regProvince === '') newErrors.regProvince = 'Must provide province';
+    else if (
+      !['ON', 'QC', 'NS', 'NB', 'MB', 'BC', 'PE', 'SK', 'AB', 'NL', 'NT', 'YT', 'NU'].includes(
+        regProvince
+      )
+    )
+      newErrors.regProvince = 'Must be a Canadian province';
     if (!regPostalCode || regPostalCode === '')
       newErrors.regPostalCode = 'Must provide postal code';
+    else if (!/^[A-Z][0-9][A-Z][0-9][A-Z][0-9]$/.test(regPostalCode))
+      newErrors.regPostalCode = 'Postal code must be in X#X#X# format';
     // }
     // actual owners address check
     // if (!checkedAct) {
     if (!actStreet || actStreet === '') newErrors.actStreet = 'Must provide street address';
     if (!actCity || actCity === '') newErrors.actCity = 'Must provide city';
     if (!actCountry || actCountry === '') newErrors.actCountry = 'Must provide country';
+    else if (actCountry !== 'Canada') newErrors.actCountry = 'Must be Canada';
     if (!actProvince || actProvince === '') newErrors.actProvince = 'Must provide province';
+    else if (
+      !['ON', 'QC', 'NS', 'NB', 'MB', 'BC', 'PE', 'SK', 'AB', 'NL', 'NT', 'YT', 'NU'].includes(
+        actProvince
+      )
+    )
+      newErrors.actProvince = 'Must be a Canadian province';
     if (!actPostalCode || actPostalCode === '')
       newErrors.actPostalCode = 'Must provide postal code';
+    else if (!/^[A-Z][0-9][A-Z][0-9][A-Z][0-9]$/.test(actPostalCode))
+      newErrors.actPostalCode = 'Postal code must be in X#X#X# format';
     // }
     // license plate check
     if (!licensePlateNo || licensePlateNo === '')
@@ -76,11 +94,19 @@ const VehicleInfo = ({ nextStep, prevStep, setField, setErrors, errors, formValu
     // vehicle details check
     if (!province || province === '')
       newErrors.province = 'Must provide the province of where the vehicle was bought';
+    else if (
+      !['ON', 'QC', 'NS', 'NB', 'MB', 'BC', 'PE', 'SK', 'AB', 'NL', 'NT', 'YT', 'NU'].includes(
+        province
+      )
+    )
+      newErrors.province = 'Must be a Canadian province';
     if (!make || make === '') newErrors.make = 'Must provide make of vehicle';
     if (!year || year === '') newErrors.year = 'Must provide year of vehicle';
     if (!model || model === '') newErrors.model = 'Must provide model of vehicle';
     if (!type || type === '') newErrors.type = 'Must provide type of vehicle';
     if (!VIN || VIN === '') newErrors.VIN = 'Must provide vehicle identification number';
+    else if (VIN.length != 17)
+      newErrors.VIN = 'Vehicle identification number must be 17 characters';
 
     return newErrors;
   };

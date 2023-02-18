@@ -50,12 +50,9 @@ const PersonalInfo = ({ nextStep, setField, setErrors, errors, formValues }) => 
     if (!homeStreet || homeStreet === '') newErrors.homeStreet = 'Must provide home street address';
     if (!homeCity || homeCity === '') newErrors.homeCity = 'Must provide city';
     if (!homeCountry || homeCountry === '') newErrors.homeCountry = 'Must provide country';
-    else if (homeCountry && homeCountry !== '' && homeCountry !== 'Canada')
-      newErrors.homeCountry = 'Must be Canada';
+    else if (homeCountry !== 'Canada') newErrors.homeCountry = 'Must be Canada';
     if (!homeProvince || homeProvince === '') newErrors.homeProvince = 'Must provide province';
     else if (
-      homeProvince &&
-      homeProvince !== '' &&
       !['ON', 'QC', 'NS', 'NB', 'MB', 'BC', 'PE', 'SK', 'AB', 'NL', 'NT', 'YT', 'NU'].includes(
         homeProvince
       )
@@ -63,15 +60,11 @@ const PersonalInfo = ({ nextStep, setField, setErrors, errors, formValues }) => 
       newErrors.homeProvince = 'Must be a Canadian province';
     if (!homePostalCode || homePostalCode === '')
       newErrors.homePostalCode = 'Must provide postal code';
-    else if (
-      homePostalCode &&
-      homePostalCode !== '' &&
-      !/^[A-Z][0-9][A-Z][0-9][A-Z][0-9]$/.test(homePostalCode)
-    )
+    else if (!/^[A-Z][0-9][A-Z][0-9][A-Z][0-9]$/.test(homePostalCode))
       newErrors.homePostalCode = 'Postal code must be in X#X#X# format';
     // phone number check
     if (!phoneNumber || phoneNumber === '') newErrors.phoneNumber = 'Must provide phone number';
-    else if (phoneNumber || (phoneNumber !== '' && /[0-9]{10}/.test(phoneNumber)))
+    else if (!/^[0-9]{10}$/.test(phoneNumber))
       newErrors.phoneNumber = 'Phone number must be in ########## format';
     // years driving check
     if (!yearsDriving || yearsDriving === '')
@@ -79,8 +72,9 @@ const PersonalInfo = ({ nextStep, setField, setErrors, errors, formValues }) => 
 
     // drivers license check
     if (!driverLicense || driverLicense === '')
-      newErrors.driverLicense = 'Must provide drivers license number';
-
+      newErrors.driverLicense = "Must provide driver's license number";
+    if (!/^[A-Z][0-9]{4}-[0-9]{5}-[0-9]{5}$/.test(driverLicense))
+      newErrors.driverLicense = "Driver's license number must in X####-#####-##### format";
     return newErrors;
   };
 
