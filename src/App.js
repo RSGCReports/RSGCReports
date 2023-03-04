@@ -5,6 +5,7 @@ import NotFound from './components/routes/NotFound';
 import NavigationBar from './components/NavigationBar';
 import Profile from './components/routes/Profile';
 import Reports from './components/routes/Reports';
+import NewReport from './components/routes/NewReport';
 import './App.css';
 import { withAuthenticator } from '@aws-amplify/ui-react';
 import PropTypes from 'prop-types';
@@ -26,6 +27,7 @@ function App({ user }) {
           <Route exact path="/" element={<About />} />
           <Route exact path="/profile" element={<Profile />} />
           <Route exact path="/reports" element={<Reports />} />
+          <Route exact path="/newreport" element={<NewReport />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
