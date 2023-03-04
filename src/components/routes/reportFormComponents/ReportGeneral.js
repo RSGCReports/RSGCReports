@@ -1,10 +1,84 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Container, Form, Button } from 'react-bootstrap';
+import PersonInjured from './PersonInjured';
+import Witness from './Witness';
+import Evidence from './Evidence';
+
 const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
-  // const [personsInjured, setPersonsInjured] = useState([]);
-  // const [policeInvestigation, setPoliceInvestigation] = useState([]);
-  // const [witnesses, setWitnesses] = useState([]);
-  // const [evidences, setEvidences] = useState([]);
+  const [personsInjured, setPersonsInjured] = useState([]);
+  const [witnesses, setWitnesses] = useState([]);
+  const [evidences, setEvidences] = useState([]);
+  const addPersonInjured = (e) => {
+    e.preventDefault();
+    setPersonsInjured([
+      ...personsInjured,
+      {
+        personInjuredName: '',
+        personInjuredDob: '',
+        personInjuredHospital: '',
+        personInjuredNatureOfInjuries: '',
+      },
+    ]);
+  };
+  const addWitness = (e) => {
+    e.preventDefault();
+    setWitnesses([
+      ...witnesses,
+      {
+        witnessName: '',
+        witnessPhone: '',
+      },
+    ]);
+  };
+  const addEvidence = (e) => {
+    e.preventDefault();
+    setEvidences([
+      ...evidences,
+      {
+        evidenceName: '',
+      },
+    ]);
+  };
+  const removePersonInjured = (e, index) => {
+    e.preventDefault();
+    setPersonsInjured(personsInjured.filter((personInjured, idx) => idx != index));
+  };
+  const removeWitness = (e, index) => {
+    e.preventDefault();
+    setWitnesses(witnesses.filter((witness, idx) => idx != index));
+  };
+  const removeEvidence = (e, index) => {
+    e.preventDefault();
+    setEvidences(evidences.filter((evidence, idx) => idx != index));
+  };
+
+  const handlePersonInjuredChange = (e, index) => {
+    e.preventDefault();
+    setPersonsInjured([
+      ...personsInjured.slice(0, index),
+      { ...personsInjured[index], [e.target.name]: e.target.value },
+      ...personsInjured.slice(index + 1),
+    ]);
+    console.log(evidences[index]);
+  };
+  const handleWitnessChange = (e, index) => {
+    e.preventDefault();
+    setWitnesses([
+      ...witnesses.slice(0, index),
+      { ...witnesses[index], [e.target.name]: e.target.value },
+      ...witnesses.slice(index + 1),
+    ]);
+    console.log(evidences[index]);
+  };
+  const handleEvidenceChange = (e, index) => {
+    e.preventDefault();
+    setEvidences([
+      ...evidences.slice(0, index),
+      { ...evidences[index], [e.target.name]: e.target.value },
+      ...evidences.slice(index + 1),
+    ]);
+    console.log(evidences[index]);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -12,16 +86,18 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-    } else {
-      console.log('Hello');
     }
   };
 
   const checkErrors = () => {
-    const { date } = formValues;
+    const { date, time } = formValues;
     const newErrors = {};
-    if (!date || date === '') newErrors.date = 'Must provide date of birth';
+    if (!date || date === '') newErrors.date = 'Must provide a date';
     //else if (Date(date) > Date.now()) newErrors.date = 'Date must be current date or before';
+    if (!time || time === '') newErrors.time = 'Must provide a time';
+
+    // if (evidences.every((evidence) => !evidence.name || evidence.name === ''))
+    //   newErrors.time = 'Must provide a time';
 
     return newErrors;
   };
@@ -37,14 +113,24 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
               name="form[date]"
               defaultValue={formValues.date}
               onChange={(e) => setField('date', e.target.value)}
+              isInvalid={errors.date}
             />
             <Form.Control.Feedback type="invalid">{errors.date}</Form.Control.Feedback>
           </Form.Group>
           <Form.Group controlId="formTime">
             <Form.Label>Time</Form.Label>
-            <Form.Control type="time" name="form[time]" defaultValue={formValues.time} />
+            <Form.Control
+              type="time"
+              name="form[time]"
+              defaultValue={formValues.time}
+              onChange={(e) => setField('time', e.target.value)}
+              isInvalid={errors.time}
+            />
+            <Form.Control.Feedback type="invalid">{errors.time}</Form.Control.Feedback>
           </Form.Group>
           <Form.Group controlId="formDayLight">
+            <Form.Label>Light Conditions</Form.Label>
+            <br />
             <Form.Check
               type="radio"
               name="daylight"
@@ -117,15 +203,7 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
               defaultValue={formValues.purposeForUsage}
             />
           </Form.Group>
-          <Form.Group controlId="formDamageDescription">
-            <Form.Label>Damage Description</Form.Label>
-            <Form.Control
-              as="textarea"
-              type="text"
-              name="form[damagecondtions]"
-              defaultValue={formValues.damageCondtions}
-            />
-          </Form.Group>
+          <Form.Label>Damage Description</Form.Label>
           <Form.Group controlId="formSeverity">
             <Form.Check
               type="radio"
@@ -152,25 +230,53 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
               inline
             />
           </Form.Group>
+          <Form.Group controlId="formDamageDescription">
+            <Form.Control
+              as="textarea"
+              type="text"
+              name="form[damagecondtions]"
+              defaultValue={formValues.damageCondtions}
+            />
+          </Form.Group>
+
           <Form.Group controlId="formPersonInjured">
             <Form.Label>Persons Injured</Form.Label>
+            {personsInjured.map((personInjured, idx) => (
+              <PersonInjured
+                key={idx}
+                index={idx}
+                handleChange={handlePersonInjuredChange}
+                handleRemove={removePersonInjured}
+              />
+            ))}
             <br />
-            <Button>Add</Button>
-          </Form.Group>
-          <Form.Group controlId="formPoliceInvestigation">
-            <Form.Label>Police Investigation</Form.Label>
-            <br />
-            <Button>Add</Button>
+            <Button onClick={(e) => addPersonInjured(e)}>Add</Button>
           </Form.Group>
           <Form.Group controlId="formWitness">
             <Form.Label>Witnesses</Form.Label>
+            {witnesses.map((witness, idx) => (
+              <Witness
+                key={idx}
+                index={idx}
+                handleChange={handleWitnessChange}
+                handleRemove={removeWitness}
+              />
+            ))}
             <br />
-            <Button>Add</Button>
+            <Button onClick={(e) => addWitness(e)}>Add</Button>
           </Form.Group>
           <Form.Group controlId="formEvidence">
             <Form.Label>Evidence</Form.Label>
+            {evidences.map((evidence, idx) => (
+              <Evidence
+                key={idx}
+                index={idx}
+                handleChange={handleEvidenceChange}
+                handleRemove={removeEvidence}
+              />
+            ))}
             <br />
-            <Button>Add</Button>
+            <Button onClick={(e) => addEvidence(e)}>Add</Button>
           </Form.Group>
           <br />
           <div style={{ display: 'flex', justifyContent: 'space-around' }}>
