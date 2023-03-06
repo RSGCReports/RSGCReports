@@ -62,7 +62,8 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
   };
   const removeEvidence = (e, index) => {
     e.preventDefault();
-    setEvidences(evidences.filter((evidence, idx) => idx != index));
+    setEvidences(evidences.filter((evidence, idx) => idx !== index));
+    console.log(evidences);
   };
 
   const handlePersonInjuredChange = (e, index) => {
@@ -290,6 +291,7 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
                 handleChange={handleEvidenceChange}
                 handleRemove={removeEvidence}
                 evidenceOnClickErrors={evidenceOnClickErrors}
+                evidence={evidence}
               />
             ))}
             <br />
