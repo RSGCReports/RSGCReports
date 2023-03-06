@@ -8,8 +8,13 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
   const [personsInjured, setPersonsInjured] = useState([]);
   const [witnesses, setWitnesses] = useState([]);
   const [evidences, setEvidences] = useState([]);
+  const [personInjuredErrors, setPersonInjuredErrors] = useState({});
+  const [personInjuredOnClickErrors, setPersonInjuredOnClickErrors] = useState({});
+  const [witnessErrors, setWitnessErrors] = useState({});
+  const [witnessOnClickErrors, setWitnessOnClickErrors] = useState({});
   const [evidenceErrors, setEvidenceErrors] = useState({});
   const [evidenceOnClickErrors, setEvidenceOnClickErrors] = useState({});
+
   const addPersonInjured = (e) => {
     e.preventDefault();
     setPersonsInjured([
@@ -22,6 +27,7 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
       },
     ]);
   };
+
   const addWitness = (e) => {
     e.preventDefault();
     setWitnesses([
@@ -32,17 +38,7 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
       },
     ]);
   };
-  const checkEvidenceError = (e, index) => {
-    e.preventDefault();
-    let error = {};
-    //logic to check against I guess
-    if (!e.target.value || e.target.value === '') {
-      error = { [index]: { [e.target.name]: 'Required field' } };
-      setEvidenceErrors({ ...evidenceErrors, ...error });
-    } else {
-      delete evidenceErrors[index];
-    }
-  };
+
   const addEvidence = (e) => {
     e.preventDefault();
     setEvidences([
@@ -52,18 +48,53 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
       },
     ]);
   };
+
+  const checkPersonInjuredError = (e, index) => {
+    e.preventDefault();
+    let error = {};
+    if (!e.target.value || e.target.value === '') {
+      error = { [index]: { [e.target.name]: 'Required field' } };
+      setPersonInjuredErrors({ ...personInjuredErrors, ...error });
+    } else {
+      delete personInjuredErrors[index][e.target.name];
+    }
+  };
+
+  const checkWitnessError = (e, index) => {
+    e.preventDefault();
+    let error = {};
+    if (!e.target.value || e.target.value === '') {
+      error = { [index]: { [e.target.name]: 'Required field' } };
+      setWitnessErrors({ ...witnessErrors, ...error });
+    } else {
+      delete witnessErrors[index][e.target.name];
+    }
+  };
+
+  const checkEvidenceError = (e, index) => {
+    e.preventDefault();
+    let error = {};
+    if (!e.target.value || e.target.value === '') {
+      error = { [index]: { [e.target.name]: 'Required field' } };
+      setEvidenceErrors({ ...evidenceErrors, ...error });
+    } else {
+      delete evidenceErrors[index][e.target.name];
+    }
+  };
+
   const removePersonInjured = (e, index) => {
     e.preventDefault();
     setPersonsInjured(personsInjured.filter((personInjured, idx) => idx != index));
   };
+
   const removeWitness = (e, index) => {
     e.preventDefault();
     setWitnesses(witnesses.filter((witness, idx) => idx != index));
   };
+
   const removeEvidence = (e, index) => {
     e.preventDefault();
     setEvidences(evidences.filter((evidence, idx) => idx !== index));
-    console.log(evidences);
   };
 
   const handlePersonInjuredChange = (e, index) => {
@@ -73,8 +104,9 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
       { ...personsInjured[index], [e.target.name]: e.target.value },
       ...personsInjured.slice(index + 1),
     ]);
-    console.log(evidences[index]);
+    checkPersonInjuredError(e, index);
   };
+
   const handleWitnessChange = (e, index) => {
     e.preventDefault();
     setWitnesses([
@@ -82,8 +114,9 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
       { ...witnesses[index], [e.target.name]: e.target.value },
       ...witnesses.slice(index + 1),
     ]);
-    console.log(evidences[index]);
+    checkWitnessError(e, index);
   };
+
   const handleEvidenceChange = (e, index) => {
     e.preventDefault();
     setEvidences([
@@ -91,7 +124,6 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
       { ...evidences[index], [e.target.name]: e.target.value },
       ...evidences.slice(index + 1),
     ]);
-    // console.log(evidences[index]);
     //call this on change to accumulate evidence errors
     checkEvidenceError(e, index);
   };
@@ -99,11 +131,12 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const newErrors = checkErrors();
+    if (personInjuredErrors) setPersonInjuredOnClickErrors(personInjuredErrors);
+    if (witnessErrors) setWitnessOnClickErrors(witnessErrors);
     if (evidenceErrors) setEvidenceOnClickErrors(evidenceErrors);
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
     }
-    console.log(evidenceOnClickErrors);
   };
 
   const checkErrors = () => {
@@ -258,44 +291,51 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
 
           <Form.Group controlId="formPersonInjured">
             <Form.Label>Persons Injured</Form.Label>
+            <br />
+            <Button onClick={(e) => addPersonInjured(e)}>Add</Button>
             {personsInjured.map((personInjured, idx) => (
               <PersonInjured
                 key={idx}
                 index={idx}
                 handleChange={handlePersonInjuredChange}
                 handleRemove={removePersonInjured}
+                onClickErrors={personInjuredOnClickErrors}
+                errorSetter={setPersonInjuredErrors}
+                personInjured={personInjured}
               />
             ))}
-            <br />
-            <Button onClick={(e) => addPersonInjured(e)}>Add</Button>
           </Form.Group>
           <Form.Group controlId="formWitness">
             <Form.Label>Witnesses</Form.Label>
+            <br />
+            <Button onClick={(e) => addWitness(e)}>Add</Button>
             {witnesses.map((witness, idx) => (
               <Witness
                 key={idx}
                 index={idx}
                 handleChange={handleWitnessChange}
                 handleRemove={removeWitness}
+                onClickErrors={witnessOnClickErrors}
+                errorSetter={setWitnessErrors}
+                witness={witness}
               />
             ))}
-            <br />
-            <Button onClick={(e) => addWitness(e)}>Add</Button>
           </Form.Group>
           <Form.Group controlId="formEvidence">
             <Form.Label>Evidence</Form.Label>
+            <br />
+            <Button onClick={(e) => addEvidence(e)}>Add</Button>
             {evidences.map((evidence, idx) => (
               <Evidence
                 key={idx}
                 index={idx}
                 handleChange={handleEvidenceChange}
                 handleRemove={removeEvidence}
-                evidenceOnClickErrors={evidenceOnClickErrors}
+                onClickErrors={evidenceOnClickErrors}
+                errorSetter={setEvidenceErrors}
                 evidence={evidence}
               />
             ))}
-            <br />
-            <Button onClick={(e) => addEvidence(e)}>Add</Button>
           </Form.Group>
           <br />
           <div style={{ display: 'flex', justifyContent: 'space-around' }}>
