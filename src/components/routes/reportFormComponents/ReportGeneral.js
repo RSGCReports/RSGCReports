@@ -8,6 +8,8 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
   const [personsInjured, setPersonsInjured] = useState([]);
   const [witnesses, setWitnesses] = useState([]);
   const [evidences, setEvidences] = useState([]);
+  const [evidenceErrors, setEvidenceErrors] = useState({});
+  const [evidenceOnClickErrors, setEvidenceOnClickErrors] = useState({});
   const addPersonInjured = (e) => {
     e.preventDefault();
     setPersonsInjured([
@@ -30,6 +32,17 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
       },
     ]);
   };
+  const checkEvidenceError = (e, index) => {
+    e.preventDefault();
+    let error = {};
+    //logic to check against I guess
+    if (!e.target.value || e.target.value === '') {
+      error = { [index]: { [e.target.name]: 'Required field' } };
+      setEvidenceErrors({ ...evidenceErrors, ...error });
+    } else {
+      delete evidenceErrors[index];
+    }
+  };
   const addEvidence = (e) => {
     e.preventDefault();
     setEvidences([
@@ -49,7 +62,8 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
   };
   const removeEvidence = (e, index) => {
     e.preventDefault();
-    setEvidences(evidences.filter((evidence, idx) => idx != index));
+    setEvidences(evidences.filter((evidence, idx) => idx !== index));
+    console.log(evidences);
   };
 
   const handlePersonInjuredChange = (e, index) => {
@@ -77,16 +91,19 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
       { ...evidences[index], [e.target.name]: e.target.value },
       ...evidences.slice(index + 1),
     ]);
-    console.log(evidences[index]);
+    // console.log(evidences[index]);
+    //call this on change to accumulate evidence errors
+    checkEvidenceError(e, index);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const newErrors = checkErrors();
-
+    if (evidenceErrors) setEvidenceOnClickErrors(evidenceErrors);
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
     }
+    console.log(evidenceOnClickErrors);
   };
 
   const checkErrors = () => {
@@ -273,6 +290,8 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
                 index={idx}
                 handleChange={handleEvidenceChange}
                 handleRemove={removeEvidence}
+                evidenceOnClickErrors={evidenceOnClickErrors}
+                evidence={evidence}
               />
             ))}
             <br />
