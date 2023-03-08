@@ -172,8 +172,9 @@ const About = () => {
               <Card>
                 <Card.Body>
                   <Card.Title>Genevieve Calma</Card.Title>
-                  <Card.Subtitle>Developer</Card.Subtitle>
-                  <Card.Text>About you and contact...</Card.Text>
+                  <Card.Subtitle>Front-End Developer</Card.Subtitle>
+                  <br />
+                  <Card.Text>Contact me at gccalma@myseneca.ca</Card.Text>
                 </Card.Body>
               </Card>
             </Col>

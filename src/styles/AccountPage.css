@@ -1,0 +1,19 @@
+body {
+  background-color: rgba(0, 0, 0, 0.03) !important;
+}
+.jumbotron {
+  background: url('../assets/pexels-photo-2265634.jpeg');
+  background-size: cover;
+  background-color: rgba(0, 0, 0, 0.8);
+  margin: 0;
+  padding: 5%;
+  text-align: center;
+}
+.jumbotron h2 {
+  color: white;
+  text-shadow: #000 1px 0 20px;
+}
+.card {
+  margin: 10px;
+  border: 0 !important;
+}
