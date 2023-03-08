@@ -39,6 +39,9 @@ const NavigationBar = () => {
             <NavDropdown.Item as={Link} to="/profile">
               Profile
             </NavDropdown.Item>
+            <NavDropdown.Item as={Link} to="/accountpage">
+              Account
+            </NavDropdown.Item>
             <NavDropdown.Item as={Link} to="/reports">
               Reports
             </NavDropdown.Item>
