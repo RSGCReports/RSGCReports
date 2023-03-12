@@ -146,15 +146,17 @@ const Confirmation = ({ prevStep, setForm, setErrors, formValues }) => {
         </p>
         <p>
           <strong>Business Address: </strong>
-          {formValues.businessStreet +
-            ', ' +
-            formValues.businessCity +
-            ', ' +
-            formValues.businessProvince +
-            ', ' +
-            formValues.businessCountry +
-            ', ' +
-            formValues.businessPostalCode}
+          {formValues.businessStreet
+            ? formValues.businessStreet +
+              ', ' +
+              formValues.businessCity +
+              ', ' +
+              formValues.businessProvince +
+              ', ' +
+              formValues.businessCountry +
+              ', ' +
+              formValues.businessPostalCode
+            : 'Not Stated'}
         </p>
         <p>
           <strong>Phone Number: </strong>
@@ -170,7 +172,7 @@ const Confirmation = ({ prevStep, setForm, setErrors, formValues }) => {
         </p>
         <p>
           <strong>Disabilities: </strong>
-          {formValues.disabilities}
+          {formValues.disabilities ? formValues.disabilities : 'Not Stated'}
         </p>
       </div>
       <br />
@@ -203,15 +205,17 @@ const Confirmation = ({ prevStep, setForm, setErrors, formValues }) => {
         </p>
         <p>
           <strong>Business Address: </strong>
-          {formValues.IPbusinessStreet +
-            ', ' +
-            formValues.IPbusinessCity +
-            ', ' +
-            formValues.IPbusinessProvince +
-            ', ' +
-            formValues.IPbusinessCountry +
-            ', ' +
-            formValues.IPbusinessPostalCode}
+          {formValues.IPbusinessStreet
+            ? formValues.IPbusinessStreet +
+              ', ' +
+              formValues.IPbusinessCity +
+              ', ' +
+              formValues.IPbusinessProvince +
+              ', ' +
+              formValues.IPbusinessCountry +
+              ', ' +
+              formValues.IPbusinessPostalCode
+            : 'Not Stated'}
         </p>
         <p>
           <strong>Policy Number: </strong>

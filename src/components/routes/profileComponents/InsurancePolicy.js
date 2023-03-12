@@ -171,8 +171,8 @@ const InsurancePolicy = ({ nextStep, prevStep, setField, setErrors, errors, form
               <Form.Control
                 type="text"
                 name="form[IPbusinessStreet]"
-                defaultValue={formValues.businessStreet || ''}
-                placeholder={formValues.businessStreet || '123 Fake St'}
+                defaultValue={formValues.IPbusinessStreet}
+                placeholder="123 Fake St"
                 onChange={(e) => setField('IPbusinessStreet', e.target.value)}
               />
             </Form.Group>
@@ -181,8 +181,7 @@ const InsurancePolicy = ({ nextStep, prevStep, setField, setErrors, errors, form
               <Form.Control
                 type="text"
                 name="form[IPbusinessCity]"
-                defaultValue={formValues.businessCity || ''}
-                placeholder={formValues.businessCity}
+                defaultValue={formValues.IPbusinessCity}
                 onChange={(e) => setField('IPbusinessCity', e.target.value)}
               />
             </Form.Group>
@@ -193,8 +192,7 @@ const InsurancePolicy = ({ nextStep, prevStep, setField, setErrors, errors, form
               <Form.Control
                 type="text"
                 name="form[IPbusinessProvince]"
-                defaultValue={formValues.businessProvince || ''}
-                placeholder={formValues.businessProvince}
+                defaultValue={formValues.IPbusinessProvince}
                 onChange={(e) => setField('IPbusinessProvince', e.target.value)}
               />
             </Form.Group>
@@ -203,8 +201,7 @@ const InsurancePolicy = ({ nextStep, prevStep, setField, setErrors, errors, form
               <Form.Control
                 type="text"
                 name="form[IPbusinessCountry]"
-                defaultValue={formValues.businessCountry || ''}
-                placeholder={formValues.businessCountry}
+                defaultValue={formValues.IPbusinessCountry}
                 onChange={(e) => setField('IPbusinessCountry', e.target.value)}
               />
             </Form.Group>
@@ -213,8 +210,8 @@ const InsurancePolicy = ({ nextStep, prevStep, setField, setErrors, errors, form
               <Form.Control
                 type="text"
                 name="form[IPbusinessPostalCode]"
-                defaultValue={formValues.businessPostalCode || ''}
-                placeholder={formValues.businessPostalCode || 'X#X#X#'}
+                defaultValue={formValues.IPbusinessPostalCode}
+                placeholder="X#X#X#"
                 onChange={(e) => setField('IPbusinessPostalCode', e.target.value)}
               />
             </Form.Group>

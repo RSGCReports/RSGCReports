@@ -177,7 +177,7 @@ const PersonalInfo = ({ nextStep, setField, setErrors, errors, formValues }) => 
               <Form.Label>Postal Code</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="A1B2C3"
+                placeholder="X#X#X#"
                 name="form[homePostalCode]"
                 defaultValue={formValues.homePostalCode}
                 onChange={(e) => setField('homePostalCode', e.target.value)}
@@ -195,11 +195,7 @@ const PersonalInfo = ({ nextStep, setField, setErrors, errors, formValues }) => 
                 placeholder="1234 Fake St"
                 name="form[businessStreet]"
                 defaultValue={formValues.businessStreet || ''}
-                onChange={(e) =>
-                  e.target.value
-                    ? setField('businessStreet', e.target.value)
-                    : setField('businessStreet', '')
-                }
+                onChange={(e) => setField('businessStreet', e.target.value)}
               />
             </Form.Group>
             <Form.Group as={Col} controlId="formCity">
@@ -235,7 +231,7 @@ const PersonalInfo = ({ nextStep, setField, setErrors, errors, formValues }) => 
               <Form.Label>Postal Code</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="A1B2C3"
+                placeholder="X#X#X#"
                 name="form[businessPostalCode]"
                 defaultValue={formValues.businessPostalCode || ''}
                 onChange={(e) => setField('businessPostalCode', e.target.value)}
