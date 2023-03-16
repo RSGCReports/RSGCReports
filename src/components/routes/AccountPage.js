@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Container, Card, Row } from 'react-bootstrap';
 import '../../styles/AccountPage.css';
@@ -110,6 +111,7 @@ const AccountPage = () => {
   //   },
   // ];
 
+
   const obscureEmail = (email) => {
     const [name, domain] = email.split('@');
     const newEmail = `${name[0]}${new Array(name.length).join('*')}@${domain}`;
@@ -134,6 +136,7 @@ const AccountPage = () => {
   };
   return (
     <div className="account-body">
+
       {userInfo.map((data) => {
         return (
           <div className="jumbotron" key={data.key}>
@@ -143,6 +146,7 @@ const AccountPage = () => {
           </div>
         );
       })}
+
       {userInfo.map((data) => {
         return (
           <Container key={data.key}>
@@ -190,6 +194,7 @@ const AccountPage = () => {
                 <p>
                   <strong>Business Address: </strong>
                   <br />
+
                   {data.businessStreet
                     ? data.businessStreet +
                       ', ' +
@@ -201,18 +206,23 @@ const AccountPage = () => {
                       ', ' +
                       data.businessPostalCode
                     : 'Not Stated'}
+
                 </p>
                 <p>
                   <strong>Disabilities:</strong>
                   <br />
+
                   {data.disabilities ? data.disabilities : 'Not Stated'}
+
                 </p>
               </Row>
             </Card>
           </Container>
         );
       })}
+
       {insuranceInfo.map((data) => {
+
         return (
           <Container key={data.key}>
             <Card body>
@@ -251,6 +261,7 @@ const AccountPage = () => {
                 <p>
                   <strong>Business Address: </strong>
                   <br />
+
                   {data.businessStreet
                     ? data.businessStreet +
                       ', ' +
@@ -262,13 +273,16 @@ const AccountPage = () => {
                       ', ' +
                       data.businessPostalCode
                     : 'Not Stated'}
+
                 </p>
               </Row>
             </Card>
           </Container>
         );
       })}
+
       {vehicleInfo.map((data) => {
+
         return (
           <Container key={data.key}>
             <Card body>
@@ -282,6 +296,7 @@ const AccountPage = () => {
                 <p>
                   <strong>Registered Owner{"'"}s Address: </strong>
                   <br />
+
                   {data.registeredOwnerStreet +
                     ', ' +
                     data.registeredOwnerCity +
@@ -291,6 +306,7 @@ const AccountPage = () => {
                     data.registeredOwnerCountry +
                     ', ' +
                     data.registeredOwnerPostalCode}
+
                 </p>
               </Row>
               <hr />
@@ -302,6 +318,7 @@ const AccountPage = () => {
                 <p>
                   <strong>Actual Owner{"'"}s Address: </strong>
                   <br />
+
                   {data.actualOwnerStreet +
                     ', ' +
                     data.actualOwnerCity +
@@ -311,6 +328,7 @@ const AccountPage = () => {
                     data.actualOwnerCountry +
                     ', ' +
                     data.actualOwnerPostalCode}
+
                 </p>
               </Row>
               <hr />
@@ -341,7 +359,9 @@ const AccountPage = () => {
                 </p>
                 <p>
                   <strong>Vehicle Identification Number: </strong>
+
                   {obscureVIN(data.VIN)}
+
                 </p>
               </Row>
             </Card>
