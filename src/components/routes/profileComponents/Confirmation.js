@@ -13,7 +13,7 @@ const Confirmation = ({ prevStep, setForm, setErrors, formValues }) => {
     fetchUser().then((users) => setUserName(users.username));
     fetchUser().then((users) => setEmail(users.attributes.email));
     fetchUser().then((users) => setToken(users.signInUserSession.idToken.jwtToken));
-  });
+  }, []);
 
   const fetchUser = async () => {
     return await Auth.currentAuthenticatedUser();
