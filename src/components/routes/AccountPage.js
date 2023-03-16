@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Container, Card, Row } from 'react-bootstrap';
 import '../../styles/AccountPage.css';
@@ -8,109 +7,35 @@ const AccountPage = () => {
   const [userInfo, setUserInfo] = useState([]);
   const [insuranceInfo, setInsuranceInfo] = useState([]);
   const [vehicleInfo, setVehicleInfo] = useState([]);
-  const [bearerToken, setToken] = useState([]);
-  // const token = 'Bearer ' + bearerToken;
+  const [bearerToken, setToken] = useState('');
 
   useEffect(() => {
-    fetchUser().then((users) => setToken(users.signInUserSession.idToken.jwtToken));
-  }, []);
+    const fetchUser = async () => {
+      const user = await Auth.currentAuthenticatedUser();
+      setToken(user.signInUserSession.idToken.jwtToken);
 
-  useEffect(() => {
-    // fetchUser().then((users) => setToken(users.signInUserSession.idToken.jwtToken));
-    // .then(() => {
-    // const token = `Bearer ${bearerToken}`;
-    fetch('http://localhost:8080/api/userInfo', {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${bearerToken}` },
-    })
-      .then((response) => {
-        console.log(response);
-        return response.json();
+      fetch('http://localhost:8080/api/userInfo', {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${bearerToken}` },
       })
-      .then((data) => {
-        console.log(data.userInfo);
-        setUserInfo([data.userInfo.user]);
-        setInsuranceInfo([data.userInfo.policies[0]]);
-        setVehicleInfo([data.userInfo.vehicles[0]]);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    // });
-  }, []);
+        .then((response) => {
+          console.log(response);
+          return response.json();
+        })
+        .then((data) => {
+          console.log(data);
+          console.log(data.userInfo);
+          setUserInfo([data.userInfo.user]);
+          setInsuranceInfo([data.userInfo.policies[0]]);
+          setVehicleInfo([data.userInfo.vehicles[0]]);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
 
-  const fetchUser = async () => {
-    return await Auth.currentAuthenticatedUser();
-  };
-
-  // const token = `Bearer ${bearerToken}`;
-  // console.log(token);
-  // const userTest = [
-  //   {
-  //     fullname: 'John Doe',
-  //     username: 'johndoe12',
-  //     email: 'john.doe@gmail.com',
-  //     dob: '2001-11-08',
-  //     disabilities: 'Something...',
-  //     yearsDriving: '5',
-  //     homeStreet: '123 Fake St',
-  //     homeCity: 'Toronto',
-  //     homeCountry: 'Canada',
-  //     homeProvince: 'ON',
-  //     homePostalCode: 'A1B2C3',
-  //     businessStreet: '321 Fake St',
-  //     businessCity: 'Edmonton',
-  //     businessCountry: 'Canada',
-  //     businessProvince: 'AB',
-  //     businessPostalCode: 'C3B2A1',
-  //     phoneNumber: '4161231234',
-  //     driverLicense: 'A1234-12345-67890',
-  //   },
-  // ];
-
-  // const insuranceTest = [
-  //   {
-  //     insurer: 'Life',
-  //     insurerName: 'Mike J',
-  //     Agent: 'Mary Jane',
-  //     homeStreet: '432 Fake Ave',
-  //     homeCity: 'Brampton',
-  //     homeCountry: 'Canada',
-  //     homeProvince: 'ON',
-  //     homePostalCode: 'D4E5F6',
-  //     businessStreet: '234 Some Dr',
-  //     businessCity: 'Victoria',
-  //     businessCountry: 'Canada',
-  //     businessProvince: 'BC',
-  //     businessPostalCode: 'L1M2A0',
-  //     policyNumber: '1234567890',
-  //   },
-  // ];
-
-  // const vehicleTest = [
-  //   {
-  //     licensePlateNo: 'ABCD123',
-  //     registeredOwner: 'John Doe',
-  //     actualOwner: 'John Doe',
-  //     RegisteredOwnerStreet: '123 Fake St',
-  //     RegisteredOwnerCity: 'Toronto',
-  //     RegisteredOwnerCountry: 'Canada',
-  //     RegisteredOwnerProvince: 'ON',
-  //     RegisteredOwnerPostalCode: 'A1B2C3',
-  //     ActualOwnerStreet: '123 Fake St',
-  //     ActualOwnerCity: 'Toronto',
-  //     ActualOwnerCountry: 'Canada',
-  //     ActualOwnerProvince: 'ON',
-  //     ActualOwnerPostalCode: 'A1B2C3',
-  //     province: 'ON',
-  //     make: 'Ford',
-  //     year: '2015',
-  //     model: 'Escape',
-  //     type: 'SUV',
-  //     identification: '12345678901234567',
-  //   },
-  // ];
-
+    fetchUser().catch(console.error);
+  }, [bearerToken, fetch, setUserInfo, setInsuranceInfo, setVehicleInfo]);
 
   const obscureEmail = (email) => {
     const [name, domain] = email.split('@');
@@ -136,7 +61,6 @@ const AccountPage = () => {
   };
   return (
     <div className="account-body">
-
       {userInfo.map((data) => {
         return (
           <div className="jumbotron" key={data.key}>
@@ -206,14 +130,12 @@ const AccountPage = () => {
                       ', ' +
                       data.businessPostalCode
                     : 'Not Stated'}
-
                 </p>
                 <p>
                   <strong>Disabilities:</strong>
                   <br />
 
                   {data.disabilities ? data.disabilities : 'Not Stated'}
-
                 </p>
               </Row>
             </Card>
@@ -222,7 +144,6 @@ const AccountPage = () => {
       })}
 
       {insuranceInfo.map((data) => {
-
         return (
           <Container key={data.key}>
             <Card body>
@@ -273,7 +194,6 @@ const AccountPage = () => {
                       ', ' +
                       data.businessPostalCode
                     : 'Not Stated'}
-
                 </p>
               </Row>
             </Card>
@@ -282,7 +202,6 @@ const AccountPage = () => {
       })}
 
       {vehicleInfo.map((data) => {
-
         return (
           <Container key={data.key}>
             <Card body>
@@ -306,7 +225,6 @@ const AccountPage = () => {
                     data.registeredOwnerCountry +
                     ', ' +
                     data.registeredOwnerPostalCode}
-
                 </p>
               </Row>
               <hr />
@@ -328,7 +246,6 @@ const AccountPage = () => {
                     data.actualOwnerCountry +
                     ', ' +
                     data.actualOwnerPostalCode}
-
                 </p>
               </Row>
               <hr />
@@ -361,14 +278,12 @@ const AccountPage = () => {
                   <strong>Vehicle Identification Number: </strong>
 
                   {obscureVIN(data.VIN)}
-
                 </p>
               </Row>
             </Card>
           </Container>
         );
       })}
-      {/* <br /> */}
     </div>
   );
 };
