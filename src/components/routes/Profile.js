@@ -4,6 +4,7 @@ import PersonalInfo from './profileComponents/PersonalInfo';
 import InsurancePolicy from './profileComponents/InsurancePolicy';
 import VehicleInfo from './profileComponents/VehicleInfo';
 import Confirmation from './profileComponents/Confirmation';
+import Success from './profileComponents/Success';
 import NotFound from './NotFound';
 
 const Profile = () => {
@@ -76,11 +77,18 @@ const Profile = () => {
       return (
         <Container>
           <Confirmation
+            nextStep={nextStep}
             prevStep={prevStep}
             setForm={setForm}
             setErrors={setErrors}
             formValues={form}
           />
+        </Container>
+      );
+    case 5:
+      return (
+        <Container>
+          <Success />
         </Container>
       );
     default:

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Container, Button } from 'react-bootstrap';
 import { Auth } from 'aws-amplify';
 
-const Confirmation = ({ prevStep, setForm, setErrors, formValues }) => {
+const Confirmation = ({ nextStep, prevStep, setForm, setErrors, formValues }) => {
   const [fullName_auth, setFullName] = useState([]);
   const [username_auth, setUserName] = useState([]);
   const [email_auth, setEmail] = useState([]);
@@ -96,6 +96,7 @@ const Confirmation = ({ prevStep, setForm, setErrors, formValues }) => {
           setForm({});
           setErrors({});
           console.log('POST Success!!');
+          nextStep();
         } else {
           console.log('Some Error occurred...');
         }
