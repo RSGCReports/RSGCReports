@@ -4,9 +4,11 @@ import { Link } from 'react-router-dom';
 
 const Success = () => {
   return (
-    <Container>
+    <Container className="text-center ">
       <h2>Profile Completed!</h2>
-      <Button variant="primary" type="submit" as={Link} to="/accountpage" />
+      <Button variant="primary" type="submit" as={Link} to="/accountpage">
+        Account Page
+      </Button>
     </Container>
   );
 };
