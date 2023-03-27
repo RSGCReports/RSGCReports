@@ -33,7 +33,6 @@ const ViewReport = () => {
         country: 'CA',
         province: 'ON',
         postalCode: 'J1D 0I3',
-        dob: new Date('2013-04-23'),
         hospital: "St. Henry Children's Hopsital",
         natureOfInjuries: 'Broken right arm',
         reportId: 48,
@@ -254,14 +253,6 @@ const ViewReport = () => {
                         type="text"
                         name="personInjuredName"
                         value={personInjured.name}
-                      />
-                    </Form.Group>
-                    <Form.Group as={Col} controlId="formPersonInjuredDate">
-                      <Form.Label>Date of Birth</Form.Label>
-                      <Form.Control
-                        type="text"
-                        name="personInjuredDate"
-                        value={personInjured.dob}
                       />
                     </Form.Group>
                   </Row>
@@ -555,7 +546,7 @@ const ViewReport = () => {
               <Form.Group controlId="formPersonalInfoDob">
                 <Form.Label>Date of Birth</Form.Label>
                 <Form.Control
-                  type="date"
+                  type="text"
                   name="personalInfoDob"
                   value={report.PersonalInfo[0].dob}
                 />
