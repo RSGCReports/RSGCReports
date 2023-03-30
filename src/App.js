@@ -7,6 +7,7 @@ import Profile from './components/routes/Profile';
 import Reports from './components/routes/Reports';
 import NewReport from './components/routes/NewReport';
 import ViewReport from './components/routes/ViewReport';
+import ViewAllReport from './components/routes/ViewAllReport';
 import AccountPage from './components/routes/AccountPage';
 import './App.css';
 import { withAuthenticator } from '@aws-amplify/ui-react';
@@ -30,6 +31,7 @@ function App({ user }) {
           <Route exact path="/profile" element={<Profile />} />
           <Route exact path="/reports" element={<Reports />} />
           <Route exact path="/viewreport" element={<ViewReport />} />
+          <Route exact path="/viewallreport" element={<ViewAllReport />} />
           <Route exact path="/newreport" element={<NewReport />} />
           <Route exact path="/accountpage" element={<AccountPage />} />
           <Route path="*" element={<NotFound />} />

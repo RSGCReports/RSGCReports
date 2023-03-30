@@ -2,9 +2,9 @@ import React from 'react';
 import { Container, Form, Button, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-//TODO: make edit button functional
+//TODO: make edit button functional...with id passed
 //TODO: add id as parameter and use it in your get request to fetch the report
-const ViewReport = () => {
+const ViewReport = (id) => {
   // TODO: Delete the mocking when get report route is made
   let report = {
     reportId: 46,
@@ -546,7 +546,7 @@ const ViewReport = () => {
               <Form.Group controlId="formPersonalInfoDob">
                 <Form.Label>Date of Birth</Form.Label>
                 <Form.Control
-                  type="date"
+                  type="text"
                   name="personalInfoDob"
                   value={report.PersonalInfo[0].dob}
                 />
@@ -856,206 +856,209 @@ const ViewReport = () => {
                 <br />
               </div>
               <div>
-                <h6>The Other Party{"'"}s Vehicle Owner Information</h6>
-                <Form.Group as={Col} controlId="formDamageNameOwner">
-                  <Form.Label>Owner Name</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="damageNameOwner"
-                    value={report.PropertyDamage[0].nameOwner}
-                  />
-                </Form.Group>
-
-                <Form.Group as={Col} controlId="formDamagePhoneOwner">
-                  <Form.Label>Owner Phone</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="damagePhoneOwner"
-                    value={report.PropertyDamage[0].phoneOwner}
-                  />
-                </Form.Group>
-                <Row>
-                  <Form.Group as={Col} controlId="formDamageOwnerStreet">
-                    <Form.Label>Address</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="damageOwnerStreet"
-                      value={report.PropertyDamage[0].ownerStreet}
-                    />
-                  </Form.Group>
-                  <Form.Group as={Col} controlId="formDamageOwnerCity">
-                    <Form.Label>City</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="damageOwnerCity"
-                      value={report.PropertyDamage[0].ownerCity}
-                    />
-                  </Form.Group>
-                  <Form.Group as={Col} controlId="formDamageOwnerProvince">
-                    <Form.Label>Province/State</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="damageOwnerProvince"
-                      value={report.PropertyDamage[0].ownerProvince}
-                    />
-                  </Form.Group>
-                  <Form.Group as={Col} controlId="formDamageOwnerCountry">
-                    <Form.Label>Country</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="damageOwnerCountry"
-                      value={report.PropertyDamage[0].ownerCountry}
-                    />
-                  </Form.Group>
-                  <Form.Group as={Col} controlId="formDamageOwnerPostalCode">
-                    <Form.Label>Postal Code</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="damageOwnerPostalCode"
-                      value={report.PropertyDamage[0].ownerPostalCode}
-                    />
-                  </Form.Group>
-                </Row>
-                <Row>
-                  <Form.Group as={Col} controlId="formDamagelicenseOwner">
-                    <Form.Label>Driver License</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="damagelicenseOwner"
-                      value={report.PropertyDamage[0].licenseNumberOwner}
-                    />
-                  </Form.Group>
-                  <Form.Group as={Col} controlId="formDamageOwnerProvIssue">
-                    <Form.Label>Issuing Province</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="damageOwnerProvIssue"
-                      value={report.PropertyDamage[0].ownerProvIssue}
-                    />
-                  </Form.Group>
-                  <Form.Group as={Col} controlId="formDamageCarYear">
-                    <Form.Label>Year of the Vehicle</Form.Label>
-                    <Form.Control
-                      type="number"
-                      name="damageCarYear"
-                      value={report.PropertyDamage[0].yearOfVehicle}
-                    />
-                  </Form.Group>
-                </Row>
-                <br />
-                <h6>The Other Party{"'"}s Vehicle Driver Information</h6>
-                <Form.Group as={Col} controlId="formDamageNameDriver">
-                  <Form.Label>Driver Name</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="damageNameDriver"
-                    value={report.PropertyDamage[0].nameDriver}
-                  />
-                </Form.Group>
-
-                <Form.Group as={Col} controlId="formDamagePhoneDrive">
-                  <Form.Label>Driver Phone</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="damagePhoneDriver"
-                    value={report.PropertyDamage[0].phoneDriver}
-                  />
-                </Form.Group>
-                <Row>
-                  <Form.Group as={Col} controlId="formDamageDriStreet">
-                    <Form.Label>Address</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="damageDriStreet"
-                      value={report.PropertyDamage[0].nameDriver}
-                    />
-                  </Form.Group>
-                  <Form.Group as={Col} controlId="formDamageDriCity">
-                    <Form.Label>City</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="damageDriCity"
-                      value={report.PropertyDamage[0].driverCity}
-                    />
-                  </Form.Group>
-                  <Form.Group as={Col} controlId="formDamageDriProvince">
-                    <Form.Label>Province/State</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="damageDriProvince"
-                      value={report.PropertyDamage[0].driverProvince}
-                    />
-                  </Form.Group>
-                  <Form.Group as={Col} controlId="formDamageDriCountry">
-                    <Form.Label>Country</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="damageDriCountry"
-                      value={report.PropertyDamage[0].driverCountry}
-                    />
-                  </Form.Group>
-                  <Form.Group as={Col} controlId="formDamageDriPostalCode">
-                    <Form.Label>Postal Code</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="damageDriPostalCode"
-                      value={report.PropertyDamage[0].driverPostalCode}
-                    />
-                  </Form.Group>
-                </Row>
-                <Row>
-                  <Form.Group as={Col} controlId="formDamagelicenseDriver">
-                    <Form.Label>Driver License</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="damagelicenseDriver"
-                      value={report.PropertyDamage[0].driverLicenseNumber}
-                    />
-                  </Form.Group>
-                  <Form.Group as={Col} controlId="formDamageDriverProvIssue">
-                    <Form.Label>Issuing Province</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="damageDriverProvIssue"
-                      value={report.PropertyDamage[0].driverProvIssue}
-                    />
-                  </Form.Group>
-                </Row>
-                <br />
-
-                <Row>
-                  <br />
-                  <h6>The Other Party{"'"}s Insurance</h6>
-                  <Row>
-                    <Form.Group as={Col} controlId="formDamageNameInsurer">
-                      <Form.Label>Insurance Agency</Form.Label>
+                {report.PropertyDamage.map((PropertyDamage, idx) => (
+                  <div key={idx}>
+                    <h6>The Other Party{"'"}s Vehicle Owner Information</h6>
+                    <Form.Group as={Col} controlId="formDamageNameOwner">
+                      <Form.Label>Owner Name</Form.Label>
                       <Form.Control
                         type="text"
-                        name="damageNameInsurer"
-                        value={report.PropertyDamage[0].nameInsurer}
+                        name="damageNameOwner"
+                        value={PropertyDamage.nameOwner}
                       />
                     </Form.Group>
-                    <Form.Group as={Col} controlId="formDamagePolicyNumber">
-                      <Form.Label>Policy Number</Form.Label>
+
+                    <Form.Group as={Col} controlId="formDamagePhoneOwner">
+                      <Form.Label>Owner Phone</Form.Label>
                       <Form.Control
                         type="text"
-                        name="damagePolicyNumber"
-                        value={report.PropertyDamage[0].policyNumber}
+                        name="damagePhoneOwner"
+                        value={PropertyDamage.phoneOwner}
                       />
                     </Form.Group>
-                  </Row>
-                </Row>
+                    <Row>
+                      <Form.Group as={Col} controlId="formDamageOwnerStreet">
+                        <Form.Label>Address</Form.Label>
+                        <Form.Control
+                          type="text"
+                          name="damageOwnerStreet"
+                          value={PropertyDamage.ownerStreet}
+                        />
+                      </Form.Group>
+                      <Form.Group as={Col} controlId="formDamageOwnerCity">
+                        <Form.Label>City</Form.Label>
+                        <Form.Control
+                          type="text"
+                          name="damageOwnerCity"
+                          value={PropertyDamage.ownerCity}
+                        />
+                      </Form.Group>
+                      <Form.Group as={Col} controlId="formDamageOwnerProvince">
+                        <Form.Label>Province/State</Form.Label>
+                        <Form.Control
+                          type="text"
+                          name="damageOwnerProvince"
+                          value={PropertyDamage.ownerProvince}
+                        />
+                      </Form.Group>
+                      <Form.Group as={Col} controlId="formDamageOwnerCountry">
+                        <Form.Label>Country</Form.Label>
+                        <Form.Control
+                          type="text"
+                          name="damageOwnerCountry"
+                          value={PropertyDamage.ownerCountry}
+                        />
+                      </Form.Group>
+                      <Form.Group as={Col} controlId="formDamageOwnerPostalCode">
+                        <Form.Label>Postal Code</Form.Label>
+                        <Form.Control
+                          type="text"
+                          name="damageOwnerPostalCode"
+                          value={PropertyDamage.ownerPostalCode}
+                        />
+                      </Form.Group>
+                    </Row>
+                    <Row>
+                      <Form.Group as={Col} controlId="formDamagelicenseOwner">
+                        <Form.Label>Driver License</Form.Label>
+                        <Form.Control
+                          type="text"
+                          name="damagelicenseOwner"
+                          value={PropertyDamage.licenseNumberOwner}
+                        />
+                      </Form.Group>
+                      <Form.Group as={Col} controlId="formDamageOwnerProvIssue">
+                        <Form.Label>Issuing Province</Form.Label>
+                        <Form.Control
+                          type="text"
+                          name="damageOwnerProvIssue"
+                          value={PropertyDamage.ownerProvIssue}
+                        />
+                      </Form.Group>
+                      <Form.Group as={Col} controlId="formDamageCarYear">
+                        <Form.Label>Year of the Vehicle</Form.Label>
+                        <Form.Control
+                          type="number"
+                          name="damageCarYear"
+                          value={PropertyDamage.yearOfVehicle}
+                        />
+                      </Form.Group>
+                    </Row>
+                    <br />
+                    <h6>The Other Party{"'"}s Vehicle Driver Information</h6>
+                    <Form.Group as={Col} controlId="formDamageNameDriver">
+                      <Form.Label>Driver Name</Form.Label>
+                      <Form.Control
+                        type="text"
+                        name="damageNameDriver"
+                        value={PropertyDamage.nameDriver}
+                      />
+                    </Form.Group>
 
+                    <Form.Group as={Col} controlId="formDamagePhoneDrive">
+                      <Form.Label>Driver Phone</Form.Label>
+                      <Form.Control
+                        type="text"
+                        name="damagePhoneDriver"
+                        value={PropertyDamage.phoneDriver}
+                      />
+                    </Form.Group>
+                    <Row>
+                      <Form.Group as={Col} controlId="formDamageDriStreet">
+                        <Form.Label>Address</Form.Label>
+                        <Form.Control
+                          type="text"
+                          name="damageDriStreet"
+                          value={PropertyDamage.nameDriver}
+                        />
+                      </Form.Group>
+                      <Form.Group as={Col} controlId="formDamageDriCity">
+                        <Form.Label>City</Form.Label>
+                        <Form.Control
+                          type="text"
+                          name="damageDriCity"
+                          value={PropertyDamage.driverCity}
+                        />
+                      </Form.Group>
+                      <Form.Group as={Col} controlId="formDamageDriProvince">
+                        <Form.Label>Province/State</Form.Label>
+                        <Form.Control
+                          type="text"
+                          name="damageDriProvince"
+                          value={PropertyDamage.driverProvince}
+                        />
+                      </Form.Group>
+                      <Form.Group as={Col} controlId="formDamageDriCountry">
+                        <Form.Label>Country</Form.Label>
+                        <Form.Control
+                          type="text"
+                          name="damageDriCountry"
+                          value={PropertyDamage.driverCountry}
+                        />
+                      </Form.Group>
+                      <Form.Group as={Col} controlId="formDamageDriPostalCode">
+                        <Form.Label>Postal Code</Form.Label>
+                        <Form.Control
+                          type="text"
+                          name="damageDriPostalCode"
+                          value={PropertyDamage.driverPostalCode}
+                        />
+                      </Form.Group>
+                    </Row>
+                    <Row>
+                      <Form.Group as={Col} controlId="formDamagelicenseDriver">
+                        <Form.Label>Driver License</Form.Label>
+                        <Form.Control
+                          type="text"
+                          name="damagelicenseDriver"
+                          value={PropertyDamage.driverLicenseNumber}
+                        />
+                      </Form.Group>
+                      <Form.Group as={Col} controlId="formDamageDriverProvIssue">
+                        <Form.Label>Issuing Province</Form.Label>
+                        <Form.Control
+                          type="text"
+                          name="damageDriverProvIssue"
+                          value={PropertyDamage.driverProvIssue}
+                        />
+                      </Form.Group>
+                    </Row>
+                    <br />
+
+                    <Row>
+                      <br />
+                      <h6>The Other Party{"'"}s Insurance</h6>
+                      <Row>
+                        <Form.Group as={Col} controlId="formDamageNameInsurer">
+                          <Form.Label>Insurance Agency</Form.Label>
+                          <Form.Control
+                            type="text"
+                            name="damageNameInsurer"
+                            value={PropertyDamage.nameInsurer}
+                          />
+                        </Form.Group>
+                        <Form.Group as={Col} controlId="formDamagePolicyNumber">
+                          <Form.Label>Policy Number</Form.Label>
+                          <Form.Control
+                            type="text"
+                            name="damagePolicyNumber"
+                            value={PropertyDamage.policyNumber}
+                          />
+                        </Form.Group>
+                      </Row>
+                    </Row>
+                  </div>
+                ))}
                 <br />
               </div>
             </Form.Group>
             <br />
-            <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-              <Button as={Link} to="/editreport">
-                Edit Report
-              </Button>
-            </div>
           </fieldset>
+          <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+            <Button as={Link} to="/editreport" id={id}>
+              Edit Report
+            </Button>
+          </div>
         </Form>
       </Container>
     </div>
