@@ -1,17 +1,9 @@
 import React, { useEffect } from 'react';
 import { Form, Button } from 'react-bootstrap';
-const Evidence = ({
-  index,
-  handleChange,
-  handleRemove,
-  onClickErrors,
-  errors,
-  errorSetter,
-  evidence,
-}) => {
+const Evidence = ({ index, handleChange, handleRemove, onClickErrors, errorSetter }) => {
   // fix for initial empty field errors
   useEffect(() => {
-    errorSetter({ ...errors, ...{ [index]: { ['evidenceName']: 'Required field' } } });
+    errorSetter({ [index]: { ['evidenceName']: 'Required field' } });
   }, []);
   return (
     <>
@@ -21,7 +13,6 @@ const Evidence = ({
         <Form.Control
           type="text"
           name="evidenceName"
-          value={evidence.evidenceName}
           onChange={(e) => handleChange(e, index)}
           isInvalid={onClickErrors[index] ? onClickErrors[index].evidenceName : null}
         />

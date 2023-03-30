@@ -4,21 +4,40 @@ import { Auth } from 'aws-amplify';
 import PersonInjured from './PersonInjured';
 import Witness from './Witness';
 import Evidence from './Evidence';
+import PropertyDamage from './PropertyDamage';
 
 const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
   const [personsInjured, setPersonsInjured] = useState([]);
   const [witnesses, setWitnesses] = useState([]);
   const [evidences, setEvidences] = useState([]);
+  const [propertyDamages, setPropertyDamages] = useState([]);
   const [personInjuredErrors, setPersonInjuredErrors] = useState({});
   const [personInjuredOnClickErrors, setPersonInjuredOnClickErrors] = useState({});
   const [witnessErrors, setWitnessErrors] = useState({});
   const [witnessOnClickErrors, setWitnessOnClickErrors] = useState({});
   const [evidenceErrors, setEvidenceErrors] = useState({});
   const [evidenceOnClickErrors, setEvidenceOnClickErrors] = useState({});
+  const [propertyDamageErrors, setPropertyDamageErrors] = useState({});
+  const [propertyDamageOnClickErrors, setPropertyDamageOnClickErrors] = useState({});
   const [bearerToken, setToken] = useState([]);
+  const [vehicleInfo, setVehicleInfo] = useState([]);
 
   useEffect(() => {
     fetchUser().then((users) => setToken(users.signInUserSession.idToken.jwtToken));
+
+    fetch('http://localhost:8080/api/userInfo', {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${bearerToken}` },
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        setVehicleInfo([data.userInfo.vehicles[0]]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   const fetchUser = async () => {
@@ -31,9 +50,6 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
       ...personsInjured,
       {
         personInjuredName: '',
-        personInjuredDob: '',
-        personInjuredHospital: '',
-        personInjuredNatureOfInjuries: '',
       },
     ]);
   };
@@ -44,7 +60,6 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
       ...witnesses,
       {
         witnessName: '',
-        witnessPhone: '',
       },
     ]);
   };
@@ -59,11 +74,79 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
     ]);
   };
 
+  const addPropertyDamage = (e) => {
+    e.preventDefault();
+    setPropertyDamages([
+      ...propertyDamages,
+      {
+        propertyDamageOwnerName: '',
+      },
+    ]);
+    console.log(propertyDamages);
+  };
+
   const checkPersonInjuredError = (e, index) => {
     e.preventDefault();
     let error = {};
-    if (!e.target.value || e.target.value === '') {
-      error = { [index]: { [e.target.name]: 'Required field' } };
+
+    /* if (e.target.name === 'personInjuredAddress') {
+      if (e.target.value) {
+        if (!personsInjured[index].personInjuredCity)
+          error[index].personInjuredCity = 'Incomplete address';
+        if (!personsInjured[index].personInjuredProvince)
+          error[index].personInjuredProvince = 'Incomplete address';
+        if (!personsInjured[index].personInjuredCountry)
+          error[index].personInjuredCountry = 'Incomplete address';
+        if (!personsInjured[index].personInjuredPostalCode)
+          error[index].personInjuredPostalCode = 'Incomplete address';
+      }
+    } else if (e.target.name === 'personInjuredCity') {
+      if (e.target.value) {
+        if (!personsInjured[index].personInjuredAddress)
+          error[index].personInjuredAddress = 'Incomplete address';
+        if (!personsInjured[index].personInjuredProvince)
+          error[index].personInjuredProvince = 'Incomplete address';
+        if (!personsInjured[index].personInjuredCountry)
+          error[index].personInjuredCountry = 'Incomplete address';
+        if (!personsInjured[index].personInjuredPostalCode)
+          error[index].personInjuredPostalCode = 'Incomplete address';
+      }
+    } else if (e.target.name === 'personInjuredProvince') {
+      if (e.target.value) {
+        if (!personsInjured[index].personInjuredAddress)
+          error[index].personInjuredAddress = 'Incomplete address';
+        if (!personsInjured[index].personInjuredCity)
+          error[index].personInjuredCity = 'Incomplete address';
+        if (!personsInjured[index].personInjuredCountry)
+          error[index].personInjuredCountry = 'Incomplete address';
+        if (!personsInjured[index].personInjuredPostalCode)
+          error[index].personInjuredPostalCode = 'Incomplete address';
+      }
+    } else if (e.target.name === 'personInjuredCountry') {
+      if (e.target.value) {
+        if (!personsInjured[index].personInjuredAddress)
+          error[index].personInjuredAddress = 'Incomplete address';
+        if (!personsInjured[index].personInjuredCity)
+          error[index].personInjuredCity = 'Incomplete address';
+        if (!personsInjured[index].personInjuredProvince)
+          error[index].personInjuredProvince = 'Incomplete address';
+        if (!personsInjured[index].personInjuredPostalCode)
+          error[index].personInjuredPostalCode = 'Incomplete address';
+      }
+    } else if (e.target.name === 'personInjuredPostalCode') {
+      if (e.target.value) {
+        if (!personsInjured[index].personInjuredAddress)
+          error[index].personInjuredAddress = 'Incomplete address';
+        if (!personsInjured[index].personInjuredCity)
+          error[index].personInjuredCity = 'Incomplete address';
+        if (!personsInjured[index].personInjuredCountry)
+          error[index].personInjuredCountry = 'Incomplete address';
+        if (!personsInjured[index].personInjuredProvince)
+          error[index].personInjuredProvince = 'Incomplete address';
+      }
+    } else */
+    if (!e.target.value) {
+      error[index][e.target.name] = 'Required field';
       setPersonInjuredErrors({ ...personInjuredErrors, ...error });
     } else {
       delete personInjuredErrors[index][e.target.name];
@@ -73,8 +156,8 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
   const checkWitnessError = (e, index) => {
     e.preventDefault();
     let error = {};
-    if (!e.target.value || e.target.value === '') {
-      error = { [index]: { [e.target.name]: 'Required field' } };
+    if (!e.target.value) {
+      error[index][e.target.name] = 'Required field';
       setWitnessErrors({ ...witnessErrors, ...error });
     } else {
       delete witnessErrors[index][e.target.name];
@@ -84,11 +167,22 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
   const checkEvidenceError = (e, index) => {
     e.preventDefault();
     let error = {};
-    if (!e.target.value || e.target.value === '') {
-      error = { [index]: { [e.target.name]: 'Required field' } };
+    if (!e.target.value) {
+      error[index][e.target.name] = 'Required field';
       setEvidenceErrors({ ...evidenceErrors, ...error });
     } else {
       delete evidenceErrors[index][e.target.name];
+    }
+  };
+
+  const checkPropertyDamageError = (e, index) => {
+    e.preventDefault();
+    let error = {};
+    if (!e.target.value) {
+      error[index][e.target.name] = 'Required field';
+      setPropertyDamageErrors({ ...propertyDamageErrors, ...error });
+    } else {
+      delete propertyDamageErrors[index][e.target.name];
     }
   };
 
@@ -111,6 +205,13 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
     setEvidences(evidences.filter((evidence, idx) => idx !== index));
     setEvidenceErrors({});
     setEvidenceOnClickErrors({});
+  };
+
+  const removePropertyDamage = (e, index) => {
+    e.preventDefault();
+    setPropertyDamages(propertyDamages.filter((propertyDamage, idx) => idx !== index));
+    setPropertyDamageErrors({});
+    setPropertyDamageOnClickErrors({});
   };
 
   const handlePersonInjuredChange = (e, index) => {
@@ -140,8 +241,17 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
       { ...evidences[index], [e.target.name]: e.target.value },
       ...evidences.slice(index + 1),
     ]);
-    //call this on change to accumulate evidence errors
     checkEvidenceError(e, index);
+  };
+
+  const handlePropertyDamageChange = (e, index) => {
+    e.preventDefault();
+    setPropertyDamages([
+      ...propertyDamages.slice(0, index),
+      { ...propertyDamages[index], [e.target.name]: e.target.value },
+      ...propertyDamages.slice(index + 1),
+    ]);
+    checkPropertyDamageError(e, index);
   };
 
   const handleSubmit = async (e) => {
@@ -150,11 +260,12 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
     if (personInjuredErrors) setPersonInjuredOnClickErrors(personInjuredErrors);
     if (witnessErrors) setWitnessOnClickErrors(witnessErrors);
     if (evidenceErrors) setEvidenceOnClickErrors(evidenceErrors);
+    if (propertyDamageErrors) setPropertyDamageOnClickErrors(propertyDamageErrors);
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
     }
-
-    const report = { formValues, personsInjured, witnesses, evidences };
+    const report = { formValues, personsInjured, witnesses, evidences, propertyDamages };
+    console.log(report);
     const token = 'Bearer ' + bearerToken;
     try {
       let res = await fetch('http://localhost:8080/api/report', {
@@ -275,6 +386,16 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
               onChange={(e) => setField('location', e.target.value)}
             />
           </Form.Group>
+
+          <Form.Group controlId="formVehicle">
+            <Form.Label>Vehicle</Form.Label>
+            <Form.Select aria-label="Default select example">
+              {vehicleInfo.map((vehicle, idx) => (
+                <option key={idx} value={vehicle.licensePlateNo}></option>
+              ))}
+            </Form.Select>
+          </Form.Group>
+
           <Form.Group controlId="formAccidentDescription">
             <Form.Label>Accident Description</Form.Label>
             <Form.Control
@@ -365,9 +486,7 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
                 handleChange={handlePersonInjuredChange}
                 handleRemove={removePersonInjured}
                 onClickErrors={personInjuredOnClickErrors}
-                errors={personInjuredErrors}
                 errorSetter={setPersonInjuredErrors}
-                personInjured={personInjured}
               />
             ))}
           </Form.Group>
@@ -383,9 +502,7 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
                 handleChange={handleWitnessChange}
                 handleRemove={removeWitness}
                 onClickErrors={witnessOnClickErrors}
-                errors={witnessErrors}
                 errorSetter={setWitnessErrors}
-                witness={witness}
               />
             ))}
           </Form.Group>
@@ -401,9 +518,23 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
                 handleChange={handleEvidenceChange}
                 handleRemove={removeEvidence}
                 onClickErrors={evidenceOnClickErrors}
-                errors={evidenceErrors}
                 errorSetter={setEvidenceErrors}
-                evidence={evidence}
+              />
+            ))}
+          </Form.Group>
+          <hr />
+          <Form.Group controlId="formPropertyDamage">
+            <Form.Label>Property Damages</Form.Label>
+            <br />
+            <Button onClick={(e) => addPropertyDamage(e)}>Add</Button>
+            {propertyDamages.map((propertyDamage, idx) => (
+              <PropertyDamage
+                key={idx}
+                index={idx}
+                handleChange={handlePropertyDamageChange}
+                handleRemove={removePropertyDamage}
+                onClickErrors={propertyDamageOnClickErrors}
+                errorSetter={setPropertyDamageErrors}
               />
             ))}
           </Form.Group>
