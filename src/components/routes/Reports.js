@@ -9,8 +9,8 @@ const Reports = () => {
         <Button as={Link} to="/newreport">
           Create a New Report
         </Button>{' '}
-        <Button as={Link} to="/viewreport">
-          View Existing Reports
+        <Button as={Link} to="/viewallreport">
+          View All Existing Reports
         </Button>
       </Container>
     </div>
