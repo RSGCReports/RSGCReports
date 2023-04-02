@@ -1,13 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Card, Row } from 'react-bootstrap';
+import { Container, Card, Row, Button } from 'react-bootstrap';
 import '../../styles/AccountPage.css';
 import { Auth } from 'aws-amplify';
+import PersonalInfoModal from './accountComponents/PersonalInfoModal';
+import PolicyInfoModal from './accountComponents/PolicyInfoModal';
+import VehicleInfoModal from './accountComponents/VehicleInfoModal';
 
 const AccountPage = () => {
-  const [userInfo, setUserInfo] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [userInfo, setUserInfo] = useState({});
   const [insuranceInfo, setInsuranceInfo] = useState([]);
   const [vehicleInfo, setVehicleInfo] = useState([]);
   const [bearerToken, setToken] = useState('');
+  const [showInfoModal, setShowInfoModal] = useState(false);
+  const [showAddPolicyModal, setShowAddPolicyModal] = useState(false);
+  const [showEditPolicyModal, setShowEditPolicyModal] = useState(false);
+  const [showAddVehicleModal, setShowAddVehicleModal] = useState(false);
+  const [showEditVehicleModal, setShowEditVehicleModal] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -25,9 +34,11 @@ const AccountPage = () => {
         .then((data) => {
           console.log(data);
           console.log(data.userInfo);
-          setUserInfo([data.userInfo.user]);
-          setInsuranceInfo([data.userInfo.policies[0]]);
-          setVehicleInfo([data.userInfo.vehicles[0]]);
+          setUserInfo(data.userInfo.user);
+          console.log('my state', userInfo);
+          setInsuranceInfo(data.userInfo.policies);
+          setVehicleInfo(data.userInfo.vehicles);
+          setLoading(false);
         })
         .catch((err) => {
           console.log(err);
@@ -35,8 +46,13 @@ const AccountPage = () => {
     };
 
     fetchUser().catch(console.error);
-  }, [bearerToken, fetch, setUserInfo, setInsuranceInfo, setVehicleInfo]);
+  }, [bearerToken, fetch, setUserInfo, setInsuranceInfo, setVehicleInfo, setLoading]);
 
+  const newDob = (dob) => {
+    const timeIdx = dob.indexOf('T');
+    const date = dob.substring(0, timeIdx);
+    return date;
+  };
   const obscureEmail = (email) => {
     const [name, domain] = email.split('@');
     const newEmail = `${name[0]}${new Array(name.length).join('*')}@${domain}`;
@@ -60,231 +76,290 @@ const AccountPage = () => {
     return newVIN;
   };
   return (
-    <div className="account-body">
-      {userInfo.map((data) => {
-        return (
-          <div className="jumbotron" key={data.key}>
+    <>
+      {loading ? (
+        <h1>Loading</h1>
+      ) : (
+        <div className="account-body">
+          <div className="jumbotron">
             <Container>
-              <h2>{data.fullname}</h2>
+              <h2>{userInfo.fullname}</h2>
             </Container>
           </div>
-        );
-      })}
-
-      {userInfo.map((data) => {
-        return (
-          <Container key={data.key}>
+          <Container>
             <Card body>
+              <Button
+                style={{ float: 'right' }}
+                variant="outline-secondary"
+                onClick={() => setShowInfoModal(true)}
+              >
+                Edit
+              </Button>
               <h5>Personal Information</h5>
               <hr />
               <Row xs={1} md={2}>
                 <p>
                   <strong>Username: </strong>
-                  {data.username}
+                  {userInfo.username}
                 </p>
                 <p>
                   <strong>Email: </strong>
-                  {obscureEmail(data.email)}
+                  {obscureEmail(userInfo.email)}
                 </p>
                 <p>
                   <strong>Date of Birth: </strong>
-                  {data.dob}
+                  {newDob(userInfo.dob)}
                 </p>
                 <p>
                   <strong>Phone Number: </strong>
-                  {data.phoneNumber}
+                  {userInfo.phoneNumber}
                 </p>
                 <p>
                   <strong>Years of Driving: </strong>
-                  {data.yearsDriving}
+                  {userInfo.yearsDriving}
                 </p>
                 <p>
                   <strong>Drivers License: </strong>
-                  {obscureDriversLicense(data.driverLicense)}
+                  {obscureDriversLicense(userInfo.driverLicense)}
                 </p>
                 <p>
                   <strong>Home Address:</strong>
                   <br />
-                  {data.homeStreet +
+                  {userInfo.homeStreet +
                     ', ' +
-                    data.homeCity +
+                    userInfo.homeCity +
                     ', ' +
-                    data.homeProvince +
+                    userInfo.homeProvince +
                     ', ' +
-                    data.homeCountry +
+                    userInfo.homeCountry +
                     ', ' +
-                    data.homePostalCode}
+                    userInfo.homePostalCode}
                 </p>
                 <p>
                   <strong>Business Address: </strong>
                   <br />
 
-                  {data.businessStreet
-                    ? data.businessStreet +
+                  {userInfo.businessStreet
+                    ? userInfo.businessStreet +
                       ', ' +
-                      data.businessCity +
+                      userInfo.businessCity +
                       ', ' +
-                      data.businessProvince +
+                      userInfo.businessProvince +
                       ', ' +
-                      data.businessCountry +
+                      userInfo.businessCountry +
                       ', ' +
-                      data.businessPostalCode
+                      userInfo.businessPostalCode
                     : 'Not Stated'}
                 </p>
                 <p>
                   <strong>Disabilities:</strong>
                   <br />
 
-                  {data.disabilities ? data.disabilities : 'Not Stated'}
+                  {userInfo.disabilities ? userInfo.disabilities : 'Not Stated'}
                 </p>
               </Row>
+              <PersonalInfoModal
+                show={showInfoModal}
+                onHide={() => setShowInfoModal(false)}
+                data={userInfo}
+              />
             </Card>
           </Container>
-        );
-      })}
 
-      {insuranceInfo.map((data) => {
-        return (
-          <Container key={data.key}>
-            <Card body>
-              <h5>Insurance Policy Information</h5>
-              <hr />
-              <Row xs={1} md={2}>
-                <p>
-                  <strong>Insurer: </strong>
-                  {data.insurer}
-                </p>
-                <p>
-                  <strong>Insurer Name: </strong>
-                  {data.insurerName}
-                </p>
-                <p>
-                  <strong>Agent: </strong>
-                  {data.Agent}
-                </p>
-                <p>
-                  <strong>Policy Number: </strong>
-                  {obscurePolicy(data.policyNumber)}
-                </p>
-                <p>
-                  <strong>Home Address:</strong>
-                  <br />
-                  {data.homeStreet +
-                    ', ' +
-                    data.homeCity +
-                    ', ' +
-                    data.homeProvince +
-                    ', ' +
-                    data.homeCountry +
-                    ', ' +
-                    data.homePostalCode}
-                </p>
-                <p>
-                  <strong>Business Address: </strong>
-                  <br />
+          {insuranceInfo.map((data) => {
+            return (
+              <Container key={data.key}>
+                <Card body>
+                  <Button
+                    style={{ float: 'right' }}
+                    variant="outline-primary"
+                    onClick={() => setShowAddPolicyModal(true)}
+                  >
+                    Add
+                  </Button>
+                  <Button
+                    style={{ float: 'right' }}
+                    variant="outline-secondary"
+                    onClick={() => setShowEditPolicyModal(true)}
+                  >
+                    Edit
+                  </Button>
+                  <h5>Insurance Policy Information</h5>
+                  <hr />
+                  <Row xs={1} md={2}>
+                    <p>
+                      <strong>Insurer: </strong>
+                      {data.insurer}
+                    </p>
+                    <p>
+                      <strong>Insurer Name: </strong>
+                      {data.insurerName}
+                    </p>
+                    <p>
+                      <strong>Agent: </strong>
+                      {data.Agent}
+                    </p>
+                    <p>
+                      <strong>Policy Number: </strong>
+                      {obscurePolicy(data.policyNumber)}
+                    </p>
+                    <p>
+                      <strong>Home Address:</strong>
+                      <br />
+                      {data.homeStreet +
+                        ', ' +
+                        data.homeCity +
+                        ', ' +
+                        data.homeProvince +
+                        ', ' +
+                        data.homeCountry +
+                        ', ' +
+                        data.homePostalCode}
+                    </p>
+                    <p>
+                      <strong>Business Address: </strong>
+                      <br />
 
-                  {data.businessStreet
-                    ? data.businessStreet +
-                      ', ' +
-                      data.businessCity +
-                      ', ' +
-                      data.businessProvince +
-                      ', ' +
-                      data.businessCountry +
-                      ', ' +
-                      data.businessPostalCode
-                    : 'Not Stated'}
-                </p>
-              </Row>
-            </Card>
-          </Container>
-        );
-      })}
+                      {data.businessStreet
+                        ? data.businessStreet +
+                          ', ' +
+                          data.businessCity +
+                          ', ' +
+                          data.businessProvince +
+                          ', ' +
+                          data.businessCountry +
+                          ', ' +
+                          data.businessPostalCode
+                        : 'Not Stated'}
+                    </p>
+                  </Row>
+                  <PolicyInfoModal
+                    show={showAddPolicyModal}
+                    onHide={() => setShowAddPolicyModal(false)}
+                    adding={true}
+                  />
+                  <PolicyInfoModal
+                    show={showEditPolicyModal}
+                    onHide={() => setShowEditPolicyModal(false)}
+                    data={data}
+                    adding={false}
+                  />
+                </Card>
+              </Container>
+            );
+          })}
 
-      {vehicleInfo.map((data) => {
-        return (
-          <Container key={data.key}>
-            <Card body>
-              <h5>Vehicle Information</h5>
-              <hr />
-              <Row xs={1} md={2}>
-                <p>
-                  <strong>Registered Owner{"'"}s Name: </strong>
-                  {data.registeredOwner}
-                </p>
-                <p>
-                  <strong>Registered Owner{"'"}s Address: </strong>
-                  <br />
+          {vehicleInfo.map((data) => {
+            return (
+              <Container key={data.key}>
+                <Card body>
+                  <Button
+                    style={{ float: 'right' }}
+                    variant="outline-primary"
+                    onClick={() => setShowAddVehicleModal(true)}
+                  >
+                    Add
+                  </Button>
+                  <Button
+                    style={{ float: 'right' }}
+                    variant="outline-secondary"
+                    onClick={() => setShowEditVehicleModal(true)}
+                  >
+                    Edit
+                  </Button>
+                  <h5>Vehicle Information</h5>
+                  <hr />
+                  <Row xs={1} md={2}>
+                    <p>
+                      <strong>Registered Owner{"'"}s Name: </strong>
+                      {data.registeredOwner}
+                    </p>
+                    <p>
+                      <strong>Registered Owner{"'"}s Address: </strong>
+                      <br />
 
-                  {data.registeredOwnerStreet +
-                    ', ' +
-                    data.registeredOwnerCity +
-                    ', ' +
-                    data.registeredOwnerProvince +
-                    ', ' +
-                    data.registeredOwnerCountry +
-                    ', ' +
-                    data.registeredOwnerPostalCode}
-                </p>
-              </Row>
-              <hr />
-              <Row xs={1} md={2}>
-                <p>
-                  <strong>Actual Owner{"'"}s Name: </strong>
-                  {data.actualOwner}
-                </p>
-                <p>
-                  <strong>Actual Owner{"'"}s Address: </strong>
-                  <br />
+                      {data.registeredOwnerStreet +
+                        ', ' +
+                        data.registeredOwnerCity +
+                        ', ' +
+                        data.registeredOwnerProvince +
+                        ', ' +
+                        data.registeredOwnerCountry +
+                        ', ' +
+                        data.registeredOwnerPostalCode}
+                    </p>
+                  </Row>
+                  <hr />
+                  <Row xs={1} md={2}>
+                    <p>
+                      <strong>Actual Owner{"'"}s Name: </strong>
+                      {data.actualOwner}
+                    </p>
+                    <p>
+                      <strong>Actual Owner{"'"}s Address: </strong>
+                      <br />
 
-                  {data.actualOwnerStreet +
-                    ', ' +
-                    data.actualOwnerCity +
-                    ', ' +
-                    data.actualOwnerProvince +
-                    ', ' +
-                    data.actualOwnerCountry +
-                    ', ' +
-                    data.actualOwnerPostalCode}
-                </p>
-              </Row>
-              <hr />
-              <Row xs={1} md={2}>
-                <p>
-                  <strong>License Plate Number: </strong>
-                  {data.licensePlateNo}
-                </p>
-                <p>
-                  <strong>Province: </strong>
-                  {data.province}
-                </p>
-                <p>
-                  <strong>Make: </strong>
-                  {data.make}
-                </p>
-                <p>
-                  <strong>Year: </strong>
-                  {data.year}
-                </p>
-                <p>
-                  <strong>Model: </strong>
-                  {data.model}
-                </p>
-                <p>
-                  <strong>Type: </strong>
-                  {data.type}
-                </p>
-                <p>
-                  <strong>Vehicle Identification Number: </strong>
+                      {data.actualOwnerStreet +
+                        ', ' +
+                        data.actualOwnerCity +
+                        ', ' +
+                        data.actualOwnerProvince +
+                        ', ' +
+                        data.actualOwnerCountry +
+                        ', ' +
+                        data.actualOwnerPostalCode}
+                    </p>
+                  </Row>
+                  <hr />
+                  <Row xs={1} md={2}>
+                    <p>
+                      <strong>License Plate Number: </strong>
+                      {data.licensePlateNo}
+                    </p>
+                    <p>
+                      <strong>Province: </strong>
+                      {data.province}
+                    </p>
+                    <p>
+                      <strong>Make: </strong>
+                      {data.make}
+                    </p>
+                    <p>
+                      <strong>Year: </strong>
+                      {data.year}
+                    </p>
+                    <p>
+                      <strong>Model: </strong>
+                      {data.model}
+                    </p>
+                    <p>
+                      <strong>Type: </strong>
+                      {data.type}
+                    </p>
+                    <p>
+                      <strong>Vehicle Identification Number: </strong>
 
-                  {obscureVIN(data.VIN)}
-                </p>
-              </Row>
-            </Card>
-          </Container>
-        );
-      })}
-    </div>
+                      {obscureVIN(data.VIN)}
+                    </p>
+                  </Row>
+                  <VehicleInfoModal
+                    show={showAddVehicleModal}
+                    onHide={() => setShowAddVehicleModal(false)}
+                    adding={true}
+                  />
+                  <VehicleInfoModal
+                    show={showEditVehicleModal}
+                    onHide={() => setShowEditVehicleModal(false)}
+                    data={data}
+                    adding={false}
+                  />
+                </Card>
+              </Container>
+            );
+          })}
+        </div>
+      )}
+    </>
   );
 };
 

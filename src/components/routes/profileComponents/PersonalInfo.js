@@ -37,6 +37,9 @@ const PersonalInfo = ({ nextStep, setField, setErrors, errors, formValues }) => 
       homeCountry,
       homeProvince,
       homePostalCode,
+      businessCountry,
+      businessProvince,
+      businessPostalCode,
       phoneNumber,
       driverLicense,
     } = formValues;
@@ -57,15 +60,35 @@ const PersonalInfo = ({ nextStep, setField, setErrors, errors, formValues }) => 
         homeProvince
       )
     )
-      newErrors.homeProvince = 'Must be a Canadian province';
+      newErrors.homeProvince = 'Must be a Canadian province code (e.g. ON)';
     if (!homePostalCode || homePostalCode === '')
       newErrors.homePostalCode = 'Must provide postal code';
     else if (!/^[A-Z][0-9][A-Z][0-9][A-Z][0-9]$/.test(homePostalCode))
       newErrors.homePostalCode = 'Postal code must be in X#X#X# format';
+
+    // business validation
+    if (businessCountry && businessCountry !== '' && businessCountry !== 'Canada')
+      newErrors.businessCountry = 'Must be Canada';
+    if (
+      businessProvince &&
+      businessProvince !== '' &&
+      !['ON', 'QC', 'NS', 'NB', 'MB', 'BC', 'PE', 'SK', 'AB', 'NL', 'NT', 'YT', 'NU'].includes(
+        businessProvince
+      )
+    )
+      newErrors.businessProvince = 'Must be a Canadian province code (e.g. ON)';
+    if (
+      businessPostalCode &&
+      businessPostalCode !== '' &&
+      !/^[A-Z][0-9][A-Z][0-9][A-Z][0-9]$/.test(businessPostalCode)
+    )
+      newErrors.businessPostalCode = 'Postal code must be in X#X#X# format';
+
     // phone number check
     if (!phoneNumber || phoneNumber === '') newErrors.phoneNumber = 'Must provide phone number';
     else if (!/^[0-9]{10}$/.test(phoneNumber))
       newErrors.phoneNumber = 'Phone number must be in ########## format';
+
     // years driving check
     if (!yearsDriving || yearsDriving === '')
       newErrors.yearsDriving = 'Must provide how many years you drove';
@@ -216,7 +239,11 @@ const PersonalInfo = ({ nextStep, setField, setErrors, errors, formValues }) => 
                 name="form[businessProvince]"
                 defaultValue={formValues.businessProvince || ''}
                 onChange={(e) => setField('businessProvince', e.target.value)}
+                isInvalid={errors.businessProvince}
               />
+              <Form.Control.Feedback type="invalid">
+                {errors.businessProvince}
+              </Form.Control.Feedback>
             </Form.Group>
             <Form.Group as={Col} controlId="formCountry">
               <Form.Label>Country</Form.Label>
@@ -225,7 +252,9 @@ const PersonalInfo = ({ nextStep, setField, setErrors, errors, formValues }) => 
                 name="form[businessCountry]"
                 defaultValue={formValues.businessCountry || ''}
                 onChange={(e) => setField('businessCountry', e.target.value)}
+                isInvalid={errors.businessCountry}
               />
+              <Form.Control.Feedback type="invalid">{errors.businessCountry}</Form.Control.Feedback>
             </Form.Group>
             <Form.Group as={Col} controlId="formPostal">
               <Form.Label>Postal Code</Form.Label>
@@ -235,7 +264,11 @@ const PersonalInfo = ({ nextStep, setField, setErrors, errors, formValues }) => 
                 name="form[businessPostalCode]"
                 defaultValue={formValues.businessPostalCode || ''}
                 onChange={(e) => setField('businessPostalCode', e.target.value)}
+                isInvalid={errors.businessPostalCode}
               />
+              <Form.Control.Feedback type="invalid">
+                {errors.businessPostalCode}
+              </Form.Control.Feedback>
             </Form.Group>
           </Row>
           <br />
