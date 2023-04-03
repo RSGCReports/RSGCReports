@@ -28,6 +28,9 @@ const InsurancePolicy = ({ nextStep, prevStep, setField, setErrors, errors, form
       IPhomeCountry,
       IPhomeProvince,
       IPhomePostalCode,
+      IPbusinessCountry,
+      IPbusinessProvince,
+      IPbusinessPostalCode,
       policyNumber,
     } = formValues;
     const newErrors = {};
@@ -55,6 +58,24 @@ const InsurancePolicy = ({ nextStep, prevStep, setField, setErrors, errors, form
       newErrors.IPhomePostalCode = 'Must provide postal code';
     else if (!/^[A-Z][0-9][A-Z][0-9][A-Z][0-9]$/.test(IPhomePostalCode))
       newErrors.IPhomePostalCode = 'Postal code must be in X#X#X# format';
+
+    // business validation
+    if (IPbusinessCountry && IPbusinessCountry !== '' && IPbusinessCountry !== 'Canada')
+      newErrors.IPbusinessCountry = 'Must be Canada';
+    if (
+      IPbusinessProvince &&
+      IPbusinessProvince !== '' &&
+      !['ON', 'QC', 'NS', 'NB', 'MB', 'BC', 'PE', 'SK', 'AB', 'NL', 'NT', 'YT', 'NU'].includes(
+        IPbusinessProvince
+      )
+    )
+      newErrors.IPbusinessProvince = 'Must be a Canadian province code (e.g. ON)';
+    if (
+      IPbusinessPostalCode &&
+      IPbusinessPostalCode !== '' &&
+      !/^[A-Z][0-9][A-Z][0-9][A-Z][0-9]$/.test(IPbusinessPostalCode)
+    )
+      newErrors.IPbusinessPostalCode = 'Postal code must be in X#X#X# format';
 
     // policy number check
     if (!policyNumber || policyNumber === '') newErrors.policyNumber = 'Must include policy number';
@@ -194,7 +215,11 @@ const InsurancePolicy = ({ nextStep, prevStep, setField, setErrors, errors, form
                 name="form[IPbusinessProvince]"
                 defaultValue={formValues.IPbusinessProvince}
                 onChange={(e) => setField('IPbusinessProvince', e.target.value)}
+                isInvalid={errors.IPbusinessProvince}
               />
+              <Form.Control.Feedback type="invalid">
+                {errors.IPbusinessProvince}
+              </Form.Control.Feedback>
             </Form.Group>
             <Form.Group as={Col} controlId="formCountry">
               <Form.Label>Country</Form.Label>
@@ -203,7 +228,11 @@ const InsurancePolicy = ({ nextStep, prevStep, setField, setErrors, errors, form
                 name="form[IPbusinessCountry]"
                 defaultValue={formValues.IPbusinessCountry}
                 onChange={(e) => setField('IPbusinessCountry', e.target.value)}
+                isInvalid={errors.IPbusinessCountry}
               />
+              <Form.Control.Feedback type="invalid">
+                {errors.IPbusinessCountry}
+              </Form.Control.Feedback>
             </Form.Group>
             <Form.Group as={Col} controlId="formPostal">
               <Form.Label>Postal Code</Form.Label>
@@ -213,7 +242,11 @@ const InsurancePolicy = ({ nextStep, prevStep, setField, setErrors, errors, form
                 defaultValue={formValues.IPbusinessPostalCode}
                 placeholder="X#X#X#"
                 onChange={(e) => setField('IPbusinessPostalCode', e.target.value)}
+                isInvalid={errors.IPbusinessPostalCode}
               />
+              <Form.Control.Feedback type="invalid">
+                {errors.IPbusinessPostalCode}
+              </Form.Control.Feedback>
             </Form.Group>
           </Row>
           <br />
