@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, Form, Button, Row, Col } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 //TODO: make edit button functional...with id passed
 //TODO: add id as parameter and use it in your get request to fetch the report
 const ViewReport = (id) => {
+  const [evidence, setEvidence] = useState([]);
+
   // TODO: Delete the mocking when get report route is made
   let report = {
     reportId: 46,
@@ -156,6 +158,49 @@ const ViewReport = (id) => {
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${bearerToken}` },
       }).then ((result)=>{result=mockReport;})
    */
+
+  const token = JSON.parse(localStorage.getItem('token'));
+  const { Id } = useParams();
+
+  useEffect(() => {
+    console.log('Logging token: ', token);
+    getReports(Id);
+  }, []);
+
+  const getReports = async (Id) => {
+    console.log(id);
+    fetch(`http://localhost:8080/api/report/${Id}`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json', Authorization: token },
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        // SET  REPORTS HERE
+        console.log(data);
+        setEvidence(data.reportInfo.report.Evidence);
+        // console.log('Logging fetched reports: ', data.reports);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleImageRender = (evidence) => {
+    let bytes = new Uint8Array(evidence.size);
+
+    for (var i = 0; i < evidence.size; i++) {
+      bytes[i] = evidence.data.data[i];
+    }
+
+    let blob = new Blob([bytes], { type: evidence.contentType });
+
+    var urlCreator = window.URL || window.webkitURL;
+    const result = urlCreator.createObjectURL(blob);
+    console.log(result);
+    return result;
+  };
 
   return (
     <div>
@@ -389,11 +434,16 @@ const ViewReport = (id) => {
               <h3>
                 <b>Evidence</b>
               </h3>
-              {report.Evidence.map((evidence, idx) => (
+              {evidence.map((evidence, idx) => (
                 <div key={idx}>
                   <Form.Group controlId="formEvidenceName">
                     <Form.Label>Name</Form.Label>
-                    <Form.Control type="text" name="evidenceName" value={evidence.name} />
+                    <Form.Control
+                      type="text"
+                      name="evidenceName"
+                      value={evidence.id + evidence.name}
+                    />
+                    <img src={handleImageRender(evidence)} height="200px"></img>
                   </Form.Group>
                   <br />
                 </div>

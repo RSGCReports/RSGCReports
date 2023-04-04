@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Container, Form, Button, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
@@ -297,6 +297,31 @@ const ViewAllReport = () => {
       }).then ((result)=>{result=mockReport;})
    */
 
+  const token = JSON.parse(localStorage.getItem('token'));
+
+  useEffect(() => {
+    console.log('Logging token: ', token);
+    getReports();
+  }, []);
+
+  const getReports = async () => {
+    fetch('http://localhost:8080/api/reports', {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json', Authorization: token },
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        // SET  REPORTS HERE
+        console.log(data);
+        // console.log('Logging fetched reports: ', data.reports);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <div>
       <Container>
@@ -391,7 +416,7 @@ const ViewAllReport = () => {
               </fieldset>
               <br />
               <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-                <Button as={Link} to="/viewreport" id={report.reportId}>
+                <Button as={Link} to="/viewreport/5" id={report.reportId}>
                   View Report
                 </Button>
               </div>

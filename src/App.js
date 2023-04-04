@@ -31,7 +31,7 @@ function App({ user }) {
           <Route exact path="/" element={<About />} />
           <Route exact path="/profile" element={<Profile />} />
           <Route exact path="/reports" element={<Reports />} />
-          <Route exact path="/viewreport" element={<ViewReport />} />
+          <Route exact path="/viewreport/:Id" element={<ViewReport />} />
           <Route exact path="/viewallreport" element={<ViewAllReport />} />
           <Route exact path="/newreport" element={<NewReport />} />
           <Route exact path="/accountpage" element={<AccountPage />} />
