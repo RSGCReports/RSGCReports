@@ -1,26 +1,17 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Form, Button } from 'react-bootstrap';
-const Evidence = ({ index, handleChange, handleRemove, onClickErrors, errorSetter }) => {
-  // fix for initial empty field errors
-  useEffect(() => {
-    errorSetter({ [index]: { ['evidenceName']: 'Required field' } });
-  }, []);
+const Evidence = ({ index, handleChange, handleRemove }) => {
   return (
     <>
       <hr />
       <Form.Group controlId="formEvidenceName">
-        <Form.Label>Name</Form.Label>
+        <Form.Label>Picture Evidence</Form.Label>
         <Form.Control
-          type="text"
+          type="file"
+          accept=".png, .jpg, .jpeg, .webp, .gif"
           name="evidenceName"
           onChange={(e) => handleChange(e, index)}
-          isInvalid={onClickErrors[index] ? onClickErrors[index].evidenceName : null}
         />
-        {onClickErrors[index] ? (
-          <Form.Control.Feedback type="invalid">
-            {onClickErrors[index].evidenceName}
-          </Form.Control.Feedback>
-        ) : null}
       </Form.Group>
       <br />
       <Button className="btn btn-danger" onClick={(e) => handleRemove(e, index)}>
