@@ -14,14 +14,17 @@ import { withAuthenticator } from '@aws-amplify/ui-react';
 import PropTypes from 'prop-types';
 
 function App({ user }) {
-  function authorizationHeaders(type = 'application/json') {
-    const headers = { 'Content-Type': type };
-    headers['Authorization'] = `Bearer ${user.signInUserSession.idToken.jwtToken}`;
-    return headers;
-  }
+  // function authorizationHeaders(type = 'application/json') {
+  //   const headers = { 'Content-Type': type };
+  //   headers['Authorization'] = `Bearer ${user.signInUserSession.idToken.jwtToken}`;
+  //   return headers;
+  // }
 
-  console.log(authorizationHeaders());
-  localStorage.setItem('token', JSON.stringify(authorizationHeaders().Authorization));
+  // console.log(authorizationHeaders());
+  localStorage.setItem(
+    'token',
+    JSON.stringify(`Bearer ${user.signInUserSession.idToken.jwtToken}`)
+  );
 
   return (
     <div>
