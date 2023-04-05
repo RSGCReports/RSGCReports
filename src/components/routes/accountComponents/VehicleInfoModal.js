@@ -70,24 +70,6 @@ const VehicleInfoModal = (props) => {
       }
       props.onHide();
     }
-
-    try {
-      const payload = { newVehicle, policy };
-      console.log(payload);
-      let res = await fetch('http://localhost:8080/api/postVehicle', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: token },
-        body: JSON.stringify(payload),
-      });
-      if (res.status >= 200 && res.status <= 299) {
-        // maybe empty out fields and errors here with set state
-        console.log('POST Success!!');
-      } else {
-        console.log('Some Error occurred...');
-      }
-    } catch (err) {
-      console.log(err);
-    }
   };
 
   // get policies to display for dropdown
