@@ -278,11 +278,9 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
 
     formData.append('reportBody', JSON.stringify({ ...formValues, licensePlate }));
 
-
     formData.append('personsInjured', JSON.stringify(personsInjured));
     formData.append('witnesses', JSON.stringify(witnesses));
     formData.append('propertyDamages', JSON.stringify(propertyDamages));
-
 
     console.log('Form Data');
     console.log(formData);
