@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Form, Button, Row, Col } from 'react-bootstrap';
-import { Auth } from 'aws-amplify';
+// import { Auth } from 'aws-amplify';
 import PersonInjured from './PersonInjured';
 import Witness from './Witness';
 import Evidence from './Evidence';
 import PropertyDamage from './PropertyDamage';
+import Select from 'react-select';
 
 const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
   const [personsInjured, setPersonsInjured] = useState([]);
@@ -15,34 +16,42 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
   const [personInjuredOnClickErrors, setPersonInjuredOnClickErrors] = useState({});
   const [witnessErrors, setWitnessErrors] = useState({});
   const [witnessOnClickErrors, setWitnessOnClickErrors] = useState({});
-  const [evidenceErrors, setEvidenceErrors] = useState({});
-  const [evidenceOnClickErrors, setEvidenceOnClickErrors] = useState({});
   const [propertyDamageErrors, setPropertyDamageErrors] = useState({});
   const [propertyDamageOnClickErrors, setPropertyDamageOnClickErrors] = useState({});
-  const [bearerToken, setToken] = useState([]);
+  // const [bearerToken, setToken] = useState([]);
   const [vehicleInfo, setVehicleInfo] = useState([]);
+  const [licensePlate, setLicensePlate] = useState({});
+
+  const token = JSON.parse(localStorage.getItem('token'));
 
   useEffect(() => {
-    fetchUser().then((users) => setToken(users.signInUserSession.idToken.jwtToken));
+    // fetchUser().then((users) => setToken(users.signInUserSession.idToken.jwtToken));
+    console.log('Logging token: ', token);
+    getVehicleInfo();
+  }, []);
 
+  const getVehicleInfo = async () => {
     fetch('http://localhost:8080/api/userInfo', {
       method: 'GET',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${bearerToken}` },
+      headers: { 'Content-Type': 'application/json', Authorization: token },
     })
       .then((response) => {
         return response.json();
       })
       .then((data) => {
-        setVehicleInfo([data.userInfo.vehicles[0]]);
+        if (data.userInfo.vehicles.length !== 0) {
+          setVehicleInfo(data.userInfo.vehicles);
+          console.log('Logging fetched vehicle info: ', data.userInfo.vehicles);
+        }
       })
       .catch((err) => {
         console.log(err);
       });
-  }, []);
-
-  const fetchUser = async () => {
-    return await Auth.currentAuthenticatedUser();
   };
+
+  // const fetchUser = async () => {
+  //   return await Auth.currentAuthenticatedUser();
+  // };
 
   const addPersonInjured = (e) => {
     e.preventDefault();
@@ -164,17 +173,6 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
     }
   };
 
-  const checkEvidenceError = (e, index) => {
-    e.preventDefault();
-    let error = {};
-    if (!e.target.value) {
-      error[index][e.target.name] = 'Required field';
-      setEvidenceErrors({ ...evidenceErrors, ...error });
-    } else {
-      delete evidenceErrors[index][e.target.name];
-    }
-  };
-
   const checkPropertyDamageError = (e, index) => {
     e.preventDefault();
     let error = {};
@@ -203,8 +201,6 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
   const removeEvidence = (e, index) => {
     e.preventDefault();
     setEvidences(evidences.filter((evidence, idx) => idx !== index));
-    setEvidenceErrors({});
-    setEvidenceOnClickErrors({});
   };
 
   const removePropertyDamage = (e, index) => {
@@ -212,6 +208,11 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
     setPropertyDamages(propertyDamages.filter((propertyDamage, idx) => idx !== index));
     setPropertyDamageErrors({});
     setPropertyDamageOnClickErrors({});
+  };
+
+  const handleLicensePlateChange = (selectedOption) => {
+    console.log('Handle License: ', selectedOption);
+    setLicensePlate(selectedOption.licensePlateNo);
   };
 
   const handlePersonInjuredChange = (e, index) => {
@@ -238,10 +239,9 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
     e.preventDefault();
     setEvidences([
       ...evidences.slice(0, index),
-      { ...evidences[index], [e.target.name]: e.target.value },
+      { ...evidences[index], [e.target.name]: e.target.files[0] },
       ...evidences.slice(index + 1),
     ]);
-    checkEvidenceError(e, index);
   };
 
   const handlePropertyDamageChange = (e, index) => {
@@ -259,21 +259,40 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
     const newErrors = checkErrors();
     if (personInjuredErrors) setPersonInjuredOnClickErrors(personInjuredErrors);
     if (witnessErrors) setWitnessOnClickErrors(witnessErrors);
-    if (evidenceErrors) setEvidenceOnClickErrors(evidenceErrors);
     if (propertyDamageErrors) setPropertyDamageOnClickErrors(propertyDamageErrors);
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
     }
-    const report = { formValues, personsInjured, witnesses, evidences, propertyDamages };
-    console.log(report);
-    const token = 'Bearer ' + bearerToken;
+
+    // here we make form data
+
+    const formData = new FormData();
+
+    evidences.map((evidence) => {
+      formData.append('evidenceName', evidence.evidenceName);
+    });
+
+    // I took out evidences
+    const report = { formValues, personsInjured, witnesses, propertyDamages, licensePlate };
+    console.log('Logging report here: ', report);
+
+    formData.append('reportBody', JSON.stringify({ ...formValues, licensePlate }));
+
+
+    formData.append('personsInjured', JSON.stringify(personsInjured));
+    formData.append('witnesses', JSON.stringify(witnesses));
+    formData.append('propertyDamages', JSON.stringify(propertyDamages));
+
+
+    console.log('Form Data');
+    console.log(formData);
+    // const token = 'Bearer ' + bearerToken;
+
     try {
       let res = await fetch('http://localhost:8080/api/report', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: token },
-        body: JSON.stringify({
-          report,
-        }),
+        headers: { Authorization: token },
+        body: formData,
       });
       if (res.status >= 200 && res.status <= 299) {
         console.log('POST Success!!');
@@ -292,16 +311,13 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
     //else if (Date(date) > Date.now()) newErrors.date = 'Date must be current date or before';
     if (!time || time === '') newErrors.time = 'Must provide a time';
 
-    // if (evidences.every((evidence) => !evidence.name || evidence.name === ''))
-    //   newErrors.time = 'Must provide a time';
-
     return newErrors;
   };
 
   return (
     <div>
       <Container style={{ padding: '15px' }}>
-        <Form>
+        <Form encType="multipart/form">
           <Row>
             <Form.Group as={Col} controlId="formDate">
               <Form.Label>Date</Form.Label>
@@ -326,34 +342,35 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
               <Form.Control.Feedback type="invalid">{errors.time}</Form.Control.Feedback>
             </Form.Group>
           </Row>
+
           <Form.Group controlId="formDayLight">
             <Form.Label>Light Conditions</Form.Label>
             <br />
             <Form.Check
               type="radio"
-              name="form[daylight]"
+              name="form[dayLight]"
               id="inline-radio-1"
               value="dark"
               label="Dark"
-              onChange={(e) => setField('daylight', e.target.value)}
+              onChange={(e) => setField('dayLight', e.target.value)}
               inline
             />
             <Form.Check
               type="radio"
-              name="form[daylight]"
+              name="form[dayLight]"
               id="inline-radio-2"
-              value="daylight"
-              label="Daylight"
-              onChange={(e) => setField('daylight', e.target.value)}
+              value="dayLight"
+              label="DayLight"
+              onChange={(e) => setField('dayLight', e.target.value)}
               inline
             />
             <Form.Check
               type="radio"
-              name="form[daylight]"
+              name="form[dayLight]"
               id="inline-radio-3"
               value="dusk"
               label="Dusk"
-              onChange={(e) => setField('daylight', e.target.value)}
+              onChange={(e) => setField('dayLight', e.target.value)}
               inline
             />
           </Form.Group>
@@ -362,9 +379,9 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
             <Form.Control
               as="textarea"
               type="text"
-              name="form[roadconditions]"
+              name="form[roadConditions]"
               defaultValue={formValues.roadConditions}
-              onChange={(e) => setField('roadconditions', e.target.value)}
+              onChange={(e) => setField('roadConditions', e.target.value)}
             />
           </Form.Group>
           <Form.Group controlId="formWeatherConditions">
@@ -372,9 +389,9 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
             <Form.Control
               as="textarea"
               type="text"
-              name="form[weatherconditions]"
+              name="form[weatherConditions]"
               defaultValue={formValues.weatherConditions}
-              onChange={(e) => setField('weatherconditions', e.target.value)}
+              onChange={(e) => setField('weatherConditions', e.target.value)}
             />
           </Form.Group>
           <Form.Group controlId="formLocation">
@@ -387,23 +404,24 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
             />
           </Form.Group>
 
-          <Form.Group controlId="formVehicle">
-            <Form.Label>Vehicle</Form.Label>
-            <Form.Select aria-label="Default select example">
-              {vehicleInfo.map((vehicle, idx) => (
-                <option key={idx} value={vehicle.licensePlateNo}></option>
-              ))}
-            </Form.Select>
-          </Form.Group>
+          <Form.Label>Vehicle</Form.Label>
+          <Select
+            value={licensePlate.licensePlateNo}
+            getOptionLabel={(option) =>
+              option.make + ' ' + option.model + ' ' + option.licensePlateNo
+            }
+            onChange={handleLicensePlateChange}
+            options={vehicleInfo}
+          ></Select>
 
           <Form.Group controlId="formAccidentDescription">
             <Form.Label>Accident Description</Form.Label>
             <Form.Control
               as="textarea"
               type="text"
-              name="form[accidentcondtions]"
-              defaultValue={formValues.accidentCondtions}
-              onChange={(e) => setField('accidentcondtions', e.target.value)}
+              name="form[accidentConditions]"
+              defaultValue={formValues.accidentConditions}
+              onChange={(e) => setField('accidentConditions', e.target.value)}
             />
           </Form.Group>
           <Row>
@@ -430,9 +448,9 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
             <Form.Label>Purpose for Usage</Form.Label>
             <Form.Control
               type="text"
-              name="form[purposeforusage]"
+              name="form[purposeForUsage]"
               defaultValue={formValues.purposeForUsage}
-              onChange={(e) => setField('purposeforusage', e.target.value)}
+              onChange={(e) => setField('purposeForUsage', e.target.value)}
             />
           </Form.Group>
           <Form.Label>Damage Description</Form.Label>
@@ -469,9 +487,9 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
             <Form.Control
               as="textarea"
               type="text"
-              name="form[damagecondtions]"
-              defaultValue={formValues.damageCondtions}
-              onChange={(e) => setField('damagecondtions', e.target.value)}
+              name="form[damageConditions]"
+              defaultValue={formValues.damageConditions}
+              onChange={(e) => setField('damageConditions', e.target.value)}
             />
           </Form.Group>
           <hr />
@@ -517,8 +535,6 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
                 index={idx}
                 handleChange={handleEvidenceChange}
                 handleRemove={removeEvidence}
-                onClickErrors={evidenceOnClickErrors}
-                errorSetter={setEvidenceErrors}
               />
             ))}
           </Form.Group>

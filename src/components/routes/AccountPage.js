@@ -28,7 +28,6 @@ const AccountPage = () => {
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${bearerToken}` },
       })
         .then((response) => {
-          console.log(response);
           return response.json();
         })
         .then((data) => {
