@@ -277,18 +277,12 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
     console.log('Logging report here: ', report);
 
     formData.append('reportBody', JSON.stringify({ ...formValues, licensePlate }));
-    // formData.append('licensePlate', JSON.stringify(licensePlate));
-    personsInjured.forEach((personInjured) => {
-      formData.append('personsInjured', JSON.stringify(personInjured));
-    });
 
-    witnesses.forEach((witness) => {
-      formData.append('witnesses', JSON.stringify(witness));
-    });
 
-    propertyDamages.forEach((propertyDamage) => {
-      formData.append('propertyDamages', JSON.stringify(propertyDamage));
-    });
+    formData.append('personsInjured', JSON.stringify(personsInjured));
+    formData.append('witnesses', JSON.stringify(witnesses));
+    formData.append('propertyDamages', JSON.stringify(propertyDamages));
+
 
     console.log('Form Data');
     console.log(formData);

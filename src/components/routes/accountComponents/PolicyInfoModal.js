@@ -29,6 +29,41 @@ const PolicyInfoModal = (props) => {
       console.log(newErrors);
     } else {
       console.log('success, no errors');
+      console.log(newPolicy);
+      if (props.adding) {
+        try {
+          let res = await fetch('http://localhost:8080/api/postPolicy', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Authorization: token },
+            body: JSON.stringify(newPolicy),
+          });
+          if (res.status >= 200 && res.status <= 299) {
+            // maybe empty out fields and errors here with set state
+            console.log('POST Success!!');
+          } else {
+            console.log('Some Error occurred...');
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      } else {
+        try {
+          newPolicy.policyNumber = props.data.policyNumber;
+          let res = await fetch('http://localhost:8080/api/updatePolicy', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json', Authorization: token },
+            body: JSON.stringify(newPolicy),
+          });
+          if (res.status >= 200 && res.status <= 299) {
+            // maybe empty out fields and errors here with set state
+            console.log('PUT Success!!');
+          } else {
+            console.log('Some Error occurred...');
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      }
       props.onHide();
     }
 
@@ -149,7 +184,9 @@ const PolicyInfoModal = (props) => {
       <Modal {...props} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
-            {!props.adding ? 'Edit Insurance Policy' : 'Add New Insurance Policy'}
+            {!props.adding
+              ? `Edit Insurance Policy for ${props.data.policyNumber}`
+              : 'Add New Insurance Policy'}
           </Modal.Title>
         </Modal.Header>
         <Form>
@@ -332,18 +369,20 @@ const PolicyInfoModal = (props) => {
               </Form.Group>
             </Row>
             <br />
-            <Form.Group controlId="formPolicyNumber">
-              <Form.Label>Policy Number</Form.Label>
-              <Form.Control
-                type="text"
-                name="newPolicy[policyNumber]"
-                defaultValue={!props.adding ? props.data.policyNumber : newPolicy.policyNumber}
-                placeholder={!props.adding ? props.data.policyNumber : ''}
-                onChange={(e) => setField('policyNumber', e.target.value)}
-                isInvalid={errors.policyNumber}
-              />
-              <Form.Control.Feedback type="invalid">{errors.policyNumber}</Form.Control.Feedback>
-            </Form.Group>
+            {props.adding && (
+              <Form.Group controlId="formPolicyNumber">
+                <Form.Label>Policy Number</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="newPolicy[policyNumber]"
+                  defaultValue={!props.adding ? props.data.policyNumber : newPolicy.policyNumber}
+                  placeholder={!props.adding ? props.data.policyNumber : ''}
+                  onChange={(e) => setField('policyNumber', e.target.value)}
+                  isInvalid={errors.policyNumber}
+                />
+                <Form.Control.Feedback type="invalid">{errors.policyNumber}</Form.Control.Feedback>
+              </Form.Group>
+            )}
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={props.onHide}>
