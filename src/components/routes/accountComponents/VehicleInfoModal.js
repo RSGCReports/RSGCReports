@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, Form, Button, Row, Col } from 'react-bootstrap';
+import Select from 'react-select';
 
 const VehicleInfoModal = (props) => {
   const [newVehicle, setNewVehicle] = useState({});
+  const [policies, setPolicies] = useState([]);
+  const [policy, setPolicy] = useState({});
   const [errors, setErrors] = useState({});
 
   const setField = (field, value) => {
@@ -18,7 +21,7 @@ const VehicleInfoModal = (props) => {
       });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     console.log('inside submit');
     e.preventDefault();
     const newErrors = checkErrors();
@@ -30,6 +33,55 @@ const VehicleInfoModal = (props) => {
       console.log('success, no errors');
       props.onHide();
     }
+
+    try {
+      const payload = { newVehicle, policy };
+      console.log(payload);
+      let res = await fetch('http://localhost:8080/api/postVehicle', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: token },
+        body: JSON.stringify(payload),
+      });
+      if (res.status >= 200 && res.status <= 299) {
+        // maybe empty out fields and errors here with set state
+        console.log('POST Success!!');
+      } else {
+        console.log('Some Error occurred...');
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // get policies to display for dropdown
+  const token = JSON.parse(localStorage.getItem('token'));
+
+  useEffect(() => {
+    console.log('Logging token: ', token);
+    getPolicies();
+  }, []);
+
+  const getPolicies = async () => {
+    fetch('http://localhost:8080/api/getPolicies', {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json', Authorization: token },
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        // SET Policies HERE
+        console.log(data);
+        setPolicies(data.policies);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handlePolicyNumberChange = (selectedOption) => {
+    console.log(selectedOption);
+    setPolicy(selectedOption);
   };
 
   const checkErrors = () => {
@@ -467,6 +519,15 @@ const VehicleInfoModal = (props) => {
                 isInvalid={errors.VIN}
               />
               <Form.Control.Feedback type="invalid">{errors.VIN}</Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Insurance Policy</Form.Label>
+              <Select
+                value={policies.policyNumber}
+                getOptionLabel={(option) => option.insurer + ' ' + option.policyNumber}
+                onChange={handlePolicyNumberChange}
+                options={policies}
+              ></Select>
             </Form.Group>
           </Modal.Body>
           <Modal.Footer>

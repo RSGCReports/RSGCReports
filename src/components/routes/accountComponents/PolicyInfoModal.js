@@ -4,6 +4,7 @@ import { Modal, Form, Button, Row, Col } from 'react-bootstrap';
 const PolicyInfoModal = (props) => {
   const [newPolicy, setNewPolicy] = useState({});
   const [errors, setErrors] = useState({});
+  const token = JSON.parse(localStorage.getItem('token'));
 
   const setField = (field, value) => {
     setNewPolicy({
@@ -18,7 +19,7 @@ const PolicyInfoModal = (props) => {
       });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     console.log('inside submit');
     e.preventDefault();
     const newErrors = checkErrors();
@@ -30,7 +31,43 @@ const PolicyInfoModal = (props) => {
       console.log('success, no errors');
       props.onHide();
     }
+
+    console.log(newPolicy);
+    try {
+      console.log(newPolicy);
+      let res = await fetch('http://localhost:8080/api/postPolicy', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: token },
+        body: JSON.stringify(newPolicy),
+      });
+      if (res.status >= 200 && res.status <= 299) {
+        // maybe empty out fields and errors here with set state
+        console.log('POST Success!!');
+      } else {
+        console.log('Some Error occurred...');
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
+
+  // const postPolicy = async () => {
+  //   try {
+  //     let res = await fetch('http://localhost:8080/api/postPolicy', {
+  //       method: 'POST',
+  //       headers: { Authorization: token },
+  //       body: newPolicy,
+  //     });
+  //     if (res.status >= 200 && res.status <= 299) {
+  //       // maybe empty out fields and errors here with set state
+  //       console.log('POST Success!!');
+  //     } else {
+  //       console.log('Some Error occurred...');
+  //     }
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
   const checkErrors = () => {
     const {
