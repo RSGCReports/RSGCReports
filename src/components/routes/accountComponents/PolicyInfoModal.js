@@ -66,43 +66,7 @@ const PolicyInfoModal = (props) => {
       }
       props.onHide();
     }
-
-    console.log(newPolicy);
-    try {
-      console.log(newPolicy);
-      let res = await fetch('http://localhost:8080/api/postPolicy', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: token },
-        body: JSON.stringify(newPolicy),
-      });
-      if (res.status >= 200 && res.status <= 299) {
-        // maybe empty out fields and errors here with set state
-        console.log('POST Success!!');
-      } else {
-        console.log('Some Error occurred...');
-      }
-    } catch (err) {
-      console.log(err);
-    }
   };
-
-  // const postPolicy = async () => {
-  //   try {
-  //     let res = await fetch('http://localhost:8080/api/postPolicy', {
-  //       method: 'POST',
-  //       headers: { Authorization: token },
-  //       body: newPolicy,
-  //     });
-  //     if (res.status >= 200 && res.status <= 299) {
-  //       // maybe empty out fields and errors here with set state
-  //       console.log('POST Success!!');
-  //     } else {
-  //       console.log('Some Error occurred...');
-  //     }
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
 
   const checkErrors = () => {
     const {

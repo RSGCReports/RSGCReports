@@ -121,37 +121,6 @@ const VehicleInfoModal = (props) => {
     setPolicy(selectedOption);
   };
 
-  // get policies to display for dropdown
-  const token = JSON.parse(localStorage.getItem('token'));
-
-  useEffect(() => {
-    console.log('Logging token: ', token);
-    getPolicies();
-  }, []);
-
-  const getPolicies = async () => {
-    fetch('http://localhost:8080/api/getPolicies', {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json', Authorization: token },
-    })
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        // SET Policies HERE
-        console.log(data);
-        setPolicies(data.policies);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const handlePolicyNumberChange = (selectedOption) => {
-    console.log(selectedOption);
-    setPolicy(selectedOption);
-  };
-
   const checkErrors = () => {
     const {
       registeredOwner,
@@ -592,15 +561,6 @@ const VehicleInfoModal = (props) => {
                 <Form.Control.Feedback type="invalid">{errors.VIN}</Form.Control.Feedback>
               </Form.Group>
             )}
-            <Form.Group>
-              <Form.Label>Insurance Policy</Form.Label>
-              <Select
-                value={policies.policyNumber}
-                getOptionLabel={(option) => option.insurer + ' ' + option.policyNumber}
-                onChange={handlePolicyNumberChange}
-                options={policies}
-              ></Select>
-            </Form.Group>
             <Form.Group>
               <Form.Label>Insurance Policy</Form.Label>
               <Select
