@@ -31,25 +31,44 @@ const VehicleInfoModal = (props) => {
       console.log(newErrors);
     } else {
       console.log('success, no errors');
-      props.onHide();
-    }
-
-    try {
-      const payload = { newVehicle, policy };
-      console.log(payload);
-      let res = await fetch('http://localhost:8080/api/postVehicle', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: token },
-        body: JSON.stringify(payload),
-      });
-      if (res.status >= 200 && res.status <= 299) {
-        // maybe empty out fields and errors here with set state
-        console.log('POST Success!!');
+      if (props.adding) {
+        try {
+          const payload = { newVehicle, policy };
+          console.log(payload);
+          let res = await fetch('http://localhost:8080/api/postVehicle', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Authorization: token },
+            body: JSON.stringify(payload),
+          });
+          if (res.status >= 200 && res.status <= 299) {
+            // maybe empty out fields and errors here with set state
+            console.log('POST Success!!');
+          } else {
+            console.log('Some Error occurred...');
+          }
+        } catch (err) {
+          console.log(err);
+        }
       } else {
-        console.log('Some Error occurred...');
+        try {
+          const payload = { newVehicle, policy };
+          console.log(payload);
+          let res = await fetch('http://localhost:8080/api/updateVehicle', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json', Authorization: token },
+            body: JSON.stringify(payload),
+          });
+          if (res.status >= 200 && res.status <= 299) {
+            // maybe empty out fields and errors here with set state
+            console.log('PUT Success!!');
+          } else {
+            console.log('Some Error occurred...');
+          }
+        } catch (err) {
+          console.log(err);
+        }
       }
-    } catch (err) {
-      console.log(err);
+      props.onHide();
     }
   };
 
@@ -212,7 +231,9 @@ const VehicleInfoModal = (props) => {
       <Modal {...props} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
-            {!props.adding ? 'Edit Vehicle Information' : 'Add New Vehicle Information'}
+            {!props.adding
+              ? `Edit Vehicle Information ${props.data.VIN}`
+              : 'Add New Vehicle Information'}
           </Modal.Title>
         </Modal.Header>
         <Form>
@@ -508,18 +529,20 @@ const VehicleInfoModal = (props) => {
                 <Form.Control.Feedback type="invalid">{errors.type}</Form.Control.Feedback>
               </Form.Group>
             </Row>
-            <Form.Group controlId="formVin">
-              <Form.Label>Vehicle Identification Number</Form.Label>
-              <Form.Control
-                type="text"
-                name="newVehicle[VIN]"
-                defaultValue={!props.adding ? props.data.VIN : newVehicle.VIN}
-                placeholder={!props.adding ? props.data.VIN : ''}
-                onChange={(e) => setField('VIN', e.target.value)}
-                isInvalid={errors.VIN}
-              />
-              <Form.Control.Feedback type="invalid">{errors.VIN}</Form.Control.Feedback>
-            </Form.Group>
+            {props.adding && (
+              <Form.Group controlId="formVin">
+                <Form.Label>Vehicle Identification Number</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="newVehicle[VIN]"
+                  defaultValue={!props.adding ? props.data.VIN : newVehicle.VIN}
+                  placeholder={!props.adding ? props.data.VIN : ''}
+                  onChange={(e) => setField('VIN', e.target.value)}
+                  isInvalid={errors.VIN}
+                />
+                <Form.Control.Feedback type="invalid">{errors.VIN}</Form.Control.Feedback>
+              </Form.Group>
+            )}
             <Form.Group>
               <Form.Label>Insurance Policy</Form.Label>
               <Select
