@@ -20,11 +20,13 @@ function App({ user }) {
   //   return headers;
   // }
 
+
   // console.log(authorizationHeaders());
   localStorage.setItem(
     'token',
     JSON.stringify(`Bearer ${user.signInUserSession.idToken.jwtToken}`)
   );
+
 
   return (
     <div>
