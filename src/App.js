@@ -21,6 +21,7 @@ function App({ user }) {
   }
 
   console.log(authorizationHeaders());
+  localStorage.setItem('token', JSON.stringify(authorizationHeaders().Authorization));
 
   return (
     <div>
