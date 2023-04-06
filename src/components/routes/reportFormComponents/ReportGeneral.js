@@ -347,7 +347,7 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
             <Form.Check
               type="radio"
               name="form[dayLight]"
-              id="inline-radio-1"
+              id="dayLightDarkRadio"
               value="dark"
               label="Dark"
               onChange={(e) => setField('dayLight', e.target.value)}
@@ -356,7 +356,7 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
             <Form.Check
               type="radio"
               name="form[dayLight]"
-              id="inline-radio-2"
+              id="dayLightDayLightRadio"
               value="dayLight"
               label="DayLight"
               onChange={(e) => setField('dayLight', e.target.value)}
@@ -365,7 +365,7 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
             <Form.Check
               type="radio"
               name="form[dayLight]"
-              id="inline-radio-3"
+              id="dayLightDuskRadio"
               value="dusk"
               label="Dusk"
               onChange={(e) => setField('dayLight', e.target.value)}
@@ -456,7 +456,7 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
             <Form.Check
               type="radio"
               name="form[severity]"
-              id="inline-radio-1"
+              id="severityMinorRadio"
               value="minor"
               label="Minor"
               onChange={(e) => setField('severity', e.target.value)}
@@ -465,7 +465,7 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
             <Form.Check
               type="radio"
               name="form[severity]"
-              id="inline-radio-2"
+              id="severityMediumRadio"
               value="medium"
               label="Medium"
               onChange={(e) => setField('severity', e.target.value)}
@@ -474,7 +474,7 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
             <Form.Check
               type="radio"
               name="form[severity]"
-              id="inline-radio-3"
+              id="severityMajorRadio"
               value="major"
               label="Major"
               onChange={(e) => setField('severity', e.target.value)}

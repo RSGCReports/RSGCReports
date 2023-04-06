@@ -2,172 +2,21 @@ import React, { useEffect, useState } from 'react';
 import { Container, Form, Button, Row, Col } from 'react-bootstrap';
 import { Link, useParams } from 'react-router-dom';
 
-//TODO: make edit button functional...with id passed
-//TODO: add id as parameter and use it in your get request to fetch the report
 const ViewReport = (id) => {
   const [loading, setLoading] = useState(true);
   const [report, setReport] = useState([]);
-  // const [user, setUser] = useState([]);
-  // const [vehicle, setVehicle] = useState([]);
-
-  // TODO: Delete the mocking when get report route is made
-  // let report = {
-  //   reportId: 46,
-  //   dayTime: new Date('2000-04-23'),
-  //   dayLight: 'dark',
-  //   roadCondition: 'Pretty slippery and icy',
-  //   weatherCondition: 'Light snowing',
-  //   location: 'Steeles and Finch Ave',
-  //   accidentDescription: 'The other car T-boned my car while it drove through a red light.',
-  //   comment: 'I had two children in the car. This is outrageous!',
-  //   flag: null,
-  //   adminComments: null,
-  //   speed: 60,
-  //   direction: 'South',
-  //   purposeForUsage: 'Personal',
-  //   damageDescription: '$4000 cost to replace right doors',
-  //   EstimateOfDamage: 'major',
-  //   AdminId: null,
-  //   PersonInjured: [
-  //     {
-  //       id: 48,
-  //       name: 'Alice Smith',
-  //       phone: '459-865-4256',
-  //       street: '221 Victoria Rd.',
-  //       city: 'Toronto',
-  //       country: 'CA',
-  //       province: 'ON',
-  //       postalCode: 'J1D 0I3',
-  //       hospital: "St. Henry Children's Hopsital",
-  //       natureOfInjuries: 'Broken right arm',
-  //       reportId: 48,
-  //     },
-  //   ],
-  //   PoliceInvestigation: [{ id: 48, policeReportNo: '12565', reportId: 48 }],
-  //   Witness: [
-  //     {
-  //       id: 48,
-  //       name: 'Amber Ellis',
-  //       phone: '458-562-5897',
-  //       street: '223 Donda St.',
-  //       city: 'Toronto',
-  //       country: 'CA',
-  //       province: 'ON',
-  //       postalCode: 'X2A 5U9',
-  //       reportId: 48,
-  //     },
-  //   ],
-  //   Evidence: [{ id: 1, name: 'photo1', data: 125, reportId: 1 }],
-  //   Insurance: [
-  //     {
-  //       policyId: 48,
-  //       insurer: 'Sunlife Inc.',
-  //       insurerName: 'John Smith',
-  //       Agent: 'Alice Reiner',
-  //       homeStreet: '221 Victoria',
-  //       homeCity: 'Toronto',
-  //       homeCountry: 'ON',
-  //       homeProvince: 'CA',
-  //       homePostalCode: 'J1D 0I3',
-  //       businessStreet: '58 York',
-  //       businessCity: 'Toronto',
-  //       businessCountry: 'ON',
-  //       businessProvince: 'CA',
-  //       businessPostalCode: 'H2E 1G4',
-  //       policyNumber: '465461656',
-  //     },
-  //   ],
-  //   PersonalInfo: [
-  //     {
-  //       username: 'user1',
-  //       fullname: 'John Smith',
-  //       email: 'js@gmail.com',
-  //       dob: new Date('2000-04-23'),
-  //       disabilities: 'lost of hearing on left side',
-  //       yearsDriving: 10,
-  //       homeStreet: '221 Victoria',
-  //       homeCity: 'Toronto',
-  //       homeCountry: 'CA',
-  //       homeProvince: 'ON',
-  //       homePostalCode: 'J1D 0I3',
-  //       businessStreet: '58 York',
-  //       businessCity: 'Toronto',
-  //       businessCountry: 'CA',
-  //       businessProvince: 'ON',
-  //       businessPostalCode: 'H2E 1G4',
-  //       phoneNumber: '121-315-6625',
-  //       driverLicense: 'F2548956525',
-  //       isAdmin: false,
-  //     },
-  //   ],
-  //   VehicleInfo: [
-  //     {
-  //       licensePlateNo: 'DHHE-875',
-  //       registeredOwner: 'John Smith',
-  //       actualOwner: 'John Smith',
-  //       registeredOwnerStreet: '221 Victoria',
-  //       registeredOwnerCity: 'Toronto',
-  //       registeredOwnerCountry: 'ON',
-  //       registeredOwnerProvince: 'CA',
-  //       registeredOwnerPostalCode: 'J1D 0I3',
-  //       actualOwnerStreet: '221 Victoria',
-  //       actualOwnerCity: 'Toronto',
-  //       actualOwnerCountry: 'ON',
-  //       actualOwnerProvince: 'CA',
-  //       actualOwnerPostalCode: 'J1D 0I3',
-  //       province: 'ON',
-  //       make: 'HONDA',
-  //       year: 2015,
-  //       model: 'Starlight',
-  //       type: 'Personal',
-  //       VIN: '8G5HJUS68J5260025',
-  //     },
-  //   ],
-  //   PropertyDamage: [
-  //     {
-  //       id: 48,
-  //       nameOwner: 'Eric Wong',
-  //       phoneOwner: '526-859-5255',
-  //       ownerStreet: '25 Warrent St.',
-  //       ownerCity: 'Toronto',
-  //       ownerCountry: 'CA',
-  //       ownerProvince: 'ON',
-  //       ownerPostalCode: 'H1N8I6',
-  //       licenseNumberOwner: 'UCCR-257',
-  //       ownerProvIssue: 'ON',
-  //       yearOfVehicle: 2013,
-  //       nameInsurer: 'West Sun Foundation',
-  //       policyNumber: '125486595',
-  //       nameDriver: 'Eric Wong',
-  //       phoneDriver: '526-859-5255',
-  //       driverStreet: 'Warrent St.',
-  //       driverCity: 'Toronto',
-  //       driverCountry: 'CA',
-  //       driverProvince: 'ON',
-  //       driverPostalCode: 'H1N8I6',
-  //       driverLicenseNumber: 'UCCR-257',
-  //       driverProvIssue: 'ON',
-  //       reportId: 48,
-  //     },
-  //   ],
-  // };
-
-  //TODO: fetch API when get report route is made; see ReportGeenral
-  /*      const user = await Auth.currentAuthenticatedUser();
-      setToken(user.signInUserSession.idToken.jwtToken);
-
-      fetch('http://localhost:8080/api/userInfo', {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${bearerToken}` },
-      }).then ((result)=>{result=mockReport;})
-   */
-
+  const [decision, setDecision] = useState('reject');
+  const [adminComment, setAdminComment] = useState('');
+  const [isAdmin, setIsAdmin] = useState(true);
+  // default is true for ease of testing; can turn it to false for production
+  //let isAdmin = false;
   const token = JSON.parse(localStorage.getItem('token'));
   const { Id } = useParams();
 
   useEffect(() => {
     console.log('Logging token: ', token);
     getReports(Id);
+    checkAdminStatus();
   }, []);
 
   const getReports = async (Id) => {
@@ -212,6 +61,43 @@ const ViewReport = (id) => {
     const result = urlCreator.createObjectURL(blob);
     console.log(result);
     return result;
+  };
+
+  const checkAdminStatus = async () => {
+    fetch('http://localhost:8080/api/userInfo', {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json', Authorization: token },
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        setIsAdmin(data.userInfo.user.isAdmin);
+        //isAdmin = data.userInfo.user.isAdmin;
+        console.log(data.userInfo);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const sendAdminFeedback = async () => {
+    try {
+      let res = await fetch('http://localhost:8080/api/postFeedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: token },
+        body: JSON.stringify({ reportId: Id, flag: decision, adminComments: adminComment }),
+      });
+      if (res.status >= 200 && res.status <= 299) {
+        // maybe empty out fields and errors here with set state
+        console.log('POST admin feedback Success!!');
+      } else {
+        console.log('Some Error occurred for admin feedback');
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    console.log(`id: ${Id},flag: ${decision}, adminComments: ${adminComment}`);
   };
 
   return (
@@ -1133,6 +1019,52 @@ const ViewReport = (id) => {
                   Edit Report
                 </Button>
               </div>
+
+              {isAdmin ? (
+                <div>
+                  <h3>Admin Only</h3>
+                  <Form.Group xs={7} controlId="adminComment">
+                    <Form.Label>Admin Comment</Form.Label>
+                    <Form.Control
+                      as="textarea"
+                      type="text"
+                      name="adminComment"
+                      onChange={(e) => setAdminComment(e.target.value)}
+                    />
+                  </Form.Group>
+                  <br />
+                  <Form.Label>Decision</Form.Label>
+                  <Form.Group controlId="decision">
+                    <Form.Check
+                      type="radio"
+                      name="decisionAccept"
+                      id="inline-radio-1"
+                      value="accept"
+                      label="Accept"
+                      checked={decision === 'accept'}
+                      onChange={() => setDecision('accept')}
+                      inline
+                    />
+                    <Form.Check
+                      type="radio"
+                      name="decisionReject"
+                      id="inline-radio-2"
+                      value="reject"
+                      label="Reject"
+                      checked={decision === 'reject'}
+                      onChange={() => setDecision('reject')}
+                      inline
+                    />
+                  </Form.Group>
+                  <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+                    <Button id={id} onClick={sendAdminFeedback}>
+                      Submit Feedback To Report
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                ''
+              )}
             </Form>
           </Container>
         </div>
