@@ -1075,10 +1075,10 @@ const ViewReport = (id) => {
                     />
                   </Form.Group>
                   <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-                    <Button id={id} onClick={sendAdminFeedback}>
+                    <Button id={id} onClick={sendAdminFeedback} as={Link} to={`/viewallreport`}>
                       Submit Feedback To Report
                     </Button>
-                    <Button id={id} onClick={deleteReport}>
+                    <Button id={id} onClick={deleteReport} as={Link} to={`/viewallreport`}>
                       Delete Report
                     </Button>
                   </div>
