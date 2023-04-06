@@ -1051,11 +1051,11 @@ const ViewReport = (id) => {
                 </Form.Group>
                 <br />
               </fieldset>
-              <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+              {/* <div style={{ display: 'flex', justifyContent: 'space-around' }}>
                 <Button as={Link} to="/editreport" id={id}>
                   Edit Report
                 </Button>
-              </div>
+              </div> */}
 
               {isAdmin ? (
                 <div>

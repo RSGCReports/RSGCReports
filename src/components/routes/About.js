@@ -155,7 +155,11 @@ const About = () => {
                 <Card.Body>
                   <Card.Title>Stefan Frunza</Card.Title>
                   <Card.Subtitle>Team Leader and Developer</Card.Subtitle>
-                  <Card.Text>About you and contact...</Card.Text>
+                  <br />
+                  <Card.Text>
+                    Contact me at <br />
+                    sfrunza@myseneca.ca
+                  </Card.Text>
                 </Card.Body>
               </Card>
             </Col>
@@ -164,7 +168,11 @@ const About = () => {
                 <Card.Body>
                   <Card.Title>Rudy Chung</Card.Title>
                   <Card.Subtitle>Developer</Card.Subtitle>
-                  <Card.Text>About you and contact...</Card.Text>
+                  <br />
+                  <Card.Text>
+                    Contact me at <br />
+                    rchung29@myseneca.ca
+                  </Card.Text>
                 </Card.Body>
               </Card>
             </Col>
@@ -185,8 +193,12 @@ const About = () => {
               <Card>
                 <Card.Body>
                   <Card.Title>Chen-Yuan Chu</Card.Title>
-                  <Card.Subtitle>Developer</Card.Subtitle>
-                  <Card.Text>About you and contact...</Card.Text>
+                  <Card.Subtitle>DBA and Developer</Card.Subtitle>
+                  <br />
+                  <Card.Text>
+                    Contact me at <br />
+                    cchu42@myseneca.ca
+                  </Card.Text>
                 </Card.Body>
               </Card>
             </Col>
