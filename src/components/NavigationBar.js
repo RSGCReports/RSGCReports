@@ -3,6 +3,7 @@ import { Nav, Navbar, NavDropdown, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { Auth } from 'aws-amplify';
 import '../styles/NavBar.css';
+import logo from '../assets/RSGCfavicon.png';
 
 const NavigationBar = () => {
   const [username, setUserName] = useState([]);
@@ -22,7 +23,9 @@ const NavigationBar = () => {
 
   return (
     <Navbar expand="lg" bg="dark" varient="dark">
-      <Navbar.Brand href="/">RSGC</Navbar.Brand>
+      <Navbar.Brand href="/">
+        <img src={logo} alt="RSGCLogo" className="logo" />
+      </Navbar.Brand>
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="ml-auto">
