@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 const Reports = () => {
   return (
     <div>
-      <Container>
+      <Container className="text-center">
         <h1>Reports</h1>
         <Button as={Link} to="/newreport">
           Create a New Report

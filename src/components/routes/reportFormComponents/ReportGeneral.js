@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Form, Button, Row, Col } from 'react-bootstrap';
-// import { Auth } from 'aws-amplify';
 import PersonInjured from './PersonInjured';
 import Witness from './Witness';
 import Evidence from './Evidence';
@@ -18,14 +17,12 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
   const [witnessOnClickErrors, setWitnessOnClickErrors] = useState({});
   const [propertyDamageErrors, setPropertyDamageErrors] = useState({});
   const [propertyDamageOnClickErrors, setPropertyDamageOnClickErrors] = useState({});
-  // const [bearerToken, setToken] = useState([]);
   const [vehicleInfo, setVehicleInfo] = useState([]);
   const [licensePlate, setLicensePlate] = useState({});
 
   const token = JSON.parse(localStorage.getItem('token'));
 
   useEffect(() => {
-    // fetchUser().then((users) => setToken(users.signInUserSession.idToken.jwtToken));
     console.log('Logging token: ', token);
     getVehicleInfo();
   }, []);
@@ -48,10 +45,6 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
         console.log(err);
       });
   };
-
-  // const fetchUser = async () => {
-  //   return await Auth.currentAuthenticatedUser();
-  // };
 
   const addPersonInjured = (e) => {
     e.preventDefault();
@@ -98,62 +91,6 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
     e.preventDefault();
     let error = {};
 
-    /* if (e.target.name === 'personInjuredAddress') {
-      if (e.target.value) {
-        if (!personsInjured[index].personInjuredCity)
-          error[index].personInjuredCity = 'Incomplete address';
-        if (!personsInjured[index].personInjuredProvince)
-          error[index].personInjuredProvince = 'Incomplete address';
-        if (!personsInjured[index].personInjuredCountry)
-          error[index].personInjuredCountry = 'Incomplete address';
-        if (!personsInjured[index].personInjuredPostalCode)
-          error[index].personInjuredPostalCode = 'Incomplete address';
-      }
-    } else if (e.target.name === 'personInjuredCity') {
-      if (e.target.value) {
-        if (!personsInjured[index].personInjuredAddress)
-          error[index].personInjuredAddress = 'Incomplete address';
-        if (!personsInjured[index].personInjuredProvince)
-          error[index].personInjuredProvince = 'Incomplete address';
-        if (!personsInjured[index].personInjuredCountry)
-          error[index].personInjuredCountry = 'Incomplete address';
-        if (!personsInjured[index].personInjuredPostalCode)
-          error[index].personInjuredPostalCode = 'Incomplete address';
-      }
-    } else if (e.target.name === 'personInjuredProvince') {
-      if (e.target.value) {
-        if (!personsInjured[index].personInjuredAddress)
-          error[index].personInjuredAddress = 'Incomplete address';
-        if (!personsInjured[index].personInjuredCity)
-          error[index].personInjuredCity = 'Incomplete address';
-        if (!personsInjured[index].personInjuredCountry)
-          error[index].personInjuredCountry = 'Incomplete address';
-        if (!personsInjured[index].personInjuredPostalCode)
-          error[index].personInjuredPostalCode = 'Incomplete address';
-      }
-    } else if (e.target.name === 'personInjuredCountry') {
-      if (e.target.value) {
-        if (!personsInjured[index].personInjuredAddress)
-          error[index].personInjuredAddress = 'Incomplete address';
-        if (!personsInjured[index].personInjuredCity)
-          error[index].personInjuredCity = 'Incomplete address';
-        if (!personsInjured[index].personInjuredProvince)
-          error[index].personInjuredProvince = 'Incomplete address';
-        if (!personsInjured[index].personInjuredPostalCode)
-          error[index].personInjuredPostalCode = 'Incomplete address';
-      }
-    } else if (e.target.name === 'personInjuredPostalCode') {
-      if (e.target.value) {
-        if (!personsInjured[index].personInjuredAddress)
-          error[index].personInjuredAddress = 'Incomplete address';
-        if (!personsInjured[index].personInjuredCity)
-          error[index].personInjuredCity = 'Incomplete address';
-        if (!personsInjured[index].personInjuredCountry)
-          error[index].personInjuredCountry = 'Incomplete address';
-        if (!personsInjured[index].personInjuredProvince)
-          error[index].personInjuredProvince = 'Incomplete address';
-      }
-    } else */
     if (!e.target.value) {
       error[index][e.target.name] = 'Required field';
       setPersonInjuredErrors({ ...personInjuredErrors, ...error });
@@ -284,7 +221,6 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
 
     console.log('Form Data');
     console.log(formData);
-    // const token = 'Bearer ' + bearerToken;
 
     try {
       let res = await fetch('http://localhost:8080/api/report', {
@@ -308,7 +244,6 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
     if (!date || date === '') newErrors.date = 'Must provide a date';
     //else if (Date(date) > Date.now()) newErrors.date = 'Date must be current date or before';
     if (!time || time === '') newErrors.time = 'Must provide a time';
-
     return newErrors;
   };
 

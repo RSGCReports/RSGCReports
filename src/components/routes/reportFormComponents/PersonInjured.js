@@ -19,18 +19,32 @@ const PersonInjured = ({ index, handleChange, handleRemove, onClickErrors, error
   return (
     <>
       <hr />
-      <Form.Group controlId="formPersonInjuredName">
-        <Form.Label>Name</Form.Label>
-        <Form.Control
-          type="text"
-          name="personInjuredName"
-          onChange={(e) => handleChange(e, index)}
-          isInvalid={onClickErrors[index] ? onClickErrors[index].personInjuredName : null}
-        />
-        <Form.Control.Feedback type="invalid">
-          {onClickErrors[index] ? onClickErrors[index].personInjuredName : null}
-        </Form.Control.Feedback>
-      </Form.Group>
+      <Row>
+        <Form.Group as={Col} controlId="formPersonInjuredName">
+          <Form.Label>Name</Form.Label>
+          <Form.Control
+            type="text"
+            name="personInjuredName"
+            onChange={(e) => handleChange(e, index)}
+            isInvalid={onClickErrors[index] ? onClickErrors[index].personInjuredName : null}
+          />
+          <Form.Control.Feedback type="invalid">
+            {onClickErrors[index] ? onClickErrors[index].personInjuredName : null}
+          </Form.Control.Feedback>
+        </Form.Group>
+        <Form.Group as={Col} controlId="formPersonInjuredPhone">
+          <Form.Label>Phone</Form.Label>
+          <Form.Control
+            type="text"
+            name="personInjuredPhone"
+            onChange={(e) => handleChange(e, index)}
+            isInvalid={onClickErrors[index] ? onClickErrors[index].personInjuredPhone : null}
+          />
+          <Form.Control.Feedback type="invalid">
+            {onClickErrors[index] ? onClickErrors[index].personInjuredPhone : null}
+          </Form.Control.Feedback>
+        </Form.Group>
+      </Row>
       <Row>
         <Form.Group as={Col} controlId="formPersonInjuredAddress">
           <Form.Label>Address</Form.Label>

@@ -4,7 +4,7 @@ import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
 const PersonalInfoModal = (props) => {
   const [userInfo, setUserInfo] = useState({});
   const [errors, setErrors] = useState({});
-
+  const token = JSON.parse(localStorage.getItem('token'));
   const setField = (field, value) => {
     setUserInfo({
       ...userInfo,
@@ -18,7 +18,7 @@ const PersonalInfoModal = (props) => {
       });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     console.log('inside submit');
     e.preventDefault();
     const newErrors = checkErrors();
@@ -28,6 +28,23 @@ const PersonalInfoModal = (props) => {
       console.log(newErrors);
     } else {
       console.log('success, no errors');
+      try {
+        userInfo.fullname = props.data.fullname;
+        userInfo.email = props.data.email;
+        let res = await fetch('http://localhost:8080/api/updatePersonal', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', Authorization: token },
+          body: JSON.stringify(userInfo),
+        });
+        if (res.status >= 200 && res.status <= 299) {
+          // maybe empty out fields and errors here with set state
+          console.log('PUT Success!!');
+        } else {
+          console.log('Some Error occurred...');
+        }
+      } catch (err) {
+        console.log(err);
+      }
       props.onHide();
     }
   };
