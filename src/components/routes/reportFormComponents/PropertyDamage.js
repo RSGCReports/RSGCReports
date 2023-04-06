@@ -133,7 +133,7 @@ const PropertyDamage = ({ index, handleChange, handleRemove, onClickErrors, erro
         </Form.Group>
       </Row>
       <Row>
-        <Form.Group controlId="formPropertyDamageOwnerLicenseNumber">
+        <Form.Group as={Col} controlId="formPropertyDamageOwnerLicenseNumber">
           <Form.Label>Owner License Number</Form.Label>
           <Form.Control
             type="text"
@@ -147,10 +147,9 @@ const PropertyDamage = ({ index, handleChange, handleRemove, onClickErrors, erro
             {onClickErrors[index] ? onClickErrors[index].propertyDamageOwnerLicenseNumber : null}
           </Form.Control.Feedback>
         </Form.Group>
-        <Form.Group controlId="formPropertyDamageOwnerIssueProvince">
+        <Form.Group as={Col} controlId="formPropertyDamageOwnerIssueProvince">
           <Form.Label>Owner License Province of Issue</Form.Label>
           <Form.Control
-            as="textarea"
             type="text"
             name="propertyDamageOwnerIssueProvince"
             onChange={(e) => handleChange(e, index)}
@@ -265,7 +264,7 @@ const PropertyDamage = ({ index, handleChange, handleRemove, onClickErrors, erro
         </Form.Group>
       </Row>
       <Row>
-        <Form.Group controlId="formPropertyDamageDriverLicenseNumber">
+        <Form.Group as={Col} controlId="formPropertyDamageDriverLicenseNumber">
           <Form.Label>Driver License Number</Form.Label>
           <Form.Control
             type="text"
@@ -279,10 +278,9 @@ const PropertyDamage = ({ index, handleChange, handleRemove, onClickErrors, erro
             {onClickErrors[index] ? onClickErrors[index].propertyDamageDriverLicenseNumber : null}
           </Form.Control.Feedback>
         </Form.Group>
-        <Form.Group controlId="formPropertyDamageDriverIssueProvince">
+        <Form.Group as={Col} controlId="formPropertyDamageDriverIssueProvince">
           <Form.Label>Driver License Province of Issue</Form.Label>
           <Form.Control
-            as="textarea"
             type="text"
             name="propertyDamageDriverIssueProvince"
             onChange={(e) => handleChange(e, index)}
@@ -296,30 +294,34 @@ const PropertyDamage = ({ index, handleChange, handleRemove, onClickErrors, erro
         </Form.Group>
       </Row>
       <hr />
-      <Form.Group controlId="formPropertyDamageYearOfVehicle">
-        <Form.Label>Vehicle Year</Form.Label>
-        <Form.Control
-          type="date"
-          name="propertyDamageYearOfVehicle"
-          onChange={(e) => handleChange(e, index)}
-          isInvalid={onClickErrors[index] ? onClickErrors[index].propertyDamageYearOfVehicle : null}
-        />
-        <Form.Control.Feedback type="invalid">
-          {onClickErrors[index] ? onClickErrors[index].propertyDamageYearOfVehicle : null}
-        </Form.Control.Feedback>
-      </Form.Group>
-      <Form.Group controlId="formPropertyDamageInsurerName">
-        <Form.Label>Insurer Name</Form.Label>
-        <Form.Control
-          type="text"
-          name="propertyDamageInsurerName"
-          onChange={(e) => handleChange(e, index)}
-          isInvalid={onClickErrors[index] ? onClickErrors[index].propertyDamageInsurerName : null}
-        />
-        <Form.Control.Feedback type="invalid">
-          {onClickErrors[index] ? onClickErrors[index].propertyDamageInsurerName : null}
-        </Form.Control.Feedback>
-      </Form.Group>
+      <Row>
+        <Form.Group as={Col} controlId="formPropertyDamageYearOfVehicle">
+          <Form.Label>Vehicle Year</Form.Label>
+          <Form.Control
+            type="text"
+            name="propertyDamageYearOfVehicle"
+            onChange={(e) => handleChange(e, index)}
+            isInvalid={
+              onClickErrors[index] ? onClickErrors[index].propertyDamageYearOfVehicle : null
+            }
+          />
+          <Form.Control.Feedback type="invalid">
+            {onClickErrors[index] ? onClickErrors[index].propertyDamageYearOfVehicle : null}
+          </Form.Control.Feedback>
+        </Form.Group>
+        <Form.Group as={Col} controlId="formPropertyDamageInsurerName">
+          <Form.Label>Insurer Name</Form.Label>
+          <Form.Control
+            type="text"
+            name="propertyDamageInsurerName"
+            onChange={(e) => handleChange(e, index)}
+            isInvalid={onClickErrors[index] ? onClickErrors[index].propertyDamageInsurerName : null}
+          />
+          <Form.Control.Feedback type="invalid">
+            {onClickErrors[index] ? onClickErrors[index].propertyDamageInsurerName : null}
+          </Form.Control.Feedback>
+        </Form.Group>
+      </Row>
       <Form.Group controlId="formPropertyDamageInsurancePolicyNumber">
         <Form.Label>Insurance Policy Number</Form.Label>
         <Form.Control
