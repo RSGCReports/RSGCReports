@@ -17,3 +17,8 @@ a {
 .dropdown-menu .dropdown-logout:hover {
   background-color: white;
 }
+
+.logo {
+  height: 80px;
+  width: 80px;
+}

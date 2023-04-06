@@ -174,7 +174,10 @@ const About = () => {
                   <Card.Title>Genevieve Calma</Card.Title>
                   <Card.Subtitle>Front-End Developer</Card.Subtitle>
                   <br />
-                  <Card.Text>Contact me at gccalma@myseneca.ca</Card.Text>
+                  <Card.Text>
+                    Contact me at <br />
+                    gccalma@myseneca.ca
+                  </Card.Text>
                 </Card.Body>
               </Card>
             </Col>
