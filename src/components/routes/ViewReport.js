@@ -100,6 +100,24 @@ const ViewReport = (id) => {
     console.log(`id: ${Id},flag: ${decision}, adminComments: ${adminComment}`);
   };
 
+  const deleteReport = async () => {
+    try {
+      let res = await fetch(`http://localhost:8080/api/report/${Id}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json', Authorization: token },
+      });
+      if (res.status >= 200 && res.status <= 299) {
+        // maybe empty out fields and errors here with set state
+        console.log('DELETE report Success!!');
+      } else {
+        console.log('Some Error occurred for deleting report');
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    console.log(`id: ${Id}`);
+  };
+
   return (
     <>
       {loading ? (
@@ -1059,6 +1077,9 @@ const ViewReport = (id) => {
                   <div style={{ display: 'flex', justifyContent: 'space-around' }}>
                     <Button id={id} onClick={sendAdminFeedback}>
                       Submit Feedback To Report
+                    </Button>
+                    <Button id={id} onClick={deleteReport}>
+                      Delete Report
                     </Button>
                   </div>
                 </div>
