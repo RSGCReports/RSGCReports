@@ -7,14 +7,16 @@ const ViewReport = (id) => {
   const [report, setReport] = useState([]);
   const [decision, setDecision] = useState('reject');
   const [adminComment, setAdminComment] = useState('');
-  // const [isAdmin, setIsAdmin] = useState(false);
-  let isAdmin = false;
+  const [isAdmin, setIsAdmin] = useState(true);
+  // default is true for ease of testing; can turn it to false for production
+  //let isAdmin = false;
   const token = JSON.parse(localStorage.getItem('token'));
   const { Id } = useParams();
 
   useEffect(() => {
     console.log('Logging token: ', token);
     getReports(Id);
+    checkAdminStatus();
   }, []);
 
   const getReports = async (Id) => {
@@ -61,39 +63,41 @@ const ViewReport = (id) => {
     return result;
   };
 
-  fetch('http://localhost:8080/api/userInfo', {
-    method: 'GET',
-    headers: { 'Content-Type': 'application/json', Authorization: token },
-  })
-    .then((response) => {
-      return response.json();
+  const checkAdminStatus = async () => {
+    fetch('http://localhost:8080/api/userInfo', {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json', Authorization: token },
     })
-    .then((data) => {
-      // setIsAdmin(data.userInfo.user.isAdmin);
-      isAdmin = data.userInfo.user.isAdmin;
-      console.log(data.userInfo.user);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        setIsAdmin(data.userInfo.user.isAdmin);
+        //isAdmin = data.userInfo.user.isAdmin;
+        console.log(data.userInfo);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
-  const sendAdminFeedback = () => {
-    // try {
-    //   let res = await fetch('http://localhost:8080/api/postAdminFeedback', {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json', Authorization: token },
-    //     body: { flag: decision, adminComments: adminComment },
-    //   });
-    //   if (res.status >= 200 && res.status <= 299) {
-    //     // maybe empty out fields and errors here with set state
-    //     console.log('POST admin feedback Success!!');
-    //   } else {
-    //     console.log('Some Error occurred for admin feedback');
-    //   }
-    // } catch (err) {
-    //   console.log(err);
-    // }
-    console.log(`flag: ${decision}, adminComments: ${adminComment}`);
+  const sendAdminFeedback = async () => {
+    try {
+      let res = await fetch('http://localhost:8080/api/postFeedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: token },
+        body: JSON.stringify({ reportId: Id, flag: decision, adminComments: adminComment }),
+      });
+      if (res.status >= 200 && res.status <= 299) {
+        // maybe empty out fields and errors here with set state
+        console.log('POST admin feedback Success!!');
+      } else {
+        console.log('Some Error occurred for admin feedback');
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    console.log(`id: ${Id},flag: ${decision}, adminComments: ${adminComment}`);
   };
 
   return (
@@ -1018,6 +1022,7 @@ const ViewReport = (id) => {
 
               {isAdmin ? (
                 <div>
+                  <h3>Admin Only</h3>
                   <Form.Group xs={7} controlId="adminComment">
                     <Form.Label>Admin Comment</Form.Label>
                     <Form.Control
@@ -1027,15 +1032,16 @@ const ViewReport = (id) => {
                       onChange={(e) => setAdminComment(e.target.value)}
                     />
                   </Form.Group>
+                  <br />
+                  <Form.Label>Decision</Form.Label>
                   <Form.Group controlId="decision">
-                    <Form.Label>Decision</Form.Label>
-                    <br />
                     <Form.Check
                       type="radio"
                       name="decisionAccept"
                       id="inline-radio-1"
                       value="accept"
                       label="Accept"
+                      checked={decision === 'accept'}
                       onChange={() => setDecision('accept')}
                       inline
                     />
@@ -1045,12 +1051,13 @@ const ViewReport = (id) => {
                       id="inline-radio-2"
                       value="reject"
                       label="Reject"
+                      checked={decision === 'reject'}
                       onChange={() => setDecision('reject')}
                       inline
                     />
                   </Form.Group>
                   <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-                    <Button id={id} onclick={sendAdminFeedback}>
+                    <Button id={id} onClick={sendAdminFeedback}>
                       Submit Feedback To Report
                     </Button>
                   </div>
