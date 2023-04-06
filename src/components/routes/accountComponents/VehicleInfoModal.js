@@ -53,6 +53,7 @@ const VehicleInfoModal = (props) => {
         try {
           const payload = { newVehicle, policy };
           console.log(payload);
+          payload.newVehicle.licensePlateNo = props.data.licensePlateNo;
           let res = await fetch('http://localhost:8080/api/updateVehicle', {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json', Authorization: token },

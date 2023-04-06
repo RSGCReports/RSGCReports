@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Form, Button, Row, Col } from 'react-bootstrap';
-// import { Auth } from 'aws-amplify';
 import PersonInjured from './PersonInjured';
 import Witness from './Witness';
 import Evidence from './Evidence';
@@ -18,14 +17,12 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
   const [witnessOnClickErrors, setWitnessOnClickErrors] = useState({});
   const [propertyDamageErrors, setPropertyDamageErrors] = useState({});
   const [propertyDamageOnClickErrors, setPropertyDamageOnClickErrors] = useState({});
-  // const [bearerToken, setToken] = useState([]);
   const [vehicleInfo, setVehicleInfo] = useState([]);
   const [licensePlate, setLicensePlate] = useState({});
 
   const token = JSON.parse(localStorage.getItem('token'));
 
   useEffect(() => {
-    // fetchUser().then((users) => setToken(users.signInUserSession.idToken.jwtToken));
     console.log('Logging token: ', token);
     getVehicleInfo();
   }, []);
@@ -48,10 +45,6 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
         console.log(err);
       });
   };
-
-  // const fetchUser = async () => {
-  //   return await Auth.currentAuthenticatedUser();
-  // };
 
   const addPersonInjured = (e) => {
     e.preventDefault();
@@ -284,7 +277,6 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
 
     console.log('Form Data');
     console.log(formData);
-    // const token = 'Bearer ' + bearerToken;
 
     try {
       let res = await fetch('http://localhost:8080/api/report', {
