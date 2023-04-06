@@ -1029,6 +1029,25 @@ const ViewReport = (id) => {
                     ))}
                     <br />
                   </div>
+                  <div>
+                    <Row>
+                      <Form.Group xs={7} controlId="adminComment">
+                        <Form.Label>Admin Comment</Form.Label>
+                        <Form.Control
+                          as="textarea"
+                          type="text"
+                          name="adminComment"
+                          value={report.adminComments}
+                          onChange={(e) => setAdminComment(e.target.value)}
+                        />
+                      </Form.Group>
+                      <br />
+                      <Form.Label>Decision</Form.Label>
+                      <Form.Group controlId="decision">
+                        <Form.Control type="text" value={report.flag} />
+                      </Form.Group>
+                    </Row>
+                  </div>
                 </Form.Group>
                 <br />
               </fieldset>
