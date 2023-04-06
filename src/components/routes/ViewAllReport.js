@@ -4,16 +4,18 @@ import { Link } from 'react-router-dom';
 
 const ViewAllReport = () => {
   const [reports, setReports] = useState([]);
+  const [isAdmin, setIsAdmin] = useState(true);
 
   const token = JSON.parse(localStorage.getItem('token'));
 
   useEffect(() => {
     console.log('Logging token: ', token);
+    checkAdminStatus();
     getReports();
   }, []);
 
-  const getReports = async () => {
-    fetch('http://localhost:8080/api/reports', {
+  const checkAdminStatus = async () => {
+    fetch('http://localhost:8080/api/userInfo', {
       method: 'GET',
       headers: { 'Content-Type': 'application/json', Authorization: token },
     })
@@ -21,14 +23,51 @@ const ViewAllReport = () => {
         return response.json();
       })
       .then((data) => {
-        // SET  REPORTS HERE
-        console.log(data);
-        setReports(data.reports);
-        // console.log('Logging fetched reports: ', data.reports);
+        setIsAdmin(data.userInfo.user.isAdmin);
+        //isAdmin = data.userInfo.user.isAdmin;
+        console.log(data.userInfo);
       })
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const getReports = async () => {
+    if (!isAdmin) {
+      fetch('http://localhost:8080/api/reports', {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json', Authorization: token },
+      })
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          // SET  REPORTS HERE
+          console.log(data);
+          setReports(data.reports);
+          // console.log('Logging fetched reports: ', data.reports);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      fetch('http://localhost:8080/api/adminGetAllReports', {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json', Authorization: token },
+      })
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          // SET  REPORTS HERE
+          console.log('REPORT DATAs: ', data);
+          setReports(data.reports);
+          // console.log('Logging fetched reports: ', data.reports);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   return (
