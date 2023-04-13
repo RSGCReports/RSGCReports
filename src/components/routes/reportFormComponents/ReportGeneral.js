@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Form, Button, Row, Col } from 'react-bootstrap';
+import { useNavigate  } from "react-router-dom";
 import PersonInjured from './PersonInjured';
 import Witness from './Witness';
 import Evidence from './Evidence';
@@ -19,7 +20,7 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
   const [propertyDamageOnClickErrors, setPropertyDamageOnClickErrors] = useState({});
   const [vehicleInfo, setVehicleInfo] = useState([]);
   const [licensePlate, setLicensePlate] = useState({});
-
+  const navigate = useNavigate();
   const token = JSON.parse(localStorage.getItem('token'));
 
   useEffect(() => {
@@ -230,6 +231,7 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
       });
       if (res.status >= 200 && res.status <= 299) {
         console.log('POST Success!!');
+        navigate("/viewallreport");
       } else {
         console.log('Some Error occurred...');
       }
