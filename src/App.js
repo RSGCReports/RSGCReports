@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import About from './components/routes/About';
 import NotFound from './components/routes/NotFound';
@@ -12,15 +13,15 @@ import AccountPage from './components/routes/AccountPage';
 import './App.css';
 import { withAuthenticator } from '@aws-amplify/ui-react';
 import PropTypes from 'prop-types';
+import { Chatbot } from 'react-chatbot-kit';
+import MessageParser from './bot/MessageParser';
+import ActionProvider from './bot/ActionProvider';
+import config from './bot/config';
+import 'react-chatbot-kit/build/main.css';
+import roboto from './assets/robot-svgrepo-com.svg';
 
 function App({ user }) {
-  // function authorizationHeaders(type = 'application/json') {
-  //   const headers = { 'Content-Type': type };
-  //   headers['Authorization'] = `Bearer ${user.signInUserSession.idToken.jwtToken}`;
-  //   return headers;
-  // }
-
-  // console.log(authorizationHeaders());
+  const [showChat, toggleBot] = useState(false);
   localStorage.setItem(
     'token',
     JSON.stringify(`Bearer ${user.signInUserSession.idToken.jwtToken}`)
@@ -40,6 +41,23 @@ function App({ user }) {
           <Route exact path="/accountpage" element={<AccountPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <footer>
+          <div>
+            {showChat && (
+              <Chatbot
+                config={config}
+                messageParser={MessageParser}
+                actionProvider={ActionProvider}
+              />
+            )}
+          </div>
+          <div>
+            <button style={{ float: 'right' }} onClick={() => toggleBot((prev) => !prev)}>
+              <div>Chat Bot</div>
+              <img src={roboto} />
+            </button>
+          </div>
+        </footer>
       </Router>
     </div>
   );
