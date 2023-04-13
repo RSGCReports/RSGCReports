@@ -69,6 +69,7 @@ const VehicleInfoModal = (props) => {
           console.log(err);
         }
       }
+      window.location.reload(false);
       props.onHide();
     }
   };

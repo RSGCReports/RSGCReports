@@ -64,6 +64,7 @@ const PolicyInfoModal = (props) => {
           console.log(err);
         }
       }
+      window.location.reload(false);
       props.onHide();
     }
   };
