@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Form, Button, Row, Col } from 'react-bootstrap';
-import { useNavigate  } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 import PersonInjured from './PersonInjured';
 import Witness from './Witness';
 import Evidence from './Evidence';
@@ -231,7 +231,7 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
       });
       if (res.status >= 200 && res.status <= 299) {
         console.log('POST Success!!');
-        navigate("/viewallreport");
+        navigate('/viewallreport');
       } else {
         console.log('Some Error occurred...');
       }
@@ -241,11 +241,38 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
   };
 
   const checkErrors = () => {
-    const { date, time } = formValues;
+    const {
+      date,
+      time,
+      // daylight,
+      roadConditions,
+      weatherConditions,
+      location,
+      accidentConditions,
+      speed,
+      direction,
+      purposeForUsage,
+    } = formValues;
     const newErrors = {};
     if (!date || date === '') newErrors.date = 'Must provide a date';
     //else if (Date(date) > Date.now()) newErrors.date = 'Date must be current date or before';
     if (!time || time === '') newErrors.time = 'Must provide a time';
+    // if (!daylight) newErrors.daylight = 'Must select a light condition';
+    if (!roadConditions || roadConditions === '')
+      newErrors.roadConditions = 'Must provide a description of the road conditions';
+    if (!weatherConditions || weatherConditions === '')
+      newErrors.weatherConditions = 'Must provide a description of the weather conditions';
+    if (!location || location === '')
+      newErrors.location = 'Must provide the location of the accident';
+    if (!accidentConditions || accidentConditions === '')
+      newErrors.accidentConditions = 'Must provide a description of the accident';
+    if (!speed || speed === '')
+      newErrors.speed = 'Must provide the speed at which you were traveling prior to the accident';
+    if (!direction || direction === '')
+      newErrors.direction = 'Must provide the direction you were traveling in (eg. North)';
+    if (!purposeForUsage || purposeForUsage === '')
+      newErrors.purposeForUsage =
+        'Must provide the reason you were driving (eg. Going home from work)';
     return newErrors;
   };
 
@@ -282,32 +309,45 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
             <Form.Label>Light Conditions</Form.Label>
             <br />
             <Form.Check
+              // required
               type="radio"
               name="form[dayLight]"
               id="dayLightDarkRadio"
               value="dark"
               label="Dark"
+              // isInvalid={errors.daylight}
+              // feedback={errors.daylight}
+              // feedbackType="invalid"
               onChange={(e) => setField('dayLight', e.target.value)}
               inline
             />
             <Form.Check
+              // required
               type="radio"
               name="form[dayLight]"
               id="dayLightDayLightRadio"
               value="dayLight"
               label="DayLight"
+              // isInvalid={errors.daylight}
+              // feedback={errors.daylight}
+              // feedbackType="invalid"
               onChange={(e) => setField('dayLight', e.target.value)}
               inline
             />
             <Form.Check
+              // required
               type="radio"
               name="form[dayLight]"
               id="dayLightDuskRadio"
               value="dusk"
               label="Dusk"
+              // isInvalid={errors.daylight}
+              // feedback={errors.daylight}
+              // feedbackType="invalid"
               onChange={(e) => setField('dayLight', e.target.value)}
               inline
             />
+            {/* <Form.Control.Feedback type="invalid">{errors.daylight}</Form.Control.Feedback> */}
           </Form.Group>
           <Form.Group controlId="formRoadConditions">
             <Form.Label>Road Conditions</Form.Label>
@@ -317,7 +357,9 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
               name="form[roadConditions]"
               defaultValue={formValues.roadConditions}
               onChange={(e) => setField('roadConditions', e.target.value)}
+              isInvalid={errors.roadConditions}
             />
+            <Form.Control.Feedback type="invalid">{errors.roadConditions}</Form.Control.Feedback>
           </Form.Group>
           <Form.Group controlId="formWeatherConditions">
             <Form.Label>Weather Conditions</Form.Label>
@@ -327,7 +369,9 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
               name="form[weatherConditions]"
               defaultValue={formValues.weatherConditions}
               onChange={(e) => setField('weatherConditions', e.target.value)}
+              isInvalid={errors.weatherConditions}
             />
+            <Form.Control.Feedback type="invalid">{errors.weatherConditions}</Form.Control.Feedback>
           </Form.Group>
           <Form.Group controlId="formLocation">
             <Form.Label>Location</Form.Label>
@@ -336,7 +380,9 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
               name="form[location]"
               defaultValue={formValues.location}
               onChange={(e) => setField('location', e.target.value)}
+              isInvalid={errors.location}
             />
+            <Form.Control.Feedback type="invalid">{errors.location}</Form.Control.Feedback>
           </Form.Group>
 
           <Form.Label>Vehicle</Form.Label>
@@ -357,17 +403,23 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
               name="form[accidentConditions]"
               defaultValue={formValues.accidentConditions}
               onChange={(e) => setField('accidentConditions', e.target.value)}
+              isInvalid={errors.accidentConditions}
             />
+            <Form.Control.Feedback type="invalid">
+              {errors.accidentConditions}
+            </Form.Control.Feedback>
           </Form.Group>
           <Row>
             <Form.Group as={Col} controlId="formSpeed">
-              <Form.Label>Speed</Form.Label>
+              <Form.Label>Speed (km/h)</Form.Label>
               <Form.Control
                 type="number"
                 name="form[speed]"
                 defaultValue={formValues.speed}
                 onChange={(e) => setField('speed', e.target.value)}
+                isInvalid={errors.speed}
               />
+              <Form.Control.Feedback type="invalid">{errors.speed}</Form.Control.Feedback>
             </Form.Group>
             <Form.Group as={Col} controlId="formDirection">
               <Form.Label>Direction</Form.Label>
@@ -376,7 +428,9 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
                 name="form[direction]"
                 defaultValue={formValues.direction}
                 onChange={(e) => setField('direction', e.target.value)}
+                isInvalid={errors.direction}
               />
+              <Form.Control.Feedback type="invalid">{errors.direction}</Form.Control.Feedback>
             </Form.Group>
           </Row>
           <Form.Group controlId="formPurposeForUsage">
@@ -386,7 +440,9 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
               name="form[purposeForUsage]"
               defaultValue={formValues.purposeForUsage}
               onChange={(e) => setField('purposeForUsage', e.target.value)}
+              isInvalid={errors.purposeForUsage}
             />
+            <Form.Control.Feedback type="invalid">{errors.purposeForUsage}</Form.Control.Feedback>
           </Form.Group>
           <Form.Label>Damage Description</Form.Label>
           <Form.Group controlId="formSeverity">
