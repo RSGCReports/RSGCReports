@@ -8,8 +8,26 @@ class MessageParser {
     console.log(message);
     const lowercase = message.toLowerCase();
 
-    if (lowercase.includes('hello')) {
+    if (
+      lowercase.includes('hello') ||
+      lowercase.includes('greetings') ||
+      lowercase.includes('hi') ||
+      lowercase.includes('hey')
+    ) {
       this.actionProvider.greet();
+    } else if (lowercase.includes('help')) {
+      this.actionProvider.help();
+    } else if (lowercase.includes('admin') || lowercase.includes('review')) {
+      this.actionProvider.admin();
+    } else if (
+      lowercase.includes('steps') ||
+      lowercase.includes('step') ||
+      lowercase.includes('next') ||
+      lowercase.includes('guide')
+    ) {
+      this.actionProvider.steps();
+    } else {
+      this.actionProvider.catchAll();
     }
   }
 }

@@ -1,6 +1,8 @@
 import React from 'react';
 import { createChatBotMessage } from 'react-chatbot-kit';
 import Recommendations from './widgets/Recommendations';
+import FindACenter from './widgets/FindACenter';
+import Steps from './widgets/Steps';
 
 const config = {
   initialMessages: [
@@ -12,6 +14,14 @@ const config = {
     {
       widgetName: 'recommendations',
       widgetFunc: (props) => <Recommendations {...props} />,
+    },
+    {
+      widgetName: 'findACenter',
+      widgetFunc: () => <FindACenter />,
+    },
+    {
+      widgetName: 'steps',
+      widgetFunc: () => <Steps />,
     },
   ],
   botName: 'RSGC Bot',

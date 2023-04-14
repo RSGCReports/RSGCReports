@@ -7,26 +7,18 @@ const Recommendations = (props) => {
     {
       recommendation: 'Contact Us',
       handler: props.actionProvider.handleContactUs,
-      // handler: () => {},
       id: 1,
     },
     {
-      recommendation: 'Nearest Collision Center',
-      // handler: props.actionProvider.handleCollisionCenter,
-      handler: () => {},
+      recommendation: 'Find a Collision Center',
+      handler: props.actionProvider.handleFindACenter,
       id: 2,
     },
     {
-      recommendation: 'Go to Reports',
-      // handler: props.actionProvider.handleGoToReports,
-      handler: () => {},
-      id: 3,
-    },
-    {
       recommendation: 'Damages Exceeding $2000',
-      // handler: props.actionProvider.handleHighDamage,
-      handler: () => {},
-      id: 4,
+
+      handler: props.actionProvider.handleBigDamage,
+      id: 3,
     },
   ];
 
