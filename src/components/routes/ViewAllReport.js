@@ -25,7 +25,7 @@ const ViewAllReport = () => {
       })
       .then((data) => {
         setIsAdmin(data.userInfo.user.isAdmin);
-        //isAdmin = data.userInfo.user.isAdmin;
+
         console.log(data.userInfo);
       })
       .catch((err) => {
@@ -46,7 +46,6 @@ const ViewAllReport = () => {
           // SET  REPORTS HERE
           console.log(data);
           setReports(data.reports);
-          // console.log('Logging fetched reports: ', data.reports);
         })
         .catch((err) => {
           console.log(err);
@@ -63,7 +62,6 @@ const ViewAllReport = () => {
           // SET  REPORTS HERE
           console.log('REPORT DATAs: ', data);
           setReports(data.reports);
-          // console.log('Logging fetched reports: ', data.reports);
         })
         .catch((err) => {
           console.log(err);

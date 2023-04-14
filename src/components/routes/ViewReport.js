@@ -39,9 +39,6 @@ const ViewReport = (id) => {
           VehicleInfo: data.reportInfo.vehicle,
         });
         console.log(report);
-        // setUser(data.reportInfo.user);
-        // setVehicle(data.reportInfo.vehicle);
-        // console.log('Logging fetched reports: ', data.reports);
         setLoading(false);
       })
       .catch((err) => {
