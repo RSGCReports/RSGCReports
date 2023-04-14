@@ -19,6 +19,11 @@ class ActionProvider {
     this.addChatbotMessageToState(message);
   };
 
+  handleContactUs = () => {
+    const message = this.createChatBotMessage('E-mail our team lead here: sfrunza@myseneca.ca');
+    this.addChatbotMessageToState(message);
+  };
+
   addChatbotMessageToState = (message) => {
     this.setState((prevState) => ({
       ...prevState,

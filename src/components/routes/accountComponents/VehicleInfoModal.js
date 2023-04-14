@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Form, Button, Row, Col } from 'react-bootstrap';
 import Select from 'react-select';
+import process from 'process';
 
 const VehicleInfoModal = (props) => {
   const [newVehicle, setNewVehicle] = useState({});
@@ -35,7 +36,7 @@ const VehicleInfoModal = (props) => {
         try {
           const payload = { newVehicle, policy };
           console.log(payload);
-          let res = await fetch('http://localhost:8080/api/postVehicle', {
+          let res = await fetch(`${process.env.REACT_APP_API_URL}/api/postVehicle`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', Authorization: token },
             body: JSON.stringify(payload),
@@ -54,7 +55,7 @@ const VehicleInfoModal = (props) => {
           const payload = { newVehicle, policy };
           console.log(payload);
           payload.newVehicle.licensePlateNo = props.data.licensePlateNo;
-          let res = await fetch('http://localhost:8080/api/updateVehicle', {
+          let res = await fetch(`${process.env.REACT_APP_API_URL}/api/updateVehicle`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json', Authorization: token },
             body: JSON.stringify(payload),
@@ -83,7 +84,7 @@ const VehicleInfoModal = (props) => {
   }, []);
 
   const getPolicies = async () => {
-    fetch('http://localhost:8080/api/getPolicies', {
+    fetch(`${process.env.REACT_APP_API_URL}/api/getPolicies`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json', Authorization: token },
     })

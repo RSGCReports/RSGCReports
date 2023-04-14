@@ -5,6 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Amplify } from 'aws-amplify';
 import '@aws-amplify/ui-react/styles.css';
+import process from 'process';
 
 // Configure our Auth object to use our Cognito User Pool
 Amplify.configure({

@@ -6,6 +6,7 @@ import Witness from './Witness';
 import Evidence from './Evidence';
 import PropertyDamage from './PropertyDamage';
 import Select from 'react-select';
+import process from 'process';
 
 const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
   const [personsInjured, setPersonsInjured] = useState([]);
@@ -29,7 +30,7 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
   }, []);
 
   const getVehicleInfo = async () => {
-    fetch('http://localhost:8080/api/userInfo', {
+    fetch(`${process.env.REACT_APP_API_URL}/api/userInfo`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json', Authorization: token },
     })
@@ -224,7 +225,7 @@ const ReportGeneral = ({ setField, setErrors, errors, formValues }) => {
     console.log(formData);
 
     try {
-      let res = await fetch('http://localhost:8080/api/report', {
+      let res = await fetch(`${process.env.REACT_APP_API_URL}/api/report`, {
         method: 'POST',
         headers: { Authorization: token },
         body: formData,

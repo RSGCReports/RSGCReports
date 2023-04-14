@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, Form, Button, Row, Col } from 'react-bootstrap';
+import process from 'process';
 
 const PolicyInfoModal = (props) => {
   const [newPolicy, setNewPolicy] = useState({});
@@ -32,7 +33,7 @@ const PolicyInfoModal = (props) => {
       console.log(newPolicy);
       if (props.adding) {
         try {
-          let res = await fetch('http://localhost:8080/api/postPolicy', {
+          let res = await fetch(`${process.env.REACT_APP_API_URL}/api/postPolicy`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', Authorization: token },
             body: JSON.stringify(newPolicy),
@@ -49,7 +50,7 @@ const PolicyInfoModal = (props) => {
       } else {
         try {
           newPolicy.policyNumber = props.data.policyNumber;
-          let res = await fetch('http://localhost:8080/api/updatePolicy', {
+          let res = await fetch(`${process.env.REACT_APP_API_URL}/api/updatePolicy`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json', Authorization: token },
             body: JSON.stringify(newPolicy),

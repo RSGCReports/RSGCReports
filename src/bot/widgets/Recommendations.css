@@ -1,0 +1,23 @@
+.recommendations {
+  font-size: 0.9rem;
+  font-weight: normal;
+}
+
+.rec-header {
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.recs {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.rec-button {
+  display: flex;
+  padding: 4px;
+  margin: 5px;
+  border-radius: 30px;
+  border-color: rgb(54 106 125);
+  text-align: center;
+}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Button } from 'react-bootstrap';
 import { Auth } from 'aws-amplify';
+import process from 'process';
 
 const Confirmation = ({ nextStep, prevStep, setForm, setErrors, formValues }) => {
   const [fullName_auth, setFullName] = useState([]);
@@ -84,7 +85,7 @@ const Confirmation = ({ nextStep, prevStep, setForm, setErrors, formValues }) =>
       console.log(completeProfile);
       const token = 'Bearer ' + bearerToken;
       try {
-        let res = await fetch('http://localhost:8080/api/', {
+        let res = await fetch(`${process.env.REACT_APP_API_URL}/api/`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Authorization: token },
           body: JSON.stringify({

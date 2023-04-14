@@ -10,7 +10,6 @@ import NewReport from './components/routes/NewReport';
 import ViewReport from './components/routes/ViewReport';
 import ViewAllReport from './components/routes/ViewAllReport';
 import AccountPage from './components/routes/AccountPage';
-import './App.css';
 import { withAuthenticator } from '@aws-amplify/ui-react';
 import PropTypes from 'prop-types';
 import { Chatbot } from 'react-chatbot-kit';
@@ -18,6 +17,7 @@ import MessageParser from './bot/MessageParser';
 import ActionProvider from './bot/ActionProvider';
 import config from './bot/config';
 import 'react-chatbot-kit/build/main.css';
+import './App.css';
 import roboto from './assets/robot-svgrepo-com.svg';
 
 function App({ user }) {

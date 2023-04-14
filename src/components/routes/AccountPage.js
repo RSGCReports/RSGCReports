@@ -5,6 +5,7 @@ import { Auth } from 'aws-amplify';
 import PersonalInfoModal from './accountComponents/PersonalInfoModal';
 import PolicyInfoModal from './accountComponents/PolicyInfoModal';
 import VehicleInfoModal from './accountComponents/VehicleInfoModal';
+import process from 'process';
 
 const AccountPage = () => {
   const [loading, setLoading] = useState(true);
@@ -23,7 +24,7 @@ const AccountPage = () => {
       const user = await Auth.currentAuthenticatedUser();
       setToken(user.signInUserSession.idToken.jwtToken);
 
-      fetch('http://localhost:8080/api/userInfo', {
+      fetch(`${process.env.REACT_APP_API_URL}/api/userInfo`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${bearerToken}` },
       })
