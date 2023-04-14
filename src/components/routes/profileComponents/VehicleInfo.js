@@ -63,7 +63,7 @@ const VehicleInfo = ({ nextStep, prevStep, setField, setErrors, errors, formValu
         regProvince
       )
     )
-      newErrors.regProvince = 'Must be a Canadian province';
+      newErrors.regProvince = 'Must be a Canadian province code (e.g. ON)';
     if (!regPostalCode || regPostalCode === '')
       newErrors.regPostalCode = 'Must provide postal code';
     else if (!/^[A-Z][0-9][A-Z][0-9][A-Z][0-9]$/.test(regPostalCode))
@@ -81,7 +81,7 @@ const VehicleInfo = ({ nextStep, prevStep, setField, setErrors, errors, formValu
         actProvince
       )
     )
-      newErrors.actProvince = 'Must be a Canadian province';
+      newErrors.actProvince = 'Must be a Canadian province code (e.g. ON)';
     if (!actPostalCode || actPostalCode === '')
       newErrors.actPostalCode = 'Must provide postal code';
     else if (!/^[A-Z][0-9][A-Z][0-9][A-Z][0-9]$/.test(actPostalCode))

@@ -53,7 +53,7 @@ const InsurancePolicy = ({ nextStep, prevStep, setField, setErrors, errors, form
         IPhomeProvince
       )
     )
-      newErrors.IPhomeProvince = 'Must be a Canadian province';
+      newErrors.IPhomeProvince = 'Must be a Canadian province code (e.g. ON)';
     if (!IPhomePostalCode || IPhomePostalCode === '')
       newErrors.IPhomePostalCode = 'Must provide postal code';
     else if (!/^[A-Z][0-9][A-Z][0-9][A-Z][0-9]$/.test(IPhomePostalCode))
