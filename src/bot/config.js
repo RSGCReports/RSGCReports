@@ -3,6 +3,7 @@ import { createChatBotMessage } from 'react-chatbot-kit';
 import Recommendations from './widgets/Recommendations';
 import FindACenter from './widgets/FindACenter';
 import Steps from './widgets/Steps';
+import BotAvatar from './BotAvatar';
 
 const config = {
   initialMessages: [
@@ -10,6 +11,9 @@ const config = {
       widget: 'recommendations',
     }),
   ],
+  customComponents: {
+    botAvatar: (props) => <BotAvatar {...props} />,
+  },
   widgets: [
     {
       widgetName: 'recommendations',

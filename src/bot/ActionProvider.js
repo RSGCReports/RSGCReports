@@ -60,6 +60,11 @@ class ActionProvider {
     this.addChatbotMessageToState(message);
   };
 
+  prettyGood = () => {
+    const message = this.createChatBotMessage('Pretty well, and yourself?');
+    this.addChatbotMessageToState(message);
+  };
+
   steps = () => {
     const message = this.createChatBotMessage('Follow these steps in order: ', {
       widget: 'steps',

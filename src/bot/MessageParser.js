@@ -10,6 +10,10 @@ class MessageParser {
 
     if (lowercase.includes('help')) {
       this.actionProvider.help();
+    } else if (lowercase.includes('totalled') || lowercase.includes('damage')) {
+      this.actionProvider.handleBigDamage();
+    } else if (lowercase.includes('how are you')) {
+      this.actionProvider.prettyGood();
     } else if (lowercase.includes('admin') || lowercase.includes('review')) {
       this.actionProvider.admin();
     } else if (
