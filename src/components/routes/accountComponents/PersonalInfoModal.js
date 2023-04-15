@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
+import process from 'process';
 
 const PersonalInfoModal = (props) => {
   const [userInfo, setUserInfo] = useState({});
@@ -31,7 +32,7 @@ const PersonalInfoModal = (props) => {
       try {
         userInfo.fullname = props.data.fullname;
         userInfo.email = props.data.email;
-        let res = await fetch('http://localhost:8080/api/updatePersonal', {
+        let res = await fetch(`${process.env.REACT_APP_API_URL}/api/updatePersonal`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json', Authorization: token },
           body: JSON.stringify(userInfo),

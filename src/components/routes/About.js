@@ -5,7 +5,6 @@ import '../../styles/About.css';
 const About = () => {
   const overview = useRef(null);
   const teamInfo = useRef(null);
-
   return (
     <>
       <div className="about-jumbotron">

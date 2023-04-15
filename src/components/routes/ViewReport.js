@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Form, Button, Row, Col } from 'react-bootstrap';
 import { Link, useParams } from 'react-router-dom';
+import process from 'process';
 
 const ViewReport = (id) => {
   const [loading, setLoading] = useState(true);
@@ -21,7 +22,7 @@ const ViewReport = (id) => {
 
   const getReports = async (Id) => {
     console.log(id);
-    fetch(`http://localhost:8080/api/report/${Id}`, {
+    fetch(`${process.env.REACT_APP_API_URL}/api/report/${Id}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json', Authorization: token },
     })
@@ -38,9 +39,6 @@ const ViewReport = (id) => {
           VehicleInfo: data.reportInfo.vehicle,
         });
         console.log(report);
-        // setUser(data.reportInfo.user);
-        // setVehicle(data.reportInfo.vehicle);
-        // console.log('Logging fetched reports: ', data.reports);
         setLoading(false);
       })
       .catch((err) => {
@@ -64,7 +62,7 @@ const ViewReport = (id) => {
   };
 
   const checkAdminStatus = async () => {
-    fetch('http://localhost:8080/api/userInfo', {
+    fetch(`${process.env.REACT_APP_API_URL}/api/userInfo`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json', Authorization: token },
     })
@@ -83,7 +81,7 @@ const ViewReport = (id) => {
 
   const sendAdminFeedback = async () => {
     try {
-      let res = await fetch('http://localhost:8080/api/postFeedback', {
+      let res = await fetch(`${process.env.REACT_APP_API_URL}/api/postFeedback`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: token },
         body: JSON.stringify({ reportId: Id, flag: decision, adminComments: adminComment }),
@@ -102,7 +100,7 @@ const ViewReport = (id) => {
 
   const deleteReport = async () => {
     try {
-      let res = await fetch(`http://localhost:8080/api/report/${Id}`, {
+      let res = await fetch(`${process.env.REACT_APP_API_URL}/api/report/${Id}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json', Authorization: token },
       });

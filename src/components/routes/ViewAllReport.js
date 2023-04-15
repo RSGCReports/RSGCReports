@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Form, Button, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import process from 'process';
 
 const ViewAllReport = () => {
   const [reports, setReports] = useState([]);
@@ -15,7 +16,7 @@ const ViewAllReport = () => {
   }, []);
 
   const checkAdminStatus = async () => {
-    fetch('http://localhost:8080/api/userInfo', {
+    fetch(`${process.env.REACT_APP_API_URL}/api/userInfo`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json', Authorization: token },
     })
@@ -24,7 +25,7 @@ const ViewAllReport = () => {
       })
       .then((data) => {
         setIsAdmin(data.userInfo.user.isAdmin);
-        //isAdmin = data.userInfo.user.isAdmin;
+
         console.log(data.userInfo);
       })
       .catch((err) => {
@@ -34,7 +35,7 @@ const ViewAllReport = () => {
 
   const getReports = async () => {
     if (!isAdmin) {
-      fetch('http://localhost:8080/api/reports', {
+      fetch(`${process.env.REACT_APP_API_URL}/api/reports`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json', Authorization: token },
       })
@@ -45,13 +46,12 @@ const ViewAllReport = () => {
           // SET  REPORTS HERE
           console.log(data);
           setReports(data.reports);
-          // console.log('Logging fetched reports: ', data.reports);
         })
         .catch((err) => {
           console.log(err);
         });
     } else {
-      fetch('http://localhost:8080/api/adminGetAllReports', {
+      fetch(`${process.env.REACT_APP_API_URL}/api/adminGetAllReports`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json', Authorization: token },
       })
@@ -62,7 +62,6 @@ const ViewAllReport = () => {
           // SET  REPORTS HERE
           console.log('REPORT DATAs: ', data);
           setReports(data.reports);
-          // console.log('Logging fetched reports: ', data.reports);
         })
         .catch((err) => {
           console.log(err);
