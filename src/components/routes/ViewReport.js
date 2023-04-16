@@ -8,7 +8,7 @@ const ViewReport = (id) => {
   const [report, setReport] = useState([]);
   const [decision, setDecision] = useState('reject');
   const [adminComment, setAdminComment] = useState('');
-  const [isAdmin, setIsAdmin] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
   // default is true for ease of testing; can turn it to false for production
   //let isAdmin = false;
   const token = JSON.parse(localStorage.getItem('token'));
@@ -18,7 +18,7 @@ const ViewReport = (id) => {
     console.log('Logging token: ', token);
     getReports(Id);
     checkAdminStatus();
-  }, []);
+  }, [isAdmin]);
 
   const getReports = async (Id) => {
     console.log(id);

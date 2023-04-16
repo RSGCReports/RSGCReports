@@ -5,7 +5,7 @@ import process from 'process';
 
 const ViewAllReport = () => {
   const [reports, setReports] = useState([]);
-  const [isAdmin, setIsAdmin] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const token = JSON.parse(localStorage.getItem('token'));
 
@@ -13,7 +13,7 @@ const ViewAllReport = () => {
     console.log('Logging token: ', token);
     checkAdminStatus();
     getReports();
-  }, []);
+  }, [isAdmin]);
 
   const checkAdminStatus = async () => {
     fetch(`${process.env.REACT_APP_API_URL}/api/userInfo`, {
