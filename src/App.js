@@ -19,6 +19,7 @@ import config from './bot/config';
 import 'react-chatbot-kit/build/main.css';
 import './App.css';
 import roboto from './assets/robot-svgrepo-com.svg';
+import Success from './components/routes/profileComponents/Success';
 
 function App({ user }) {
   const [showChat, toggleBot] = useState(false);
@@ -68,6 +69,7 @@ function App({ user }) {
             <Route exact path="/viewreport/:Id" element={<ViewReport />} />
             <Route exact path="/viewallreport" element={<ViewAllReport />} />
             <Route exact path="/newreport" element={<NewReport />} />
+            <Route exact path="/success" element={<Success />} />
             <Route exact path="/accountpage" element={<AccountPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
@@ -75,6 +77,7 @@ function App({ user }) {
           <Routes>
             <Route exact path="/" element={<About />} />
             <Route exact path="/profile" element={<Profile />} />
+            <Route exact path="/success" element={<Success />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         )}

@@ -4,8 +4,9 @@ import PersonalInfo from './profileComponents/PersonalInfo';
 import InsurancePolicy from './profileComponents/InsurancePolicy';
 import VehicleInfo from './profileComponents/VehicleInfo';
 import Confirmation from './profileComponents/Confirmation';
-import Success from './profileComponents/Success';
+// import Success from './profileComponents/Success';
 import NotFound from './NotFound';
+import { Navigate } from 'react-router-dom';
 
 const Profile = () => {
   const [form, setForm] = useState({});
@@ -86,11 +87,7 @@ const Profile = () => {
         </Container>
       );
     case 5:
-      return (
-        <Container>
-          <Success />
-        </Container>
-      );
+      return <Navigate to="/success" />;
     default:
       return (
         <Container>
