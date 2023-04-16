@@ -10,7 +10,7 @@ const NewReport = () => {
       ...form,
       [field]: value,
     });
-    // checking for errors, and removing them from error object
+
     if (errors[field])
       setErrors({
         ...errors,
